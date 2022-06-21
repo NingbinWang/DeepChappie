@@ -1,1 +1,1 @@
-CROSS_COMPLITE := 
+CROSS_COMPILE = arm-ca9-linux-gnueabihf-
