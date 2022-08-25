@@ -1,2 +1,2 @@
 # DeepChappie
-该项目是基于linux版本的APP
+用于cmake编译使用的基于Linux的app
