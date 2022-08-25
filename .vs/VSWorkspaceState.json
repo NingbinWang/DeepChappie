@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\App",
+    "\\App\\inc",
+    "\\App\\src",
+    "\\Build",
+    "\\Framework",
+    "\\WinApp",
+    "\\WinApp\\inc",
+    "\\WinApp\\src"
+  ],
+  "SelectedNode": "\\CMakeLists.txt",
+  "PreviewInSolutionExplorer": false
+}
