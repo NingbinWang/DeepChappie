@@ -3,5 +3,5 @@
 
 void Framework_Init(void)
 {
-    printf("Framework_Init");
+    printf("Framework_Init\n");
 }

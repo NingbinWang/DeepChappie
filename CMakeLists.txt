@@ -63,6 +63,17 @@ else()
     message(STATUS "found lib: ${LIBRAYS}")
     link_libraries(${LIBRAYS})
 endif()
+
+#if (WINDOWS)
+#set(OpenCV_DIR "libs/windows/opencv")
+#find_package( OpenCV REQUIRED )
+#显示OpenCV 版本
+#MESSAGE("Opencv version: " ${OpenCV_VERSION})
+#添加OpenCV头文件
+#include_directories(${OpenCV_INCLUDE_DIRS})
+#添加OpenCV库文件
+#link_directories(${OpenCV_LIB_DIR})
+#endif()
 # 添加子目录
 
 if (LINUX)
@@ -75,7 +86,7 @@ endif()
 
 add_subdirectory(Framework)
 # 指定生成的目标
-add_executable(Chappie main.cpp "WinApp/src/app.cpp" "WinApp/inc/app.h")
+add_executable(Chappie main.cpp)
 
 # 添加链接库 可以是多个
 target_link_libraries(Chappie 
