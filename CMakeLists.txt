@@ -82,6 +82,7 @@ include_directories("App/inc")
 elseif(WINDOWS)
 add_subdirectory(WinApp)
 include_directories("WinApp/inc")
+#link_directories("WinApp/libs")
 endif()
 
 add_subdirectory(Framework)

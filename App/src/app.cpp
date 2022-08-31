@@ -1,7 +1,9 @@
 #include"app.h"
 #include <stdio.h>
-int app_main()
+
+
+app_int8 app_main()
 {
-  printf("hello world");
   return 0;
 }
+
