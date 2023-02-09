@@ -1,4 +1,4 @@
-file(GLOB SRC_LIST "src/*.cpp" "src/*.c")
+file(GLOB SRC_LIST "src/file/*.cpp" )
 include_directories("inc")
 
 add_library(HAL ${SRC_LIST})

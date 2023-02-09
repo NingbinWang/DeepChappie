@@ -54,15 +54,15 @@ endif()
 #link_libraries(${LINK_DIR})
 
 # 查找库
-set(LIBRARY_PATH "./Library")
-set(LIBRARY_LIST libopencv_core.so)
-find_library(LIBRAYS ${LIBRARY_LIST} ${LIBRARY_PATH})
-if( ${LIBRAYS} STREQUAL "LIBRAYS-NOTFOUND" )
-    message(STATUS "libarys is not found")
-else()
-    message(STATUS "found lib: ${LIBRAYS}")
-    link_libraries(${LIBRAYS})
-endif()
+#set(LIBRARY_PATH "./Library")
+#set(LIBRARY_LIST libopencv_core.so)
+#find_library(LIBRAYS ${LIBRARY_LIST} ${LIBRARY_PATH})
+#if( ${LIBRAYS} STREQUAL "LIBRAYS-NOTFOUND" )
+#    message(STATUS "libarys is not found")
+#else()
+#    message(STATUS "found lib: ${LIBRAYS}")
+#    link_libraries(${LIBRAYS})
+#endif()
 
 #if (WINDOWS)
 #set(OpenCV_DIR "libs/windows/opencv")
@@ -85,12 +85,14 @@ include_directories("WinApp/inc")
 #link_directories("WinApp/libs")
 endif()
 
+add_subdirectory(HAL)
 add_subdirectory(Framework)
 # 指定生成的目标
 add_executable(Chappie main.cpp)
 
 # 添加链接库 可以是多个
 target_link_libraries(Chappie 
+HAL
 Framework
 App)
 
