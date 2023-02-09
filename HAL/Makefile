@@ -1,4 +1,7 @@
+MODULE_SUB_DIR = src/common/
+MODULE_SUB_DIR += src/time/
 MODULE_SUB_DIR += src/file/
+MODULE_SUB_INC = inc
 
 MODULE_NAME = HAL
 MODULE_CUR_PATH = $(CURDIR)

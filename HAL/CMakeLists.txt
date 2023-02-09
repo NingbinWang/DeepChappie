@@ -1,5 +1,5 @@
-file(GLOB SRC_LIST "src/file/*.cpp" )
-include_directories("inc")
+file(GLOB SRC_LIST "src/common/*.cpp" "src/time/*.cpp"  )
+include_directories("inc" "src/common" "src/file")
 
 add_library(HAL ${SRC_LIST})
 

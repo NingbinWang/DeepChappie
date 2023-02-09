@@ -12,7 +12,7 @@ GID := $(shell id -g)
 OUTPUT_DIR= $(CURDIR)/output
 
 # cross host
-TARGET_CROSS_HOST = arm-ca9-linux-gnueabihf
+TARGET_CROSS_HOST = 
 export $(TARGET_CROSS_HOST)
 
 # rules
@@ -33,6 +33,7 @@ BUILD_ALL += Framework
 
 
 all: $(BUILD_ALL)
+	@$(CXX) -o $(OUTPUT_DIR)/Chappie main.cpp $(HAL_DIR)/Lib/libHAL.a $(FRAMEWORK_DIR)/Lib/libframework.a $(APP_DIR)/Lib/libapp.a
 	@$(ECHO) "Finish generating images at $(BUILD_COMPLETE_STRING)"
 
 .PHONY: App App_Clean Framework Framework_Clean HAL HAL_Clean
@@ -64,7 +65,7 @@ Framework: checkenv
 
 Framework_Clean: 
 	@$(ECHO) "##### Build framework clean ####"
-	make -C $(FRAMEWORK_DIR)
+	make -C $(FRAMEWORK_DIR) clean
 
 clean: App_Clean Framework_Clean
 	@$(ECHO) "RM  $(OUTPUT_DIR)"
