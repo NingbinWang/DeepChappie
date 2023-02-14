@@ -6,11 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-
-
 #define PRINTF printf
-
-
 
 #ifndef TYPE_UINT8
 #define TYPE_UINT8

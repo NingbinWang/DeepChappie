@@ -7,10 +7,17 @@
 #在子目录Makefile被定义
 MODULE_SUB_DIR ?= ERROR
 MODULE_CUR_PATH?= ERROR
+LINK_SHARE?=ERROR
 #--------------------模块参数-------------------------#
 #模块名称 输出模块目标
 MODULE_NAME ?= $(notdir $(MODULE_CUR_PATH))
+
+ifeq (,$(findstring y,$(LINK_SHARE)))
 MODULE_TARGET := lib$(MODULE_NAME).a
+else
+MODULE_TARGET := lib$(MODULE_NAME).so
+endif
+
 MODULE_TEST   := test_$(MODULE_NAME)
 #生成.o目录
 MODULE_OBJDIR := $(MODULE_CUR_PATH)/obj
@@ -46,9 +53,28 @@ MODULE_CPP_DEPS  += $(MODULE_OBJS_CC:.o=.d)
 MODULE_DEPS  := $(MODULE_OBJS_C:.o=.d)
 
 #添加库参数路径
+#andriod不支持 lm lrt等库
+ifneq (,$(findstring android,$(TOOL_CHAIN_HOST)))
+LD_C_FLAGS   += --std=c99
+else
 LD_C_FLAGS   += -ldl -lm -lpthread -lrt --std=c99
-LD_CPP_FLAGS += -lstdc++  #C++参数
+endif
 
+LD_CPP_FLAGS += -lstdc++  #C++参数
+#动态库链接则增加选项LINK_SHARE=y
+ifneq (,$(findstring y,$(LINK_SHARE)))
+SUPPORT_FPIC=y
+endif
+
+#静态库外界有重定向动态库需求可以加上参数 SUPPORT_FPIC=y
+ifneq (,$(findstring y,$(SUPPORT_FPIC)))
+C_FLAGS += -fPIC
+endif
+
+#暂时替换方案支持两种Logger 待日志模块稳定后去除
+ifneq (,$(findstring y,$(SUPPORT_LOGGER)))
+C_FLAGS += -DLOGGER
+endif
 
 #添加参数CFLAGS
 
@@ -63,7 +89,12 @@ $(MODULE_TARGET) : $(MODULE_OBJS_CPP) $(MODULE_OBJS_CC) $(MODULE_OBJS_C)
 	$(Q)rm -f $(MODULE_LIB_PATH)/$@ -rf
 	$(Q)echo -e $@
 	$(Q)echo -e $(MODULE_LIB_PATH)/$@
+	$(Q)#编译选项带LINK_SHARE=y则为编译动态库
+ifeq (,$(findstring y,$(LINK_SHARE)))
 	$(Q)$(AR) rcs -o $(MODULE_LIB_PATH)/$@ $(MODULE_OBJDIR)/*
+else
+	$(Q)$(CC) -shared -fPIC -o $(MODULE_LIB_PATH)/$@ $(MODULE_OBJDIR)/*
+endif
 	$(Q)-$(RM) -f $(MODULE_OBJDIR)/ -rf
 
 $(MODULE_OBJS_CPP): %.o : %.cpp

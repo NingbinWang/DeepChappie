@@ -67,7 +67,7 @@ Framework_Clean:
 	@$(ECHO) "##### Build framework clean ####"
 	make -C $(FRAMEWORK_DIR) clean
 
-clean: App_Clean Framework_Clean
+clean: App_Clean Framework_Clean HAL_Clean
 	@$(ECHO) "RM  $(OUTPUT_DIR)"
 
 	@$(RM)  $(OUTPUT_DIR)

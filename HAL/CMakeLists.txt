@@ -1,5 +1,41 @@
-file(GLOB SRC_LIST "src/common/*.cpp" "src/time/*.cpp"  )
-include_directories("inc" "src/common" "src/file")
+file(GLOB SRC_LIST 
+#compenment
+"src/cmd/*.cpp" 
+"src/common/*.cpp" 
+"src/file/*.cpp" 
+"src/medium/*.cpp" 
+"src/mem/*.cpp" 
+"src/mutex/*.cpp" 
+"src/net/*.cpp" 
+"src/queue/*.cpp"
+"src/socket/*.cpp"
+"src/thread/*.cpp"
+"src/time/*.cpp"
+"src/timer/*.cpp"
+#BSP
+"bsp/gsensor/*.cpp"
+)
+include_directories(
+#api
+"inc"
+#compenment 
+"src/cmd" 
+"src/common"
+"src/file"
+"src/medium"
+"src/mem"
+"src/mutex"
+"src/net"
+"src/queue"
+"src/socket"
+"src/thread"
+"src/time"
+"src/timer"
+#bsp api
+"bsp/include"
+#bsp
+"bsp/gsensor"
+)
 
 add_library(HAL ${SRC_LIST})
 

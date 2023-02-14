@@ -1,5 +1,5 @@
 #include "Notification/Notification.h"
-#include "inc/Framework.h"
+#include "Framework.h"
 
 void Framework_Init(void)
 {

@@ -1,5 +1,6 @@
 #ifndef _SYS_FILE_PRIV_H_
 #define _SYS_FILE_PRIV_H_
+#include "sys_common_inside.h"
 #include"sys_file.h"
 #include <sys/stat.h>
 #include <sys/types.h>
