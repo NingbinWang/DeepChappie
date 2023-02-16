@@ -3,7 +3,7 @@ file(GLOB SRC_LIST
 "Notification/*.cpp"
 "Log/*.cpp"
 "AVB/*.cpp"
-"AVB/talkers/*.cpp"
+"AVB/talker/*.cpp"
 "src/*.cpp"
 )
 include_directories(
@@ -17,7 +17,11 @@ include_directories(
 # inside include
 "Notification"
 "Notification/PingPongBuffer"
-"AVB"
+# avb
+"AVB/adapter"
+"AVB/talker"
+
+
 "Logger"
 "src"
 )
