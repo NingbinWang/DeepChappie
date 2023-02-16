@@ -12,8 +12,9 @@ file(GLOB SRC_LIST
 "src/thread/*.cpp"
 "src/time/*.cpp"
 "src/timer/*.cpp"
+"src/block/*.cpp"
 #BSP
-"bsp/gsensor/*.cpp"
+"devices/gsensor/*.cpp"
 )
 include_directories(
 #api
@@ -31,10 +32,11 @@ include_directories(
 "src/thread"
 "src/time"
 "src/timer"
-#bsp api
-"bsp/include"
+"src/block"
+#devices api
+"devices/include"
 #bsp
-"bsp/gsensor"
+"devices/gsensor"
 )
 
 add_library(HAL ${SRC_LIST})

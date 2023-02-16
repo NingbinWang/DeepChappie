@@ -1,5 +1,4 @@
-#include "App/inc/app.h"
-#include "Framework/inc/Framework.h"
+#include "app.h"
 int main()
 {
   app_main();

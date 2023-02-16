@@ -10,12 +10,12 @@ elseif(CMAKE_HOST_UNIX)
 endif()
 
 #设置交叉编译的环境
-set(ARM 0)
+set(ARM 1)
 if(ARM)
 #指定交叉编译的gcc  g++。如果没有配置到环境变量，此处写绝对路径
 set(CMAKE_SYSTEM_PROCESSOR arm)
-set(CMAKE_C_COMPILER "arm-ca9-linux-gnueabihf-gcc")
-set(CMAKE_CXX_COMPILER "arm-ca9-linux-gnueabihf-g++")
+set(CMAKE_C_COMPILER "arm-buildroot-linux-gnueabi-gcc")
+set(CMAKE_CXX_COMPILER "arm-buildroot-linux-gnueabi-g++")
 endif()
 
 ############## 以下几条可以不设置(实测可以)，官方文档上步骤 ############
@@ -77,10 +77,10 @@ endif()
 # 添加子目录
 
 if (LINUX)
-add_subdirectory(App)
-include_directories("App/inc")
 add_subdirectory(HAL)
 add_subdirectory(Framework)
+add_subdirectory(App)
+include_directories("App/inc")
 elseif(WINDOWS)
 add_subdirectory(WinApp)
 include_directories("WinApp/inc")

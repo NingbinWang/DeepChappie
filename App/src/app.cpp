@@ -1,10 +1,10 @@
-#include"app.h"
+#include "sys_imu.h"
 #include <stdio.h>
+#include "Framework.h"
 
-
-app_int8 app_main()
+int app_main()
 {
-  printf("hello app\n");
+  Framework_Init();
   return 0;
 }
 

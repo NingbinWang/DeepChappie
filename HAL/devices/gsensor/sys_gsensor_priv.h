@@ -14,12 +14,32 @@
  * encoding UTF-8  
  */
 
-#ifndef _SYS_GSENSOR_H_
-#define _SYS_GSENSOR_H_
+#ifndef _SYS_GSENSOR_PRIV_H_
+#define _SYS_GSENSOR_PRIV_H_
 
-#define GYRO_DEVICE_NAME "gyro"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <signal.h>
+#include <math.h>
+#include <sys/time.h>
+#include "sys_common.h"
+#include "sys_common_inside.h"
+
+#define GYRO_DEVICE_NAME "/dev/gyro"
 #define GYRO_IOC_MAGIC               'Y' 
 #define LEN 32
+#define WOM_ENABLE 1
+#define WOM_DISBALE 0
 
 struct gyro_info
 {

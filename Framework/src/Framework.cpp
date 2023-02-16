@@ -1,4 +1,4 @@
-#include "Notification/Notification.h"
+#include "Notification.h"
 #include "Framework.h"
 
 void Framework_Init(void)

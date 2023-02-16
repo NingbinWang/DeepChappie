@@ -4,10 +4,20 @@ file(GLOB SRC_LIST
 )
 include_directories(
 "inc"
+#HAL API
+"./../HAL/inc"
+#HAL BSP  API
+"./../HAL/devices/include"
 
+"./../Framework/inc"
+)
+add_library(App ${SRC_LIST})
+target_link_libraries(App
+HAL
+Framework
 )
 
-add_library(App ${SRC_LIST})
+
 
 #搜索一个目录下的所有的
 #aux_source_directory(. SRC_LIST)

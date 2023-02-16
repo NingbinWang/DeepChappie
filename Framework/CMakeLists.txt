@@ -1,17 +1,25 @@
 file(GLOB SRC_LIST
+"Notification/PingPongBuffer/*.c"
 "Notification/*.cpp"
 "Log/*.cpp"
-"AVTP/*.cpp"
+"AVB/*.cpp"
+"AVB/talkers/*.cpp"
+"src/*.cpp"
 )
 include_directories(
 #api
 "inc"
+"inc/AVB"
 #HAL API
 "./../HAL/inc"
+#HAL BSP  API
+"./../HAL/devices/include"
 # inside include
-"AVTP"
+"Notification"
+"Notification/PingPongBuffer"
+"AVB"
 "Logger"
-
+"src"
 )
 
 

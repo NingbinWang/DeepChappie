@@ -1,6 +1,7 @@
 #include "Notification.h"
+#include "PingPongBuffer.h"
 
-void NotificationMain()
+void Notification()
 {
     printf("NotificationMain\n");
 }
