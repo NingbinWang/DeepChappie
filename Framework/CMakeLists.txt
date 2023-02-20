@@ -2,14 +2,13 @@ file(GLOB SRC_LIST
 "Notification/PingPongBuffer/*.c"
 "Notification/*.cpp"
 "Log/*.cpp"
-"AVB/*.cpp"
 "AVB/talker/*.cpp"
+"AVB/adaptor/*.cpp"
 "src/*.cpp"
 )
 include_directories(
 #api
 "inc"
-"inc/AVB"
 #HAL API
 "./../HAL/inc"
 #HAL BSP  API
@@ -18,9 +17,11 @@ include_directories(
 "Notification"
 "Notification/PingPongBuffer"
 # avb
-"AVB/adapter"
+"AVB/include"
+"AVB/adaptor"
 "AVB/talker"
-
+"AVB/manager"
+"AVB/adaptor"
 
 "Logger"
 "src"

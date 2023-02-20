@@ -15,11 +15,12 @@
 #include <unistd.h>
 #include "sys_common.h"
 #include "sys_utils.h"
-#include "sys_common_inside.h"
+//#include "sys_common_inside.h"
 
-#define AVTP_ERROR SYS_COMMON_ERROR
-#define AVTP_INFO SYS_COMMON_INFO
-#define AVTP_WARN SYS_COMMON_WARN
+#define _AVTP_LOG(format, ...)      printf("[AVB]"format"\r\n", ##__VA_ARGS__)
+#define AVTP_INFO(format, ...)  _AVTP_LOG("[Info] "format, ##__VA_ARGS__)
+#define AVTP_WARN(format, ...)  _AVTP_LOG("[Warn] "format, ##__VA_ARGS__)
+#define AVTP_ERROR(format, ...) _AVTP_LOG("[Error] "format, ##__VA_ARGS__)
 
 #ifndef ETH_P_TSN
 #define ETH_P_TSN	0x22F0		/* TSN (IEEE 1722) packet	*/
