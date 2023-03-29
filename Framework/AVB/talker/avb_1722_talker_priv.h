@@ -36,11 +36,12 @@
 typedef enum
 {
     AVB_STREAM_TYPE_H264VIDEO = 0,
+    AVB_STREAM_TYPE_UNKNOW = 99,
 }AVB_STREAM_TYPE_E;
 
 /**
 * @struct AVB_1722_TALKER_TRANSMIT_PARAM_T
-* @brief
+* @brief 
 */
  typedef struct 
 {
@@ -67,8 +68,8 @@ typedef struct
     MSG_Q_ID                            stReqMsgID;     /* 请求消息任务ID */
     MSG_Q_ID                            stRespMsgID;    /* 响应消息任务ID */
     AVB_1722_TALKER_TRANSMIT_PARAM_T    stTransmitParam;
-    AVB_STREAM_TYPE_E                   uStreamType;
-    INT32 iFlag;                 
+    AVB_STREAM_TYPE_E                   uStreamType;  
+    AVB_1722_TALKER_FRAME_INFO_T        st1722FrameInfo;    /* 读取的帧信息 */            
 }AVB_1722_TALKER_PRIV_DATA_T;
 
 /**

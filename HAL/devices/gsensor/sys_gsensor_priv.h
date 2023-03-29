@@ -48,16 +48,14 @@ struct gyro_info
 };
 
 struct gyro_value {
-	short accel_x;     /* 加速度 x坐标值  */
-	short accel_y;     /* 加速度 y坐标值  */ 
-	short accel_z;     /* 加速度 z坐标值  */
-	short gyro_x;      /* 角速度 x坐标值  */
-	short gyro_y;      /* 角速度 y坐标值  */
-	short gyro_z;      /* 角速度 z坐标值  */
-	unsigned int idx;   /* 数据对应的序号，暂未用 */
-	unsigned int time;  /* 数据对应的时间，暂未用 */
-	long ts_sec;			/* 时间戳秒 */
-	long ts_usec;		/* 时间戳纳秒 */
+	unsigned short accel_x;     /* 加速度 x坐标值  */
+	unsigned short accel_y;     /* 加速度 y坐标值  */ 
+	unsigned short accel_z;     /* 加速度 z坐标值  */
+	unsigned short gyro_x;      /* 角速度 x坐标值  */
+	unsigned short gyro_y;      /* 角速度 y坐标值  */
+	unsigned short gyro_z;      /* 角速度 z坐标值  */
+	long ts_sec;			    /* 时间戳秒 */
+	long ts_usec;		        /* 时间戳纳秒 */
 };
 
 struct gyro_config {
@@ -79,7 +77,16 @@ enum gyro_type
     GYRO_TYPE_DEFAULT = 0,
     GYRO_BYTE_THREE_AXIS,
     GYRO_TYPE_SIX_AXIS,
+	GYRO_TYPE_NINE_AXIS,
 };
+
+struct gyro_param
+{
+	unsigned int accvalidnum;     /* acc有效数据 */
+	unsigned int gyrovalidnum;    /* gyro有效数据 */
+	unsigned int acccoef;
+	unsigned int gyrocoef;
+}
 
 #define HAT_GYRO_INIT           _IOR(GYRO_IOC_MAGIC, 1, struct gyro_info *)
 #define HAT_GYRO_TMR_SET        _IOW(GYRO_IOC_MAGIC, 2, struct gyro_config *)
@@ -92,6 +99,6 @@ enum gyro_type
 #define HAT_GYRO_GET_INT_SRC    _IOR(GYRO_IOC_MAGIC, 9, struct gyro_INTconfig *)
 #define HAT_GYRO_LOW_POWER      _IOR(GYRO_IOC_MAGIC, 10, struct gyro_info *)
 #define HAT_GYRO_NORMAL_POWER   _IOR(GYRO_IOC_MAGIC, 11, struct gyro_info *)
-
+#define HAT_GYRO_GET_PARAM      _IOR(GYRO_IOC_MAGIC, 12, struct gyro_param *)
 
 #endif

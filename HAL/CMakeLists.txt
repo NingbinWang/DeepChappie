@@ -15,6 +15,7 @@ file(GLOB SRC_LIST
 "src/block/*.cpp"
 #BSP
 "devices/gsensor/*.cpp"
+"devices/dev_monitor/*.cpp"
 )
 include_directories(
 #api
@@ -37,6 +38,7 @@ include_directories(
 "devices/include"
 #bsp
 "devices/gsensor"
+"devices/dev_monitor"
 )
 
 add_library(HAL ${SRC_LIST})

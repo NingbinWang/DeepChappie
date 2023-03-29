@@ -2,8 +2,110 @@
 #include "avb_1722_talker.h"
 #include "avb_1722_manager.h"
 
+/**@fn         avb_1722_talker_init_resource_release   
+ * @brief      释放单例初始化过程中申请的资源
+ * @param[in]  pStPrivData   私有数据指针
+ * @return     VOID
+ */
+static VOID avb_1722_talker_init_resource_release(AVB_1722_TALKER_PRIV_DATA_T *pStPrivData)
+{
+    INT32 iRet = ERROR;
+    if(NULL == pStPrivData)
+    {
+        AVB_ERROR("param error\n");
+        return;
+    }
+
+    if(0 != pStPrivData->stReqMsgID)
+    {
+        iRet = sys_mqueue_close(&pStPrivData->stReqMsgID);
+        if(OK == iRet)
+        {
+            pStPrivData->stReqMsgID = 0;
+        }
+    }
+    if(0 != pStPrivData->stRespMsgID)
+    {
+        iRet = sys_mqueue_close(&pStPrivData->stRespMsgID);
+        if(OK == iRet)
+        {
+            pStPrivData->stRespMsgID = 0;
+        }
+    }
+    if(-1 != pStPrivData->iSock)
+    {
+        iRet = avb_avtp_socket_close(pStPrivData->iSock);
+        if(OK == iRet)
+        {
+            pStPrivData->iSock = -1;
+        }
+    }
+    if(NULL != pStPrivData->pIAvtpPdu)
+    {
+        pStPrivData->pIAvtpPdu->Release(pStPrivData->pIAvtpPdu);
+        pStPrivData->pIAvtpPdu = NULL;
+    }
+    if(NULL != pStPrivData->pIRtpPayloadH264)
+    {
+        pStPrivData->pIRtpPayloadH264->Release(pStPrivData->pIRtpPayloadH264);
+        pStPrivData->pIRtpPayloadH264 = NULL;
+    }
+    if(NULL != pStPrivData->pIFrameReader)
+    {
+        pStPrivData->pIFrameReader->Destory(pStPrivData->pIFrameReader);
+        pStPrivData->pIFrameReader = NULL;
+    }
+    if(0 != pStPrivData->stThreadID)
+    {
+        iRet = sys_pthread_cancel(pStPrivData->stThreadID);
+        if(OK == iRet)
+        {
+            pStPrivData->stThreadID = 0;
+        }
+    }
+    return;
+}
+/**@fn          avb_1722_talker_work_thread    
+ * @brief       AVBTalker工作线程
+ * @param[in]   pStPrivData  私有数据结构指针
+ * @return      VOID
+ */
+static VOID avb_1722_talker_work_thread(AVB_1722_TALKER_PRIV_DATA_T *pStPrivData)
+{
+    INT32 iRet = ERROR;
+    AVB_1722_TALKER_MSG_T  stCtrlMsg = {0};
 
 
+    if(NULL == pStPrivData)
+    {
+        AVB_ERROR("param error\n");
+        return;
+    }
+
+    while(TRUE)
+    {
+        pStPrivData->st1722FrameInfo.bFirstFrame = FALSE;
+
+        /* rtp payload */
+        iRet = pStPrivData->pIRtpPayloadH264->Serial(pStPrivData->pIRtpPayloadH264, pStPrivData->stFrameInfo.pFrameBuff, pStPrivData->stFrameInfo.pStEsInfo->uFrameSize);
+        if(iRet < 0)
+        {
+            AVB_ERROR("pIRtpPayloadH264->Serial failed\n");
+        }
+        sys_time_sleep_ms(1);
+    }
+}
+
+
+/**@fn          avb_1722_talker_init_frame_reader    
+ * @brief       初始化帧读取器
+ * @param[in]   pStPrivData  私有数据结构指针
+ * @return     成功返回OK  失败返回错误码
+ */
+static INT32 avb_1722_talker_init_frame_reader(AVB_1722_TALKER_PRIV_DATA_T *pStPrivData)
+{
+    return OK;
+}
 /**@fn         avb_1722_talker_avtp_instance_create
  * @brief      创建avtp实例
  * @param[in]  pStPrivData   私有数据指针
@@ -22,6 +124,9 @@ static INT32 avb_1722_talker_avtp_instance_create(AVB_1722_TALKER_PRIV_DATA_T *p
     {
         case AVB_STREAM_TYPE_H264VIDEO: //h264视频流
             //iRet = avb_1722_talker_avtp_h264_instance(pStPrivData);
+            break;
+        case AVB_STREAM_TYPE_UNKNOW:
+
             break;
         default:
             AVB_ERROR("stream type %d not support\n", pStPrivData->stCfgParam.uStreamType);
@@ -130,6 +235,13 @@ static INT32 avb_1722_talker_init(IAVB1722Talker *pIAVB1722Talker)
             AVB_ERROR("avb_1722_talker_avtp_instance_create error\n");
             break;
         }
+        /*创建rtp payload对象*/
+       // iRet = avb_1722_talker_rtp_payload_instance(pStPrivData);
+       // if(iRet < 0)
+      //  {
+       //     AVB_ERROR("avb_1722_talker_rtp_payload_instance error\n");
+       //     break;
+      //  }
         /*创建帧读取*/
         iRet = avb_1722_talker_init_frame_reader(pStPrivData);
         if(iRet < 0)

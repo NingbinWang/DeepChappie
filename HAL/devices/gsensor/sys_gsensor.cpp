@@ -54,30 +54,6 @@ INT32 sys_gsensor_close(const UINT32 fd)
     return OK;
 }
 
-/**@fn         sys_gsensor_getname
- * @brief      gsensor的名字
- * @param[in]  gsensor的文件描述符
- * @return      成功返回 字符串 错误返回 NULL
- */
-CHAR* sys_gsensor_getname(const UINT32 fd)
-{
-    struct gyro_info gyroInfo;
-    INT32 ret = -1;
-    if ( fd < 0)
-    {
-      SYS_COMMON_ERROR("gsensor fd  error %d,or name is NULL \n",fd);
-      return NULL;
-    }
-    memset(&gyroInfo, 0, sizeof(struct gyro_info));
-	ret = ioctl(fd, HAT_GYRO_INIT, &gyroInfo);
-	if (0 > ret)
-	{
-		SYS_COMMON_ERROR("get gsensor id failure.\n");			
-		return NULL;
-	}
-	return gyroInfo.name;
-}
-
 
 /**@fn         sys_gsensor_setpolltime
  * @brief      gsensor的名字
@@ -89,6 +65,11 @@ INT32 sys_gsensor_setpolltime(const UINT32 fd,const UINT32 polltime)
 {
    struct gyro_config gyro_cfg;
    INT32 ret = -1;
+    if(fd < 0)
+    {
+      SYS_COMMON_ERROR("gsensor fd  error \n");
+      return ERROR;
+    }
    memset(&gyro_cfg, 0, sizeof(struct gyro_config));
    gyro_cfg.poll_tmr = polltime;
    ret = ioctl(fd, HAT_GYRO_TMR_SET, &gyro_cfg);
@@ -108,6 +89,11 @@ INT32 sys_gsensor_setpolltime(const UINT32 fd,const UINT32 polltime)
 INT32 sys_gsensor_lowpower(const UINT32 fd)
 {
   INT32 ret = -1;
+  if(fd < 0)
+  {
+      SYS_COMMON_ERROR("gsensor fd  error \n");
+      return ERROR;
+  }
   ret = ioctl(fd, HAT_GYRO_LOW_POWER, 0);
   if (0 > ret)
    {
@@ -117,7 +103,7 @@ INT32 sys_gsensor_lowpower(const UINT32 fd)
    return OK;
 }
 
-/**@fn        sys_gsensor_lowpower
+/**@fn        sys_gsensor_nomalpower
  * @brief      gsensor的正常模式
  * @param[in]  gsensor的文件描述符
  * @return     成功返回 OK 错误返回 ERROR
@@ -125,6 +111,11 @@ INT32 sys_gsensor_lowpower(const UINT32 fd)
 INT32 sys_gsensor_normalpower(const UINT32 fd)
 {
   INT32 ret = -1;
+  if(fd < 0)
+  {
+      SYS_COMMON_ERROR("gsensor fd  error \n");
+      return ERROR;
+  }
   ret = ioctl(fd, HAT_GYRO_NORMAL_POWER, 0);
   if (0 > ret)
    {
@@ -141,6 +132,11 @@ INT32 sys_gsensor_normalpower(const UINT32 fd)
 INT32 sys_gsensor_clearint(const UINT32 fd)
 {
   INT32 ret = -1;
+  if(fd < 0)
+  {
+      SYS_COMMON_ERROR("gsensor fd  error \n");
+      return ERROR;
+  }
   ret = ioctl(fd, HAT_GYRO_CLEAR_INT, 0);
   if (0 > ret)
    {
@@ -160,6 +156,11 @@ INT32 sys_gsensor_setwakeup(const UINT32 fd,const UINT32 w_threshold)
 {
   INT32 ret = -1;
   struct gyro_config gyro_cfg;
+  if(fd < 0)
+  {
+      SYS_COMMON_ERROR("gsensor fd  error \n");
+      return ERROR;
+  }
   memset(&gyro_cfg, 0, sizeof(struct gyro_config));
   gyro_cfg.wom = WOM_ENABLE;
   gyro_cfg.w_threshold = w_threshold;
@@ -169,5 +170,165 @@ INT32 sys_gsensor_setwakeup(const UINT32 fd,const UINT32 w_threshold)
 		  SYS_COMMON_ERROR("HAT_GYRO_TMR_SET set failure.\n");
       return ERROR;
    }
+   return OK;
+}
+
+/**@fn        sys_gesnsor_getdata
+ * @brief      gsensor的获取数据
+ * @param[in]  gsensor的文件描述符
+ * @return     成功返回 OK 错误返回 ERROR
+ */
+
+INT32 sys_gsensor_getdata(const UINT32 fd,sensor_t * sensordata)
+{
+   INT32 ret = -1;
+   struct gyro_value gyro_val;
+   if(fd < 0)
+   {
+      SYS_COMMON_ERROR("gsensor fd  error \n");
+      return ERROR;
+   }
+   memset(&gyro_val,0,sizeof(struct gyro_value));
+   ret = read(fd,(char *)&gyro_val, sizeof(struct gyro_value));
+   if (sizeof(struct gyro_value) != ret)
+   {
+		  SYS_COMMON_ERROR("read data error failure.\n");
+      return ERROR;
+   }
+   sensordata->accx=gyro_val.accel_x;
+   sensordata->accy=gyro_val.accel_y;
+   sensordata->accz=gyro_val.accel_z;
+   sensordata->gyrox=gyro_val.gyro_x;
+   sensordata->gyroy=gyro_val.gyro_y;
+   sensordata->gyroz = gyro_val.gyro_z;
+   return OK;
+
+}
+
+/**@fn        sys_gsensor_getinfo
+ * @brief      gsensor的获取芯片信息
+ * @param[in]  gsensor的文件描述符
+ * @return     成功返回 OK 错误返回 ERROR
+ */
+
+INT32 sys_gsensor_getinfo(const UINT32 fd,sensorinfo_t * info)
+{
+  INT32 ret = ERROR;
+  struct gyro_info gsensorinfo;
+  if(fd < 0)
+  {
+      SYS_COMMON_ERROR("gsensor fd  error \n");
+      return ERROR;
+  }
+  memset(&gsensorinfo, 0, sizeof(struct gyro_info));
+ 
+  ret = ioctl(fd, HAT_GYRO_INIT, &gsensorinfo);
+  if (0 > ret)
+   {
+		  SYS_COMMON_ERROR("HAT_GYRO_INIT get failure.\n");
+      return ERROR;
+   }
+  memcpy(info->gyroname ,gsensorinfo.name,strlen(gsensorinfo.name));
+  switch (gsensorinfo.type)
+  {
+  case GYRO_TYPE_DEFAULT:
+    info->AXIS = 0;
+    break;
+  case GYRO_BYTE_THREE_AXIS:
+    info->AXIS = 3;
+    break;
+  case GYRO_TYPE_SIX_AXIS:
+    info->AXIS = 6;
+    break;
+  case GYRO_TYPE_NINE_AXIS:
+    info->AXIS = 9;
+    break;
+  default:
+    info->AXIS = 0;
+    break;
+  }
+   return OK;
+}
+/**@fn        sys_gsensor_getconfig
+ * @brief      gsensor的获取量程
+ * @param[in]  gsensor的文件描述符
+ * @return     成功返回 OK 错误返回 ERROR
+ */
+
+INT32 sys_gsensor_getconfig(const UINT32 fd,sensorinfo_t * info)
+{
+  INT32 ret = -1;
+ struct gyro_config gyro_cfg;
+  if(fd < 0)
+  {
+      SYS_COMMON_ERROR("gsensor fd  error \n");
+      return ERROR;
+  }
+  memset(&gyro_cfg, 0, sizeof(struct gyro_config));
+ 
+  ret = ioctl(fd, HAT_GYRO_READ_CONFIG, &gyro_cfg);
+  if (0 > ret)
+   {
+		  SYS_COMMON_ERROR("HAT_GYRO_INIT get failure.\n");
+      return ERROR;
+   }
+   info->accrng = gyro_cfg.accel_rng;
+   info->gyrorng = gyro_cfg.gyro_rng;
+   return OK;
+}
+
+/**@fn        sys_gsensor_setconfig
+ * @brief      gsensor的设置量程
+ * @param[in]  gsensor的文件描述符
+ * @return     成功返回 OK 错误返回 ERROR
+ */
+
+INT32 sys_gsensor_setconfig(const UINT32 fd,const UINT32 accrng)
+{
+  INT32 ret = -1;
+ struct gyro_config gyro_cfg;
+  if(fd < 0)
+  {
+      SYS_COMMON_ERROR("gsensor fd  error \n");
+      return ERROR;
+  }
+  memset(&gyro_cfg, 0, sizeof(struct gyro_config));
+  gyro_cfg.accel_rng = accrng;
+  ret = ioctl(fd, HAT_GYRO_SET_RNG, &gyro_cfg);
+  if (0 > ret)
+   {
+		  SYS_COMMON_ERROR("HAT_GYRO_INIT get failure.\n");
+      return ERROR;
+   }
+   return OK;
+}
+
+/**@fn        sys_gsensor_getparam
+ * @brief      gsensor的获取数据值
+ * @param[in]  gsensor的文件描述符
+ * @return     成功返回 OK 错误返回 ERROR
+ */
+
+INT32 sys_gsensor_getparam(const UINT32 fd,sensorinfo_t * info)
+{
+  INT32 ret = ERROR;
+  struct gyro_param gsensorparam;
+  if(fd < 0)
+  {
+      SYS_COMMON_ERROR("gsensor fd  error \n");
+      return ERROR;
+  }
+  memset(&gsensorparam, 0, sizeof(struct gyro_param));
+ 
+  ret = ioctl(fd, HAT_GYRO_GET_PARAM, &gsensorparam);
+  if (0 > ret)
+   {
+		  SYS_COMMON_ERROR("HAT_GYRO_INIT get failure.\n");
+      return ERROR;
+   }
+   info->accvalidnum = gsensorparam.accvalidnum;
+   info->gyrovalidnum = gsensorparam.gyrovalidnum;
+   info->acccoef = gsensorparam.acccoef;
+   info->gyrocoef = gsensorparam.gyrocoef;
    return OK;
 }
