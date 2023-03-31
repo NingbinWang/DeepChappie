@@ -10,6 +10,7 @@
 #include "sys_timer.h"
 #include "sys_posix.h"
 #include "sys_mqueue.h"//信号量
+#include "sys_time.h"
 
 
 
@@ -85,10 +86,10 @@ typedef struct
    UINT32                                      uGyrorng;     /* 设置gyro 的满量程精确度 可选: ±250，±500,±1000,±2000 */
    UINT32                                      uThreshold;  /* 设置碰撞唤醒阈值 0~255(0~1020mg,4mg LSB)*/
    UINT32                                      uWom;          /*  设置阈值唤醒功能，TRUE/FALSE*/
-   UINT32                                      accvalidnum;     /* acc有效数据 */
-   UINT32                                      gyrovalidnum;    /* gyro有效数据 */
-   UINT32                                      acccoef;
-   UINT32                                      gyrocoef;
+   UINT32                                      accvalidnum;     /* acc有效数据位数 */
+   UINT32                                      gyrovalidnum;    /* gyro有效数据位数 */
+   UINT32                                      acccoef;        /* acc的系数*/   
+   UINT32                                      gyrocoef;       /*gyro的系数*/
 }GSENSOR_MANAGER_PRVI_INFO_T;
 
 /**
@@ -102,9 +103,9 @@ typedef struct
    CHAR                                        cGyroname[30];//GYRO的名字
    GSENSOR_MANAGER_PRVI_INFO_T                 info;         //信息
    GSENSOR_MODE_E                              eMode;         //模式
-   MSG_Q_ID                                    stMsgID;     // 请求消息任务ID
+   MSG_Q_ID                                    stReqMsgID;     /* 请求消息任务ID */
+   MSG_Q_ID                                    stRespMsgID;    /* 响应消息任务ID */
    INT32                                       iWaitTime;      /* 超时时长 */
-   INT32                                       iFlag;  
    GSENSOR_MANAGER_CMD_E                       eState;         /* gsensor目前状态 */
    GSENSOR_MANAGER_PRVI_DATA_T                 data;     
 }GSENSOR_MANAGER_PRIV_DATA_T;

@@ -6,6 +6,7 @@ file(GLOB SRC_LIST
 #"AVB/adaptor/*.cpp"
 "src/*.cpp"
 "Hardware/*.cpp"
+"DevMonitor/*.cpp"
 )
 include_directories(
 #api
@@ -23,7 +24,6 @@ include_directories(
 #"AVB/talker"
 #"AVB/manager"
 #"AVB/adaptor"
-
 "Logger"
 "Hardware"
 "src"

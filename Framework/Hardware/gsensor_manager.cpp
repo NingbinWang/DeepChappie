@@ -1,4 +1,5 @@
 #include "gsensor_priv.h"
+#include "logger.h"
 
 /**@fn         gsensor_manager_init_resource_release   
  * @brief      释放单例初始化过程中申请的资源
@@ -10,16 +11,24 @@ static VOID gsensor_manager_init_resource_release(GSENSOR_MANAGER_PRIV_DATA_T *p
     INT32 iRet = ERROR;
     if(NULL == pStPrivData)
     {
-        printf("param error\n");
+        LOGGER_ERROR("param error\n");
         return;
     }
 
-    if(0 != pStPrivData->stMsgID)
+    if(0 != pStPrivData->stReqMsgID)
     {
-        iRet = sys_mqueue_close(&pStPrivData->stMsgID);
+        iRet = sys_mqueue_close(&pStPrivData->stReqMsgID);
         if(OK == iRet)
         {
-            pStPrivData->stMsgID = 0;
+            pStPrivData->stReqMsgID = 0;
+        }
+    }
+    if(0 != pStPrivData->stRespMsgID)
+    {
+        iRet = sys_mqueue_close(&pStPrivData->stRespMsgID);
+        if(OK == iRet)
+        {
+            pStPrivData->stRespMsgID = 0;
         }
     }
     if(0 != pStPrivData->stThreadID)
@@ -30,6 +39,7 @@ static VOID gsensor_manager_init_resource_release(GSENSOR_MANAGER_PRIV_DATA_T *p
             pStPrivData->stThreadID = 0;
         }
     }
+    
     return;
 }
 
@@ -37,7 +47,6 @@ static VOID gsensor_manager_init_resource_release(GSENSOR_MANAGER_PRIV_DATA_T *p
 /**@fn         gsensor_manager_send_ctrl_msg        
  * @brief      发送消息          
  * @param[in]  pStPrivData私有数据结构体指针
- * @param[in]  eStates    RTSP会话状态类型
  * @return     成功返回OK  失败返回错误码
  */
 static INT32 gsensor_manager_send_ctrl_msg(GSENSOR_MANAGER_PRIV_DATA_T *pStPrivData, GSENSOR_MANAGER_CMD_E eCmd)
@@ -48,26 +57,26 @@ static INT32 gsensor_manager_send_ctrl_msg(GSENSOR_MANAGER_PRIV_DATA_T *pStPrivD
 
     if(NULL == pStPrivData)
     {
-        printf("param error\n");
+        LOGGER_ERROR("param error\n");
         return iRet;
     }
     stCtrlMsg.eCmd = eCmd;
-    iRet = sys_mqueue_send(&pStPrivData->stMsgID, (CHAR *)&stCtrlMsg, sizeof(GSENSOR_MANAGER_MSG_T), NO_WAIT);
+    iRet = sys_mqueue_send(&pStPrivData->stReqMsgID, (CHAR *)&stCtrlMsg, sizeof(GSENSOR_MANAGER_MSG_T), NO_WAIT);
     if(iRet < 0)
     {
-        printf("sys_mqueue_send start msg error \n");
+        LOGGER_ERROR("sys_mqueue_send start msg error \n");
         return iRet;
     }
-    iRet = sys_mqueue_recv(&pStPrivData->stMsgID, (CHAR *)&stCtrlMsg, sizeof(GSENSOR_MANAGER_MSG_T),uWaitMsec);
+    iRet = sys_mqueue_recv(&pStPrivData->stRespMsgID, (CHAR *)&stCtrlMsg, sizeof(GSENSOR_MANAGER_MSG_T),uWaitMsec);
     if(iRet < 0)
     {
-        printf("eCmd %d recv result time out\n", eCmd);
+        LOGGER_ERROR("eCmd %d recv result time out\n", eCmd);
         return iRet;
     }
     iRet = (stCtrlMsg.eResult == GSENSOR_MANAGER_RESULT_SUCCESS) ? OK : ERROR;
     if(iRet < 0)
     {
-        printf("control cmd %d error\n", eCmd);
+        LOGGER_ERROR("control cmd %d error\n", eCmd);
         return iRet;
     }
     return iRet;
@@ -86,15 +95,15 @@ static VOID gsensor_manager_send_msg_response(GSENSOR_MANAGER_PRIV_DATA_T *pStPr
 
     if((NULL == pStPrivData) || (NULL == pStMsg))
     {
-        printf("param error\n");
+        LOGGER_ERROR("param error\n");
         return;
     }
     stSegMsg.eCmd    = pStMsg->eCmd;
     stSegMsg.eResult = eResult;
-    iRet = sys_mqueue_send(&pStPrivData->stMsgID, (CHAR *)&stSegMsg, sizeof(GSENSOR_MANAGER_MSG_T), NO_WAIT);
+    iRet = sys_mqueue_send(&pStPrivData->stRespMsgID, (CHAR *)&stSegMsg, sizeof(GSENSOR_MANAGER_MSG_T), NO_WAIT);
     if(iRet < 0)
     {
-        printf("sys_mqueue_send start msg error \n");
+        LOGGER_ERROR("sys_mqueue_send start msg error \n");
         return;
     }
     return;
@@ -111,7 +120,7 @@ static INT32 gsensor_manager_recv_msg_handle(GSENSOR_MANAGER_PRIV_DATA_T *pStPri
     INT32 iRet = ERROR;
     if((NULL == pStPrivData) || (NULL == pStMsg))
     {
-        printf("param error\n");
+        LOGGER_ERROR("param error\n");
         return iRet;
     }
     switch(pStMsg->eCmd)
@@ -119,26 +128,26 @@ static INT32 gsensor_manager_recv_msg_handle(GSENSOR_MANAGER_PRIV_DATA_T *pStPri
         case GSENSOR_MANAGER_CMD_START:
             if(GSENSOR_MANAGER_CMD_START == pStPrivData->eState)
             {
-                printf("gsensor already start\n");
+                LOGGER_INFO("gsensor already start\n");
                 iRet = OK;
                 break;
             }
             pStPrivData->eState = GSENSOR_MANAGER_CMD_START;
+            pStPrivData->iWaitTime = NO_WAIT;
             iRet = OK;
             break;
         case GSENSOR_MANAGER_CMD_STOP:
-            if(GSENSOR_MANAGER_CMD_STOP != pStPrivData->eState)
+            if(GSENSOR_MANAGER_CMD_STOP == pStPrivData->eState)
             {
-                printf("avb talker not in start state\n");
+                LOGGER_INFO("gsesor not in start state\n");
                 break;
             }
             pStPrivData->iWaitTime = WAIT_FOREVER;
             pStPrivData->eState = GSENSOR_MANAGER_CMD_STOP;
-            pStPrivData->iFlag = 0;
             iRet = OK;
             break;
         default:
-            printf("ctrl cmd %d not support\n", pStMsg->eCmd);
+            LOGGER_INFO("ctrl cmd %d not support\n", pStMsg->eCmd);
             iRet = ERROR;
             break;
     }
@@ -153,11 +162,23 @@ static INT32 gsensor_manager_recv_msg_handle(GSENSOR_MANAGER_PRIV_DATA_T *pStPri
     return iRet;
 }
 
+
+/**@fn	       gsensor_manager_maxval	  
+ * @brief	   获取极大值
+ * @param[in]  validnum 有效位数
+ * @return	   返回极大值
+ */
 static INT32 gsensor_manager_maxval(const UINT16 validnum)
 {
     return ((1<<(validnum- 1))-1);
 }
 
+/**@fn	       gsensor_manager_convert	  
+ * @brief	   获取正负数
+ * @param[in]  maxval 极大值
+ * @param[in]  data 原始数据
+ * @return	   返回正负数
+ */
 static INT32 gsensor_manager_convert(const INT32 maxval,INT32 data)
 {
     if(data < maxval){
@@ -167,23 +188,29 @@ static INT32 gsensor_manager_convert(const INT32 maxval,INT32 data)
     }
 }
 
+/**@fn	       gsensor_manager_calculate	  
+ * @brief	   进行数据换算获取mg值
+ * @param[out]  StPrivData  私有数据结构指针
+ * @param[in]  stRawData 原始数据
+ * @return	   
+ */
 static VOID gsensor_manager_calculate(GSENSOR_MANAGER_PRIV_DATA_T *pStPrivData,const sensor_t stRawData)
 {
-    INT32 accmaxval = 0;
-    INT32 gyromaxval = 0;
     if(NULL == pStPrivData)
     {
         printf("param error\n");
         return;
     }
-    accmaxval = gsensor_manager_maxval(pStPrivData->info.accvalidnum);
-    pStPrivData->data.accx = gsensor_manager_convert(accmaxval,stRawData.accx)*(pStPrivData->info.acccoef);
-    pStPrivData->data.accy = gsensor_manager_convert(accmaxval,stRawData.accy)*(pStPrivData->info.acccoef);
-    pStPrivData->data.accz = gsensor_manager_convert(accmaxval,stRawData.accz)*(pStPrivData->info.acccoef);
-    gyromaxval = gsensor_manager_maxval(pStPrivData->info.gyrovalidnum);
-    pStPrivData->data.gyrox = gsensor_manager_convert(gyromaxval,stRawData.gyrox)*(pStPrivData->info.gyrocoef);
-    pStPrivData->data.gyroy = gsensor_manager_convert(gyromaxval,stRawData.gyroy)*(pStPrivData->info.gyrocoef);
-    pStPrivData->data.gyroz = gsensor_manager_convert(gyromaxval,stRawData.gyroz)*(pStPrivData->info.gyrocoef);
+    if(0 == strncmp(pStPrivData->cGyroname,"GYRO_LIS2DH12",strlen("GYRO_LIS2DH12"))){
+      if((pStPrivData->info.accvalidnum != 0) ){
+        INT32 accmaxval = 0;
+        accmaxval = gsensor_manager_maxval(pStPrivData->info.accvalidnum);
+        pStPrivData->data.accx = gsensor_manager_convert(accmaxval,stRawData.accx)*(pStPrivData->info.acccoef);
+        pStPrivData->data.accy = gsensor_manager_convert(accmaxval,stRawData.accy)*(pStPrivData->info.acccoef);
+        pStPrivData->data.accz = gsensor_manager_convert(accmaxval,stRawData.accz)*(pStPrivData->info.acccoef);
+      }
+    }
+    printf("x = %d,mg y=%d mg z=%d mg\n",pStPrivData->data.accx,pStPrivData->data.accy,pStPrivData->data.accz);
 
 }
 /**@fn          gsensor_manager_work_thread    
@@ -200,27 +227,22 @@ static VOID gsensor_manager_work_thread(GSENSOR_MANAGER_PRIV_DATA_T *pStPrivData
     fd_set read_fd;
     if(NULL == pStPrivData)
     {
-        printf("param error\n");
+        LOGGER_ERROR("param error\n");
         return;
     }
     iFd = pStPrivData->iFd;
-    pStPrivData->iFlag = 0;
     FD_ZERO(&read_fd);
     while(TRUE)
     {
-        if(0 == pStPrivData->iFlag%20)
+        iRet = sys_mqueue_recv(&pStPrivData->stReqMsgID, (CHAR *)&stCtrlMsg, sizeof(stCtrlMsg), pStPrivData->iWaitTime);
+        if (iRet >= 0)
         {
-            iRet = sys_mqueue_recv(&pStPrivData->stMsgID, (CHAR *)&stCtrlMsg, sizeof(stCtrlMsg), pStPrivData->iWaitTime);
-            if (iRet >= 0)
-            {   
-                
-                iRet = gsensor_manager_recv_msg_handle(pStPrivData,&stCtrlMsg);
-                if((iRet < 0) || (GSENSOR_MANAGER_CMD_STOP == pStPrivData->eState))
-                {
+             iRet = gsensor_manager_recv_msg_handle(pStPrivData,&stCtrlMsg);
+             if((iRet < 0) || (GSENSOR_MANAGER_CMD_STOP == pStPrivData->eState))
+             {
                     pStPrivData->iWaitTime = WAIT_FOREVER;
                     continue;
-                }
-            }
+             }
         }
         FD_SET(iFd, &read_fd);
 		select(iFd + 1, &read_fd, NULL, NULL, NULL);
@@ -229,6 +251,7 @@ static VOID gsensor_manager_work_thread(GSENSOR_MANAGER_PRIV_DATA_T *pStPrivData
 				sys_gsensor_getdata(iFd,&stData);
 				gsensor_manager_calculate(pStPrivData,stData);		
 		}
+        sys_time_sleep_ms(1);
     }
 }
 
@@ -245,7 +268,7 @@ static GSENSOR_MANAGER_PRIV_DATA_T *gsensor_manager_get_priv_data(IGsensor_manag
     pStBase = (GSENSOR_MANAGER_BASE_T*)pIGsensor_manager;
     if(NULL == pStBase)
     {
-        printf("param error\n");
+        LOGGER_ERROR("param error\n");
         return NULL;
     }
     return &pStBase->stPrivData;
@@ -265,41 +288,56 @@ static INT32 gsensor_manager_init(IGsensor_manager *pIGsensor_manager)
     pStPrivData = gsensor_manager_get_priv_data(pIGsensor_manager);
     if((NULL == pStPrivData))
     {
-        printf("param error\n");
+        LOGGER_ERROR("param error\n");
         return iRet;
     }
     do
     {
-        iRet = snprintf(strMsgName,sizeof(strMsgName),"Gsensor_%s", pStPrivData->cGyroname);
+        //创建请求消息任务信号量
+        iRet = snprintf(strMsgName,sizeof(strMsgName),"GsensorReq_%s", pStPrivData->cGyroname);
         if(iRet < 0)
         {
-            printf("snprintf error\n");
+            LOGGER_ERROR("snprintf error\n");
             break;
         }
-        iRet = sys_mqueue_create(&pStPrivData->stMsgID, strMsgName, 8, sizeof(GSENSOR_MANAGER_MSG_T));
+        iRet = sys_mqueue_create(&pStPrivData->stReqMsgID, strMsgName, 8, sizeof(GSENSOR_MANAGER_MSG_T));
         if(iRet < 0)
         {
-            printf("sys_mqueue_create fail\n");
+            LOGGER_ERROR("sys_mqueue_create fail\n");
             break;
         }
-        iRet = snprintf(strThreadName,sizeof(strThreadName),"Gsensor_%dAxis",pStPrivData->uAxis);
+        //创建回复消息任务信号量
+        iRet = snprintf(strMsgName,sizeof(strMsgName),"GsensorResp_%s", pStPrivData->cGyroname);
         if(iRet < 0)
         {
-            printf("snprintf error!\n");
+            LOGGER_ERROR("snprintf error\n");
+            break;
+        }
+        iRet = sys_mqueue_create(&pStPrivData->stRespMsgID, strMsgName, 8, sizeof(GSENSOR_MANAGER_MSG_T));
+        if(iRet < 0)
+        {
+            LOGGER_ERROR("sys_mqueue_create fail\n");
+            break;
+        }
+        iRet = snprintf(strThreadName,sizeof(strThreadName),"Gsensor_%dAxis",pStPrivData->info.uAxis);
+        if(iRet < 0)
+        {
+            LOGGER_ERROR("snprintf error!\n");
             break;
         }
         iRet = sys_pthread_create(&pStPrivData->stThreadID, strThreadName, TASK_PRIORITY_5, SIZE_32KB, (FUNCPTR)gsensor_manager_work_thread, 1, pStPrivData);
         if(iRet != OK)
         {
-            printf("create gsensor task failed!\n");
+            LOGGER_ERROR("create gsensor task failed!\n");
             break;
         }
     } while (FALSE);
 
     if(iRet < 0)
     {
-        printf("gsensor_manager_init failed!\n");
+        LOGGER_ERROR("gsensor_manager_init failed!\n");
         gsensor_manager_init_resource_release(pStPrivData);
+        sys_mem_free(pStPrivData);
         return iRet;
     }
     
@@ -320,7 +358,7 @@ static INT32 gsensor_manager_start(IGsensor_manager *pIGsensor_manager)
     pStPrivData = gsensor_manager_get_priv_data(pIGsensor_manager);
     if(NULL == pStPrivData)
     {
-        printf("param error\n");
+        LOGGER_ERROR("param error\n");
         return iRet;
     }
     
@@ -340,12 +378,12 @@ static INT32 gsensor_manager_stop(IGsensor_manager *pIGsensor_manager)
     pStPrivData = gsensor_manager_get_priv_data(pIGsensor_manager);
     if(NULL == pStPrivData)
     {
-        printf("param error\n");
+        LOGGER_ERROR("param error\n");
         return iRet;
     }
     if(GSENSOR_MANAGER_CMD_START != pStPrivData->eState)
     {
-        printf("avb talker not in start state\n");
+        LOGGER_INFO("avb talker not in start state\n");
         return iRet;
     }
     return gsensor_manager_send_ctrl_msg(pStPrivData, GSENSOR_MANAGER_CMD_STOP);
@@ -365,7 +403,7 @@ static INT32 gsensor_manager_get_state(IGsensor_manager *pIGsensor_manager, GSEN
     pStPrivData = gsensor_manager_get_priv_data(pIGsensor_manager);
     if((NULL == pStPrivData) || (NULL == pState))
     {
-        printf("param error\n");
+        LOGGER_ERROR("param error\n");
         return iRet;
     }
     switch(pStPrivData->eState)
@@ -396,7 +434,7 @@ static INT32 gsensor_manager_release(IGsensor_manager *pIGsensor_manager)
      pStPrivData = gsensor_manager_get_priv_data(pIGsensor_manager);
     if((NULL == pStPrivData))
     {
-        printf("param error\n");
+        LOGGER_ERROR("param error\n");
         return iRet;
     }
     gsensor_manager_init_resource_release(pStPrivData);
@@ -404,7 +442,7 @@ static INT32 gsensor_manager_release(IGsensor_manager *pIGsensor_manager)
     iRet = sys_gsensor_close(pStPrivData->iFd);
     if(iRet < 0)
     {
-        printf("sys_gsensor_close error\n");
+        LOGGER_ERROR("sys_gsensor_close error\n");
         return iRet;
     }
     sys_mem_free(pIGsensor_manager);
@@ -443,55 +481,59 @@ static INT32 gsensor_manager_init_priv_data(GSENSOR_MANAGER_PRIV_DATA_T *pStPriv
     pinfo = (sensorinfo_t *)sys_mem_malloc(sizeof(sensorinfo_t));
     if(NULL == pinfo)
     {
-        printf("sys_mem_malloc failed\n");
+        LOGGER_ERROR("sys_mem_malloc failed\n");
         return ERROR;
     }
     pStPrivData->iFd = sys_gsensor_open();
     iFd = pStPrivData->iFd;
     if(iFd < 0)
     {
-        printf("id < 0\n");
+        LOGGER_ERROR("id < 0\n");
         sys_mem_free(pinfo);
         return ERROR;
     }
     iRet = sys_gsensor_getinfo(iFd,pinfo);
     if(iRet == ERROR)
     {
-        printf("sys_gsensor_getinfo failed\n");
+        LOGGER_ERROR("sys_gsensor_getinfo failed\n");
         sys_mem_free(pinfo);
         return ERROR;
     }
     pStPrivData->info.uAxis = pinfo->AXIS;
-   
     sys_mem_copy(pStPrivData->cGyroname,pinfo->gyroname,strlen(pinfo->gyroname));
     iRet = sys_gsensor_getconfig(iFd,pinfo);
     if(iRet == ERROR)
     {
-        printf("sys_gsensor_getinfo failed\n");
+        LOGGER_ERROR("sys_gsensor_getinfo failed\n");
         sys_mem_free(pinfo);
         return ERROR;
     }
     pStPrivData->info.uAccrng = pinfo->accrng;
     pStPrivData->info.uGyrorng = pinfo->gyrorng;
     pStPrivData->eMode = NORMALE_MODE;
-    iRet = sys_gsensor_normalpower(iFd);
-    if(iRet == ERROR)
-    {
-        printf("sys_gsensor_normalpower failed\n");
+   
+    if(0 == strncmp(pStPrivData->cGyroname,"GYRO_LIS2DH12",strlen("GYRO_LIS2DH12"))){
+      iRet = sys_gsensor_normalpower(iFd);
+      if(iRet == ERROR)
+      {
+        LOGGER_ERROR("sys_gsensor_normalpower failed\n");
         sys_mem_free(pinfo);
         return ERROR;
-    }
-    iRet = sys_gsensor_getparam(iFd,pinfo);
-    if(iRet == ERROR)
-    {
-        printf("sys_gsensor_getparam failed\n");
+      }
+       iRet = sys_gsensor_getparam(iFd,pinfo);
+      if(iRet == ERROR)
+      {
+        LOGGER_ERROR("sys_gsensor_getparam failed\n");
         sys_mem_free(pinfo);
         return ERROR;
+      }
+      pStPrivData->info.accvalidnum=pinfo->accvalidnum;
+      pStPrivData->info.acccoef=pinfo->acccoef;
+      pStPrivData->info.gyrovalidnum=pinfo->gyrovalidnum;
+      pStPrivData->info.gyrocoef=pinfo->gyrorng;
+      LOGGER_INFO("acc_rng = %d ,accvalidnum=%d , acccoef=%d\n",pStPrivData->info.uAccrng,pStPrivData->info.accvalidnum,pStPrivData->info.acccoef);
     }
-    pStPrivData->info.accvalidnum=pinfo->accvalidnum;
-    pStPrivData->info.acccoef=pinfo->acccoef;
-    pStPrivData->info.gyrovalidnum=pinfo->gyrovalidnum;
-    pStPrivData->info.gyrocoef=pinfo->gyrorng;
+    
     pStPrivData->eMode = HIGHRESO_MODE;
     pStPrivData->iWaitTime = WAIT_FOREVER;
     sys_mem_free(pinfo);
@@ -511,14 +553,14 @@ IGsensor_manager *gsensor_manager_init_instance(void)
    pStBase = (GSENSOR_MANAGER_BASE_T *)sys_mem_malloc(sizeof(GSENSOR_MANAGER_BASE_T));
     if(NULL == pStBase)
     {
-        printf("sys_mem_malloc failed\n");
+        LOGGER_ERROR("sys_mem_malloc failed\n");
         return NULL;
     }
 
     iRet = gsensor_manager_interface(&pStBase->stInterface); 
     if(iRet < 0)
     {   
-        printf("gsensor_manager_interface failed\n");
+        LOGGER_ERROR("gsensor_manager_interface failed\n");
         sys_mem_free(pStBase);
         return NULL;
     }
@@ -526,7 +568,7 @@ IGsensor_manager *gsensor_manager_init_instance(void)
     iRet = gsensor_manager_init_priv_data(&pStBase->stPrivData);
     if(iRet < 0)
     {
-        printf("gsensor_manager_init_priv_data failed\n");
+        LOGGER_ERROR("gsensor_manager_init_priv_data failed\n");
         sys_mem_free(pStBase);
         return NULL;
     }

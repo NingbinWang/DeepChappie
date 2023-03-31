@@ -1,7 +1,8 @@
+MODULE_SUB_DIR = src
 MODULE_SUB_DIR = Notification
+MODULE_SUB_DIR = Hareware
 
-
-
+MODULE_SUB_INC = inc
 MODULE_SUB_INC = Notification
 
 MODULE_NAME = framework

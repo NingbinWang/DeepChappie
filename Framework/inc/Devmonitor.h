@@ -1,7 +1,5 @@
-#ifndef  _SYS_DEV_MONITOR_H_
-#define  _SYS_DEV_MONITOR_H_
-
-#include"sys_common.h"
+#ifndef  _DEVMONITOR_H_
+#define  _DEVMONITOR_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,7 +36,7 @@ typedef enum
  * @param[in]  eAction       设备动作
  * @return     无
  */
-typedef VOID (*DevActionCallBack)(DEV_MONITOR_TYPE_E eType, INT32 iDevIndex, INT32 iPartIndex, DEV_MONITOR_ACTION_E eAction);
+typedef void (*DevActionCallBack)(DEV_MONITOR_TYPE_E eType, int iDevIndex, int iPartIndex, DEV_MONITOR_ACTION_E eAction);
 
 typedef struct IDevMonitor IDevMonitor;
 
@@ -51,7 +49,7 @@ struct IDevMonitor
      * @param[in]  pCallBack     回调函数
      * @return     无
      */
-    VOID (*RegisterActionCallBack)(IDevMonitor *pIDevMonitor, DEV_MONITOR_TYPE_E eType, DevActionCallBack pCallBack);
+    void (*RegisterActionCallBack)(IDevMonitor *pIDevMonitor, DEV_MONITOR_TYPE_E eType, DevActionCallBack pCallBack);
 
     /**@fn         CheckDev      
      * @brief      设备节点检测
@@ -60,8 +58,10 @@ struct IDevMonitor
      * @param[in]  iDevIndex     设备节点索引
      * @return     无
      */
-    INT32 (*CheckDev)(IDevMonitor *pIDevMonitor,DEV_MONITOR_TYPE_E eType, INT32 iDevIndex);
+    int (*CheckDev)(IDevMonitor *pIDevMonitor,DEV_MONITOR_TYPE_E eType, int iDevIndex);
 };
+
+IDevMonitor *devmonitor_init_instance(VOID);
 
 #ifdef __cplusplus
 }
