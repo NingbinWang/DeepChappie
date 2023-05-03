@@ -84,7 +84,7 @@ void devmonitor_netlink_data_handle(DEV_MONITOR_PRIV_DATA_T *pStPrivData, CHAR *
     }
     else
     {   
-        //SYS_COMMON_ERROR("ignore netlink event info :%s \n",strBuf);
+        LOGGER_INFO("ignore netlink event info :%s \n",strBuf);
         return;
     }
     strBlock = strstr(strBuf,"block");
@@ -108,7 +108,7 @@ void devmonitor_netlink_data_handle(DEV_MONITOR_PRIV_DATA_T *pStPrivData, CHAR *
     }
     if(strstr(strBlockPath,"/") != NULL)
     {
-        //SYS_COMMON_ERROR("ignore netlink event info :%s \n",strBuf);
+        LOGGER_INFO("ignore netlink event info :%s \n",strBuf);
         return;
     }
     if(NULL == pStPrivData->pCallBack)
@@ -164,6 +164,7 @@ VOID devmonitor_thread_work(DEV_MONITOR_PRIV_DATA_T *pStPrivData)
             continue;
         }
 		pStPrivData->strBuf[iRet] = '\0';
+        LOGGER_INFO("recv:%s\n",pStPrivData->strBuf);
         devmonitor_netlink_data_handle(pStPrivData, pStPrivData->strBuf, iRet);
     }
     
@@ -221,6 +222,8 @@ static INT32 devmonitor_check_dev(IDevMonitor *pIDevMonitor,DEV_MONITOR_TYPE_E e
         LOGGER_ERROR("get priv data error \n");
         return -1;
     }
+    
+
     return OK;
 }
 
@@ -231,11 +234,34 @@ static INT32 devmonitor_check_dev(IDevMonitor *pIDevMonitor,DEV_MONITOR_TYPE_E e
  */
 static INT32 devmonitor_init_priv_data(DEV_MONITOR_PRIV_DATA_T *pStPrivData)
 {
-    INT32 iRet = ERROR;
     if(!pStPrivData)
     {
         LOGGER_ERROR("init pPriv Data error\n");
         return ERROR;
+    }
+
+    return OK;
+}
+
+/**@fn	       devmonitor_init	  
+ * @brief	   初始化模块
+ * @param[in]  无
+ * @return	   成功返回IDevMonitor操作指针  失败返回NULL;
+ */
+static INT32 devmonitor_init(IDevMonitor *pIDevMonitor)
+{   
+    INT32 iRet = ERROR;
+    DEV_MONITOR_PRIV_DATA_T *pStPrivData = NULL;
+    if(NULL == pIDevMonitor)
+    {
+        LOGGER_ERROR("init interface func error\n");
+        return iRet;
+    }
+    pStPrivData = devmonitor_get_priv_data(pIDevMonitor);
+    if( NULL == pStPrivData)
+    {
+        LOGGER_ERROR("get priv data error \n");
+        return -1;
     }
     iRet = devmonitor_init_hotplug_sock();
     if(iRet < 0)
@@ -264,6 +290,7 @@ static INT32 devmonitor_init_interface(IDevMonitor *pIDevMonitor)
         LOGGER_ERROR("init interface func error\n");
         return iRet;
     }
+    pIDevMonitor->Init = devmonitor_init;
     pIDevMonitor->RegisterActionCallBack = devmonitor_register_action_callback;
     pIDevMonitor->CheckDev = devmonitor_check_dev;
     return OK;

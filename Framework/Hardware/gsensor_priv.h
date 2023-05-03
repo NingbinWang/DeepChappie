@@ -3,16 +3,27 @@
 
 
 
-#include "gsensor.h"
-#include "sys_imu.h"
+#include "Gsensor.h"
+#include "sys_gsensor.h"
 #include "sys_pthread.h"
 #include "sys_mem.h"
 #include "sys_timer.h"
 #include "sys_posix.h"
 #include "sys_mqueue.h"//信号量
 #include "sys_time.h"
+#include "logger.h"
+#include <math.h>
 
 
+typedef struct
+{
+	FLOAT32 LastP;//上次估算协方差，不可以为0
+	FLOAT32 NowP;//当前估算协方差
+	FLOAT32 out;//卡尔曼滤波器输出
+	FLOAT32 Kg;//卡尔曼增益
+	FLOAT32 Q;//过程噪声协方差
+	FLOAT32 R;//观察噪声协方差
+}KALMAN_FILTER_T;
 
 /*mode*/
 typedef enum
@@ -62,15 +73,15 @@ typedef struct
 */
 typedef struct 
 {
-    INT32 accx;     // 加速度 x mg
-	INT32 accy;     // 加速度 y mg
-	INT32 accz;     // 加速度 z mg
-	INT32 gyrox;    // 角速度 x坐标值  
-	INT32 gyroy;    // 角速度 y坐标值  
-	INT32 gyroz;    // 角速度 z坐标值  
-    INT32 magx;     // ecompass x坐标值 
-    INT32 magy;     // ecompass y坐标值 
-    INT32 magz;     // ecompass z坐标值 
+    FLOAT32 accx;     // 加速度 x mg
+	FLOAT32 accy;     // 加速度 y mg
+	FLOAT32 accz;     // 加速度 z mg
+	FLOAT32 gyrox;    // 角速度 x坐标值  
+	FLOAT32 gyroy;    // 角速度 y坐标值  
+	FLOAT32 gyroz;    // 角速度 z坐标值  
+    FLOAT32 magx;     // ecompass x坐标值 
+    FLOAT32 magy;     // ecompass y坐标值 
+    FLOAT32 magz;     // ecompass z坐标值 
 }GSENSOR_MANAGER_PRVI_DATA_T;
 
 
@@ -88,8 +99,8 @@ typedef struct
    UINT32                                      uWom;          /*  设置阈值唤醒功能，TRUE/FALSE*/
    UINT32                                      accvalidnum;     /* acc有效数据位数 */
    UINT32                                      gyrovalidnum;    /* gyro有效数据位数 */
-   UINT32                                      acccoef;        /* acc的系数*/   
-   UINT32                                      gyrocoef;       /*gyro的系数*/
+   FLOAT32                                      acccoef;        /* acc的系数*/   
+   FLOAT32                                      gyrocoef;       /*gyro的系数*/
 }GSENSOR_MANAGER_PRVI_INFO_T;
 
 /**

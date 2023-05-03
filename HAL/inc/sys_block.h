@@ -101,6 +101,12 @@ INT32 sys_block_copy(const char *src_dev, const char *dst_dev);
  */
 INT32 sys_block_cmp(const char *src_dev, const char *dst_dev);
 
+/**@fn        sys_block_verboseset 
+ * @brief     设置是否打印百分比
+ * @param[in] enable
+ */
+VOID sys_block_verboseset(const INT32 enable);
+
 
 
 #ifdef __cplusplus

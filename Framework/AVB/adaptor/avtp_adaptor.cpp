@@ -72,32 +72,32 @@ INT32 avtp_talker_socket_create(INT32 iPriority, CHAR *pInterfaceName, UINT8 *pD
     {
         return iRet;
     }
-    AVTP_INFO(">>>>>>>>>>>>>> iPriority:%d, pInterfaceName:%s\n", iPriority, pInterfaceName);
+    LOGGER_INFO(">>>>>>>>>>>>>> iPriority:%d, pInterfaceName:%s\n", iPriority, pInterfaceName);
     iSock = socket(AF_PACKET, SOCK_DGRAM, (INT32)sys_htons(ETH_P_TSN));
     if(iSock < 0)
     {
-        AVTP_ERROR("Failed to open socket\n");
+        LOGGER_ERROR("Failed to open socket\n");
         return iRet;
     }
     iRet = setsockopt(iSock, SOL_SOCKET, SO_PRIORITY, &iPriority, sizeof(iPriority));
     if(iRet < 0)
     {
-        AVTP_ERROR("Failed to set priority\n");
+        LOGGER_ERROR("Failed to set priority\n");
         iRet = close(iSock);
         if(iRet < 0)
         {
-            AVTP_ERROR("close error\n");
+            LOGGER_ERROR("close error\n");
         }
         return iRet;
     }
     iRet = avtp_socket_address_setup(iSock, pInterfaceName, pDestMacAddr, ETH_P_TSN, pStSockAddr);
     if (iRet < 0)
     {
-        AVTP_ERROR("setup socket address error\n");
+        LOGGER_ERROR("setup socket address error\n");
         iRet = close(iSock);
         if(iRet < 0)
         {
-            AVTP_ERROR("close error\n");
+            LOGGER_ERROR("close error\n");
         }
         return ERROR;
     }

@@ -14,7 +14,7 @@
  * encoding UTF-8  
  */
 #include "sys_gsensor_priv.h"
-#include "sys_imu.h"
+#include "sys_gsensor.h"
 
 /**@fn        sys_gsensor_open    
  * @brief     打开gesnor     

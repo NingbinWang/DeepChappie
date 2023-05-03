@@ -557,19 +557,19 @@ IAvtpCvfPdu *avtp_cvf_pdu_init_instance(VOID)
     pStBase = sys_mem_malloc(sizeof(AVTP_CVF_PDU_BASE_T));
     if(NULL == pStBase)
     {
-        AVTP_ERROR("sys_mem_malloc failed\n");
+        LOGGER_ERROR("sys_mem_malloc failed\n");
         return NULL;
     }
     pMemset = memset(pStBase,0,sizeof(AVTP_CVF_PDU_BASE_T));
     if(NULL == pMemset)
     {
-        AVTP_ERROR("memset error\n");
+       LOGGER_ERROR("memset error\n");
         return NULL;
     }
     iRet = avtp_cvf_pdu_init_interface(&pStBase->stInterface);
     if(iRet < 0)
     {   
-        AVTP_ERROR("avtp_init_interface failed\n");
+        LOGGER_ERROR("avtp_init_interface failed\n");
         sys_mem_free(pStBase);
         return NULL;
     }
@@ -577,7 +577,7 @@ IAvtpCvfPdu *avtp_cvf_pdu_init_instance(VOID)
     iRet = avtp_cvf_pdu_init_priv_data(&pStBase->stPrivData);
     if(iRet < 0)
     {
-        AVTP_ERROR("avtp_init_priv_data failed\n");
+        LOGGER_ERROR("avtp_init_priv_data failed\n");
         sys_mem_free(pStBase);
         return NULL;
     }

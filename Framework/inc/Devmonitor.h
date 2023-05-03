@@ -42,6 +42,13 @@ typedef struct IDevMonitor IDevMonitor;
 
 struct IDevMonitor
 {
+    /**@fn         Init   
+     * @brief      初始化参数
+     * @param[in]  pIDevMonitor   设备监听对象
+     * @return     成功返回OK     失败返回错误码
+     */
+    int (*Init)(IDevMonitor *pIGsensor_manager);
+
     /**@fn         RegisterActionCallBack      
      * @brief      注册设备监听回调函数
      * @param[in]  pIDevMonitor  设备监听对象
@@ -61,7 +68,7 @@ struct IDevMonitor
     int (*CheckDev)(IDevMonitor *pIDevMonitor,DEV_MONITOR_TYPE_E eType, int iDevIndex);
 };
 
-IDevMonitor *devmonitor_init_instance(VOID);
+IDevMonitor *devmonitor_init_instance(void);
 
 #ifdef __cplusplus
 }

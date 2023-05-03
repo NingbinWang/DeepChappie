@@ -3,6 +3,16 @@
 /* 用于该模块的进度打印 */
 int sys_block_verbose = 0;
 
+/**@fn        sys_block_verboseset 
+ * @brief     设置是否打印百分比
+ * @param[in] enable
+ */
+VOID sys_block_verboseset(const INT32 enable)
+{
+   
+    sys_block_verbose = enable;
+}
+
 /**@fn        sys_block_size 
  * @brief     获取节点大小      
  * @param[in] dev block节点

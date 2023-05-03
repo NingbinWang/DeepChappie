@@ -15,12 +15,7 @@
 #include <unistd.h>
 #include "sys_common.h"
 #include "sys_utils.h"
-//#include "sys_common_inside.h"
-
-//#define _AVTP_LOG(format, ...)      printf("[AVB]"format"\r\n", ##__VA_ARGS__)
-#define AVTP_INFO(fmt, arg...)    LOGGER_MANAGER_INFO(fmt, arg...)
-#define AVTP_WARN(fmt, arg...)    LOGGER_MANAGER_WARN(fmt, arg...)
-#define AVTP_ERROR(fmt, arg...)   LOGGER_MANAGER_ERROR(fmt, arg...)
+#include "logger.h"
 
 #ifndef ETH_P_TSN
 #define ETH_P_TSN	0x22F0		/* TSN (IEEE 1722) packet	*/

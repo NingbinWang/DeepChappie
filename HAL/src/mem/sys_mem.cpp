@@ -108,7 +108,6 @@ VOID *sys_mem_copy(VOID *pDst, VOID *pSrc, UINT32 uLength)
         SYS_COMMON_ERROR("invalid param input\n");
         return NULL;
     }
- 
     memcpy(pDst, pSrc, uLength);
     return pDst;
 }

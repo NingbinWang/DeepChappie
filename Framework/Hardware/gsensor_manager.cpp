@@ -1,5 +1,4 @@
 #include "gsensor_priv.h"
-#include "logger.h"
 
 /**@fn         gsensor_manager_init_resource_release   
  * @brief      释放单例初始化过程中申请的资源
@@ -162,6 +161,24 @@ static INT32 gsensor_manager_recv_msg_handle(GSENSOR_MANAGER_PRIV_DATA_T *pStPri
     return iRet;
 }
 
+void Kalman1Creater(KALMAN_FILTER_T *pKalman,const float fLastP,const float fQ,const float fR)
+{
+	pKalman->LastP = fLastP;
+	pKalman->Q = fQ;
+	pKalman->R= fR;
+}
+
+void Kalman1Filter(KALMAN_FILTER_T *pKalman,const float input)
+{
+    //预测协方差方程：k时刻系统估算协方差 = k-1时刻的系统协方差 + 过程噪声协方差
+	pKalman->NowP = pKalman->LastP + pKalman->Q;
+    //卡尔曼增益方程：卡尔曼增益 = k时刻系统估算协方差 / （k时刻系统估算协方差 + 观测噪声协方差）
+	pKalman->Kg = pKalman->NowP / (pKalman->NowP + pKalman->R);
+     //更新最优值方程：k时刻状态变量的最优值 = 状态变量的预测值 + 卡尔曼增益 * （测量值 - 状态变量的预测值）
+	pKalman->out = pKalman->out + pKalman->Kg * (input - pKalman->out);//因为这一次的预测值就是上一次的输出值
+    //更新协方差方程: 本次的系统协方差付给 kfp->LastP 为下一次运算准备。
+	pKalman->LastP = (1-pKalman->Kg) * pKalman->NowP ;
+}
 
 /**@fn	       gsensor_manager_maxval	  
  * @brief	   获取极大值
@@ -196,21 +213,40 @@ static INT32 gsensor_manager_convert(const INT32 maxval,INT32 data)
  */
 static VOID gsensor_manager_calculate(GSENSOR_MANAGER_PRIV_DATA_T *pStPrivData,const sensor_t stRawData)
 {
+    KALMAN_FILTER_T imukalmanaccx={0};
+    KALMAN_FILTER_T imukalmanaccy={0};
+    KALMAN_FILTER_T imukalmanaccz={0};
+    FLOAT32 tmpax,tmpay,tmpaz;
     if(NULL == pStPrivData)
     {
-        printf("param error\n");
+        LOGGER_ERROR("param error\n");
         return;
     }
+    
+ //   Kalman1Creater(&imukalmanaccx,0.02,0.001,0.543);//lastP = 0.02,Q=0.01,R=0.543
+   // Kalman1Creater(&imukalmanaccy,0.02,0.001,0.543);//lastP = 0.02,Q=0.01,R=0.543
+    //Kalman1Creater(&imukalmanaccz,0.02,0.001,0.543);//lastP = 0.02,Q=0.01,R=0.543
     if(0 == strncmp(pStPrivData->cGyroname,"GYRO_LIS2DH12",strlen("GYRO_LIS2DH12"))){
       if((pStPrivData->info.accvalidnum != 0) ){
         INT32 accmaxval = 0;
         accmaxval = gsensor_manager_maxval(pStPrivData->info.accvalidnum);
-        pStPrivData->data.accx = gsensor_manager_convert(accmaxval,stRawData.accx)*(pStPrivData->info.acccoef);
-        pStPrivData->data.accy = gsensor_manager_convert(accmaxval,stRawData.accy)*(pStPrivData->info.acccoef);
-        pStPrivData->data.accz = gsensor_manager_convert(accmaxval,stRawData.accz)*(pStPrivData->info.acccoef);
+      //  Kalman1Filter(&imukalmanaccx,stRawData.accx);
+      //  tmpax = imukalmanaccx.out;
+     //   Kalman1Filter(&imukalmanaccy,stRawData.accy);
+      //  tmpay = imukalmanaccy.out;
+       // Kalman1Filter(&imukalmanaccz,stRawData.accz);
+       // tmpaz = imukalmanaccz.out;
+        //LOGGER_INFO("kalman tmp x = %f y=%f z=%f \r\n",tmpax,tmpay,tmpaz);
+        tmpax = stRawData.accx;
+        tmpay = stRawData.accy;
+        tmpaz = stRawData.accz;
+        pStPrivData->data.accx = gsensor_manager_convert(accmaxval,tmpax)*(pStPrivData->info.acccoef);
+        pStPrivData->data.accy = gsensor_manager_convert(accmaxval,tmpay)*(pStPrivData->info.acccoef);
+        pStPrivData->data.accz = gsensor_manager_convert(accmaxval,tmpaz)*(pStPrivData->info.acccoef);
+        LOGGER_INFO("rawdata x=%d y=%d z=%d  maxvalue=%d \r\n",stRawData.accx,stRawData.accy,stRawData.accz,accmaxval);
       }
     }
-    printf("x = %d,mg y=%d mg z=%d mg\n",pStPrivData->data.accx,pStPrivData->data.accy,pStPrivData->data.accz);
+    LOGGER_INFO("x = %fmg, y=%fmg, z=%fmg\r\n",pStPrivData->data.accx,pStPrivData->data.accy,pStPrivData->data.accz);
 
 }
 /**@fn          gsensor_manager_work_thread    
@@ -421,6 +457,35 @@ static INT32 gsensor_manager_get_state(IGsensor_manager *pIGsensor_manager, GSEN
     return OK;
 }
 
+/**@fn         gsensor_manager_get_data  
+ * @brief      获取指定通道推流状态
+ * @param[in]  IGsensor_manager  对象操作指针
+ * @param[in]  pState 待获取推流状态
+ * @return     成功返回OK     失败返回错误码
+ */
+static INT32 gsensor_manager_get_data(IGsensor_manager *pIGsensor_manager,Sensordata_t *data)
+{
+    INT32 iRet = ERROR;
+    GSENSOR_MANAGER_PRIV_DATA_T *pStPrivData = NULL;
+
+    pStPrivData = gsensor_manager_get_priv_data(pIGsensor_manager);
+    if((NULL == pStPrivData))
+    {
+        LOGGER_ERROR("param error\n");
+        return iRet;
+    }
+    data->accx = pStPrivData->data.accx;
+    data->accy = pStPrivData->data.accy;
+    data->accz = pStPrivData->data.accz;
+    data->gyrox = pStPrivData->data.gyrox;
+    data->gyroy = pStPrivData->data.gyroy;
+    data->gyroz = pStPrivData->data.gyroz;
+    data->magx = pStPrivData->data.magx;
+    data->magy = pStPrivData->data.magy;
+    data->magz = pStPrivData->data.magz;
+    return OK;
+}
+
 
 /**@fn         gsensor_manager_release   
  * @brief      初始化参数
@@ -528,10 +593,10 @@ static INT32 gsensor_manager_init_priv_data(GSENSOR_MANAGER_PRIV_DATA_T *pStPriv
         return ERROR;
       }
       pStPrivData->info.accvalidnum=pinfo->accvalidnum;
-      pStPrivData->info.acccoef=pinfo->acccoef;
+      pStPrivData->info.acccoef=(FLOAT32)pinfo->acccoef/1000;
       pStPrivData->info.gyrovalidnum=pinfo->gyrovalidnum;
       pStPrivData->info.gyrocoef=pinfo->gyrorng;
-      LOGGER_INFO("acc_rng = %d ,accvalidnum=%d , acccoef=%d\n",pStPrivData->info.uAccrng,pStPrivData->info.accvalidnum,pStPrivData->info.acccoef);
+      LOGGER_INFO("acc_rng = %d ,accvalidnum=%d , acccoef=%f\n",pStPrivData->info.uAccrng,pStPrivData->info.accvalidnum,pStPrivData->info.acccoef);
     }
     
     pStPrivData->eMode = HIGHRESO_MODE;
