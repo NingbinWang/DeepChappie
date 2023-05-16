@@ -59,7 +59,7 @@ struct IGsensor_manager
     int (*GetState)(IGsensor_manager *pIGsensor_manager, GSENSOR_MANAGER_STATE_E *pState);
 
      /**@fn        GetData    
-     * @brief      模块资源释放
+     * @brief      获取Gsensor的数据
      * @param[in]  pIGsensor_manager   IGsensor_manager对象操作指针
      * @return     int
      */

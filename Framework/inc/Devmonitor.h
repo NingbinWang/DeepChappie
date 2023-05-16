@@ -47,7 +47,7 @@ struct IDevMonitor
      * @param[in]  pIDevMonitor   设备监听对象
      * @return     成功返回OK     失败返回错误码
      */
-    int (*Init)(IDevMonitor *pIGsensor_manager);
+    int (*Init)(IDevMonitor *pIDevMonitor);
 
     /**@fn         RegisterActionCallBack      
      * @brief      注册设备监听回调函数

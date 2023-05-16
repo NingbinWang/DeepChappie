@@ -40,7 +40,7 @@ typedef struct
 }DEV_MONITOR_PRIV_DATA_T;
 
 /**@struct    DEV_MONITOR_BASE_T
- * @brief     UART基础数据结构
+ * @brief     DEV MONITOR基础数据结构
  */
 typedef struct
 {

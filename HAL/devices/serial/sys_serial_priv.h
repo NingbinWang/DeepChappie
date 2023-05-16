@@ -3,5 +3,12 @@
 
 #include "sys_common.h"
 #include "sys_common_inside.h"
+#include<stdio.h>
+#include<stdlib.h>
+#include<errno.h>
+#include<fcntl.h>
+#include<string.h>
+#include "sys_serial.h"
+
 
 #endif

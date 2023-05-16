@@ -1,13 +1,14 @@
 file(GLOB SRC_LIST
 "Notification/PingPongBuffer/*.c"
 "Notification/*.cpp"
-"Log/*.cpp"
+"Logger/*.cpp"
 #"AVB/talker/*.cpp"
 #"AVB/adaptor/*.cpp"
 "src/*.cpp"
 "Hardware/*.cpp"
 "DevMonitor/*.cpp"
 "Storage/*.cpp"
+"Network/*.cpp"
 )
 include_directories(
 #api
@@ -28,6 +29,7 @@ include_directories(
 "Logger"
 "Hardware"
 "Storage"
+"Network"
 "src"
 )
 

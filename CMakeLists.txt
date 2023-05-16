@@ -69,6 +69,7 @@ endif()
 
 if (LINUX)
 add_subdirectory(HAL)
+add_subdirectory(Media)
 add_subdirectory(Framework)
 add_subdirectory(App)
 include_directories("App/inc")

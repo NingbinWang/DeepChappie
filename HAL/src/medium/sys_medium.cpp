@@ -190,7 +190,7 @@ INT32 sys_medium_umount(const CHAR *strMountPath)
 	{
 		return iRet;
 	}
-    if (sys_posix_access(strMountPath) < 0)
+    if ((iRet = sys_posix_access(strMountPath)) < 0)
     {   
         SYS_COMMON_ERROR("dev node path :%s \n",strMountPath);
         return iRet;

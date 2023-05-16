@@ -12,18 +12,10 @@
 #include "sys_mqueue.h"//信号量
 #include "sys_time.h"
 #include "logger.h"
-#include <math.h>
 
 
-typedef struct
-{
-	FLOAT32 LastP;//上次估算协方差，不可以为0
-	FLOAT32 NowP;//当前估算协方差
-	FLOAT32 out;//卡尔曼滤波器输出
-	FLOAT32 Kg;//卡尔曼增益
-	FLOAT32 Q;//过程噪声协方差
-	FLOAT32 R;//观察噪声协方差
-}KALMAN_FILTER_T;
+
+
 
 /*mode*/
 typedef enum
