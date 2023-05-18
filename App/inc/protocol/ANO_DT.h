@@ -3,7 +3,8 @@
 
 
 //设置相关的输出模式
-typedef enum ANTO_MODE_E{
+typedef enum
+{
     ANTO_VER           =  0x00,//版本号
     ANTO_STATUS        =  0X01,
     ANTO_SENSOR        =  0x02,
@@ -32,7 +33,7 @@ typedef enum ANTO_MODE_E{
     ANTO_FPNUM         =  0x20,
 }ANTO_MODE_E;
 
-typedef struct GSENSOR_DATA_T
+typedef struct
 {
     short accX;
     short accY;

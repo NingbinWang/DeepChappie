@@ -2,7 +2,7 @@
 #define _MEDIA_INIT_PRIV_H_
 
 #include "media_type.h"
-#include "media.h"
+#include "Media.h"
 
 
 
@@ -92,7 +92,7 @@ typedef struct
     unsigned int y; //图像中心垂直坐标
     unsigned int w; //图像窗口宽最大不能超过VIDEO_PARAM_CFG结构体中image_viW, 最小64
     unsigned int h; //图像窗口高最大不能超过VIDEO_PARAM_CFG结构体中image_viH, 最小32
-} VI_RECT_S;
+} VI_RECT_T;
 
 typedef struct
 {
@@ -101,20 +101,20 @@ typedef struct
     unsigned int y; //图像中心垂直坐标
     unsigned int w; //图像窗口宽最大不能超过VIDEO_PARAM_CFG结构体中image_viW, 最小64
     unsigned int h; //图像窗口高最大不能超过VIDEO_PARAM_CFG结构体中image_viH, 最小32
-} VI_Cover_S;
+} VI_Cover_T;
 
 typedef struct
 {
 	UINT8 BLCMode;//背光补偿模式 0:关闭 1:上 2:下 3：左，4：右5：中6：自定义
-    VI_RECT_S	blc_window_rec; //补偿区域（自定义模式生效）
-} VI_BLC_INFO;
+    VI_RECT_T	blc_window_rec; //补偿区域（自定义模式生效）
+} VI_BLC_INFO_T;
 typedef struct
 {
 	/**< 遮挡块数 */
 	UINT8 CoverNum;
 	/**< 遮挡区域（自定义模式生效） */
-    VI_Cover_S	cover_window_rec[4];
-} VI_COVER_INFO;
+    VI_Cover_T	cover_window_rec[4];
+} VI_COVER_INFO_T;
 
 typedef struct
 {
@@ -136,25 +136,16 @@ typedef struct
     UINT8 uIrisType;  //光圈类型0-DC 1-P     暂不支持此接口
     VI_WHITEBALANCE_INFO_T uWhiteBalanceInfo; //白平衡模式 0-手动白平衡；1-自动白平衡1；3-锁定白平衡；6-日光灯；14-白炽灯；15-暖光灯；16-自然光 默认为1
     VI_NR_INFO_T uNRInfo; //数字降噪	  0-关闭  1-普通 2-专家 默认为1
-    /*透雾模式 0 关 1 开启 2自动 */
-    VI_FOG_INFO_T uFogInfo; 
-	/*电子防抖开关-暂不支持*/
-    UINT8 uElesharkMode;
-    /*背光补偿 默认关*/
-    VI_BLC_INFO uBLCInfo;
-    /*强光抑制 默认关 */
-    UINT8 uHLCMode;
-    /*强光抑制等级（只有在强光抑制开启时生效）默认为50*/
-    UINT8 enHLCLevel;     
-    /*视频遮挡 默认关*/
-    VI_COVER_INFO uCoverMode;    
-   	/**< 防补光过爆0关 1开 默认为0*/
-	UINT8 ulightover;
-   	/**< 灰度范围0[0-255] 1[16-235]默认为0 */
-	UINT8 ugrayscale;
-	
+    VI_FOG_INFO_T uFogInfo; //透雾模式 0 关 1 开启 2自动
+    UINT8 uElesharkMode;//电子防抖开关-暂不支持
+    VI_BLC_INFO_T uBLCInfo;//背光补偿 默认关
+    UINT8 uHLCMode;//强光抑制 默认关
+    UINT8 enHLCLevel; //强光抑制等级（只有在强光抑制开启时生效）默认为50    
+    VI_COVER_INFO_T uCoverMode; //视频遮挡 默认关   
+	UINT8 ulightover;//防补光过爆0关 1开 默认为0
+	UINT8 ugrayscale;//灰度范围0[0-255] 1[16-235]默认为0
     UINT8 res[7];
-} VI_CFG_PARAM;
+} VI_CFG_PARAM_T;
 
 /***************************** ROI设置参数**********************************/
 #define MAX_ROI_RGN_CNT (10)             /*ROI区域最大一共8个*/
@@ -174,15 +165,15 @@ typedef struct
     UINT16  w;
     UINT16  h;
 	UINT8 res[4];
-} CFG_REGION;
+} CFG_REGION_T;
 
 typedef struct
 {
     UINT32 mode;                  /* 关联模式，按比特位定义，考虑到以后有可能关联多种源*/
 	/*静态区域ROI配置*/
 	UINT32 regionCnt;                     /*静态区域个数*/
-    CFG_REGION region[MAX_ROI_RGN_CNT]; /*静态区域配置*/
-} ROI_CONFIG;
+    CFG_REGION_T region[MAX_ROI_RGN_CNT]; /*静态区域配置*/
+} ROI_CONFIG_T;
 
 /*DSP编码通道运行状态*/
 typedef struct

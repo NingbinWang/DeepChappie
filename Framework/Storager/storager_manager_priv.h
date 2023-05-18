@@ -1,5 +1,5 @@
-#ifndef _STORAGE_MANAGER_PRIV_H_
-#define _STORAGE_MANAGER_PRIV_H_
+#ifndef _STORAGER_MANAGER_PRIV_H_
+#define _STORAGER_MANAGER_PRIV_H_
 
 #include "sys_common.h"
 #include "sys_posix.h"
@@ -22,7 +22,6 @@
 #include "logger.h"
 #include "Devmonitor.h"
 #include "Storager.h"
-
 
 
 

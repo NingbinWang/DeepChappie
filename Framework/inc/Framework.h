@@ -3,12 +3,27 @@
 #include "Gsensor.h"
 #include "Devmonitor.h"
 #include "Serial.h"
+#include "Network.h"
+#include "Storager.h"
+#include "Media.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif/*__cplusplus*/
 
-void Framework_Init(void);
+
+
+typedef struct 
+{
+    NetworkInfo_t networkinfo;
+    Storager_Info_T storagerinfo;
+}App_Defaultconf_t;
+
+
+
+
+
+void Framework_Init(App_Defaultconf_t *config);
 int Framework_work(void);
 
 IGsensor_manager* Framework_GetGsensorinterface(void);

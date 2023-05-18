@@ -1,5 +1,4 @@
 #include "iniparse.h"
-#include <string.h>
 
 /* Trims whitespace from the passed in string between begin_ind and
  * end_ind characters in the string. It returns the begin index and
@@ -34,7 +33,7 @@ static int iniparse_readline(FILE *fp, INIPARSE_T *inip)
 {
     int i = 0;
     int b;
-    int new = 0;
+    int newvalue = 0;
 
     for (;;)
     {
@@ -44,7 +43,7 @@ static int iniparse_readline(FILE *fp, INIPARSE_T *inip)
         if (i >= inip->tmp_cap)
         {
             inip->tmp_cap *= 2;
-            inip->tmp = realloc(inip->tmp, sizeof(*inip->tmp) * inip->tmp_cap);
+            inip->tmp = (char *)realloc(inip->tmp, sizeof(*inip->tmp) * inip->tmp_cap);
             if (inip->tmp == NULL)
             {
                 printf("realloc tmp fail\n");
@@ -72,19 +71,19 @@ static int iniparse_readline(FILE *fp, INIPARSE_T *inip)
 
         /* place char in buffer */
         inip->tmp[i++] = c;     
-        new = 1;
+        newvalue = 1;
     }
     
     /* place end-of-string marker */
-    if (new && inip->tmp)
+    if (newvalue && inip->tmp)
         inip->tmp[i] = '\0';
 
-    return new;
+    return newvalue;
 }
 
-static INIPARSE_SECTION_T *at_iniparse_section(FILE *fp, INIPARSE_T *inip)
+static INIPARSE_SECTION_T *iniparse_section(FILE *fp, INIPARSE_T *inip)
 {
-    int new;
+    int newvalue;
     INIPARSE_SECTION_T *section = NULL;
 
     APP_RET_RETURN((inip->num_sections >= INIPARSE_MAX_SECTIONS), NULL, "sections overlimit array fail");
@@ -95,15 +94,15 @@ static INIPARSE_SECTION_T *at_iniparse_section(FILE *fp, INIPARSE_T *inip)
 
     while (1)
     {
-        new = 0;
+        newvalue = 0;
         switch (inip->state)
         {
             case START:
             case IN_SECTION:
-                new = iniparse_readline(fp, inip);
+                newvalue = iniparse_readline(fp, inip);
                 break;
             case NEW_SECTION:
-                new = 1;
+                newvalue = 1;
                 break;
             case END_OF_FILE:
                 return section;
@@ -112,7 +111,7 @@ static INIPARSE_SECTION_T *at_iniparse_section(FILE *fp, INIPARSE_T *inip)
                 break;
         }
 
-        if (new)
+        if (newvalue)
         {
             int i, x, y, b = 0, e = strlen(inip->tmp);
             INIPARSE_CONFIG_T *cfg;
@@ -155,14 +154,14 @@ static INIPARSE_SECTION_T *at_iniparse_section(FILE *fp, INIPARSE_T *inip)
                     break;
             }
             x = b; y = i;
-            at_iniparse_trim(inip->tmp, &x, &y);
+            iniparse_trim(inip->tmp, &x, &y);
             inip->tmp[y+1] = '\0';
             cfg->key = strdup(&inip->tmp[x]);
 
             /* read value */
             x = i+1;
             y = e+1;
-            at_iniparse_trim(inip->tmp, &x, &y);
+            iniparse_trim(inip->tmp, &x, &y);
             inip->tmp[y+1] = '\0';
             cfg->value = strdup(&inip->tmp[x]);
         }
@@ -208,12 +207,12 @@ void* iniparse_load(const char *inifile)
 
     APP_RET_RETURN((!inifile), NULL, "inifile is NULL");
 
-    inip = malloc(sizeof(struct iniparse));
+    inip = (INIPARSE_T *)malloc(sizeof(INIPARSE_T));
     APP_RET_RETURN((!inip), NULL, "malloc iniparse fail");
-    memset(inip, 0x00, sizeof(struct iniparse));
+    memset(inip, 0x00, sizeof(INIPARSE_T));
 
     inip->filename  = (char*)inifile;
-    inip->tmp       = malloc(sizeof(*inip->tmp)*INIPARSE_DEF_TMPLEN);
+    inip->tmp       = (char*)malloc(sizeof(*inip->tmp)*INIPARSE_DEF_TMPLEN);
     inip->tmp_cap   = INIPARSE_DEF_TMPLEN;
     inip->current_line = 0;
     inip->state     = START;
@@ -239,3 +238,79 @@ void* iniparse_load(const char *inifile)
     fp = NULL;
     return (void *)inip;
 }
+
+/**@fn      iniparse_free
+ * @brief   释放ini文件解析句柄
+ * @param   [in ]h: INI文件句柄
+ * @return  N/A
+ */
+void iniparse_free(void* h)
+{
+    INIPARSE_T *inip = (INIPARSE_T *)h;
+    int s, c;
+
+    APP_RET_RETURN_NORET((!h), "inifile handle is NULL");
+
+    for (s = 0; s < inip->num_sections; s++)
+    {
+        for (c = 0; c < inip->sections[s].num_configs; c++)
+        {
+            free(inip->sections[s].configs[c].key);
+            free(inip->sections[s].configs[c].value);
+        }
+        free(inip->sections[s].name);
+    }
+
+    free(inip->tmp);
+    free(inip);
+}
+
+/**@fn      iniparse_dump
+ * @brief   打印所有ini文件中字段信息
+ * @param   [in ]h: INI文件句柄
+ */
+void iniparse_dump(void* h)
+{
+    INIPARSE_T *inip = (INIPARSE_T *)h;
+    int s, c;
+
+    APP_RET_RETURN_NORET((!h), "inifile handle is NULL");
+
+    printf("num sections: %d\n", inip->num_sections);
+    for (s = 0; s < inip->num_sections; s++)
+    {
+        printf("section: \"%s\" ", inip->sections[s].name);
+        printf("(num configs: %d)\n", inip->sections[s].num_configs);
+        for (c = 0; c < inip->sections[s].num_configs; c++)
+            printf("  key: \"%s\", value: \"%s\"\n",
+                   inip->sections[s].configs[c].key,
+                   inip->sections[s].configs[c].value);
+    }
+}
+
+/**@fn      iniparse_get_value
+ * @brief   获取ini文件的value
+ * @param   [in ]h: INI文件句柄
+ * @param   [in ]section: INI文件中section
+ * @param   [in ]key: INI文件中key
+ * @return  ==NULL:获取失败
+ * @return  !=NULL:获取VALUE成功
+ */
+char* iniparse_get_value(void* h, const char *section, const char *key)
+{
+    INIPARSE_T *inip = (INIPARSE_T *)h;
+    int s, c;
+
+    APP_RET_RETURN((!h), NULL, "inifile handle is NULL");
+
+    for (s = 0; s < inip->num_sections; s++)
+    {
+        if (strcmp(section, inip->sections[s].name) == 0)
+            for (c = 0; c < inip->sections[s].num_configs; c++)
+                if (strcmp(key, inip->sections[s].configs[c].key) == 0)
+                    return inip->sections[s].configs[c].value;        
+    }
+    return NULL;
+}
+
+

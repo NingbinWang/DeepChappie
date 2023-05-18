@@ -5,6 +5,16 @@
 extern "C" {
 #endif/*__cplusplus*/
 
+#define NETWORKSTRMAX 256
+
+typedef struct 
+{
+    int  enable;
+    char DevName[NETWORKSTRMAX];      //eth名字
+   	char IP[NETWORKSTRMAX];           // IP地址
+	  char NetMask[NETWORKSTRMAX];      // netmask 
+	  char GateWay[NETWORKSTRMAX];      // gateway 
+}NetworkInfo_t;
 
 typedef struct INetwork INetwork;
 struct INetwork
@@ -14,21 +24,21 @@ struct INetwork
      * @param[in]  pINetwork_manager   INetwork对象操作指针
      * @return     成功返回OK     失败返回错误码
      */
-    int (*Init)(INetwork *pINetwork_manager);
+    int (*Init)(INetwork *pINetwork_manager,const char *strIP,const char *strNetMask, const char *strGateWay);
 
-    /**@fn         Start      
+    /**@fn         UP    
      * @brief      开启服务
      * @param[in]  pINetwork_manager   INetwork对象操作指针
      * @return     成功返回OK     失败返回错误码
      */
-    int (*Start)(INetwork *pINetwork_manager);
+    int (*Up)(INetwork *pINetwork_manager);
 
-      /**@fn         Stop   
+      /**@fn       Down  
      * @brief      关闭服务
      * @param[in]  pINetwork_manager   INetwork对象操作指针
      * @return     成功返回OK     失败返回错误码
      */
-    int (*Stop)(INetwork *pINetwork_manager);
+    int (*Down)(INetwork *pINetwork_manager);
 
     /**@fn         Release    
      * @brief      模块资源释放

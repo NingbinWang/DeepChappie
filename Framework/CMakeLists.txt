@@ -1,5 +1,5 @@
 file(GLOB SRC_LIST
-"Notification/PingPongBuffer/*.c"
+"Notification/PingPongBuffer/*.cpp"
 "Notification/*.cpp"
 "Logger/*.cpp"
 #"AVB/talker/*.cpp"
@@ -7,7 +7,7 @@ file(GLOB SRC_LIST
 "src/*.cpp"
 "Hardware/*.cpp"
 "DevMonitor/*.cpp"
-"Storage/*.cpp"
+"Storager/*.cpp"
 "Network/*.cpp"
 )
 include_directories(
@@ -17,6 +17,8 @@ include_directories(
 "./../HAL/inc"
 #HAL BSP  API
 "./../HAL/devices/include"
+#Media API
+"./../Media/inc"
 # inside include
 "Notification"
 "Notification/PingPongBuffer"
@@ -28,7 +30,7 @@ include_directories(
 #"AVB/adaptor"
 "Logger"
 "Hardware"
-"Storage"
+"Storager"
 "Network"
 "src"
 )

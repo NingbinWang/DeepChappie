@@ -1,7 +1,17 @@
 #ifndef _INIPARSE_H_
 #define _INIPARSE_H_
 #include "app_macro.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
 #ifdef  __cplusplus
 extern "C" {
 #endif  /* __cplusplus */
@@ -48,7 +58,10 @@ typedef struct
     INIPARSE_SECTION_T sections[INIPARSE_MAX_SECTIONS];  
 }INIPARSE_T;
 
-
+void* iniparse_load(const char *inifile);
+void iniparse_free(void* h);
+void iniparse_dump(void* h);
+char* iniparse_get_value(void* h, const char *section, const char *key);
 
 
 #ifdef  __cplusplus

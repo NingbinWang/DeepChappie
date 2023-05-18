@@ -13,10 +13,12 @@ include_directories(
 "inc/can"
 "inc/media"
 "inc/protocol"
+"inc/utils"
 #HAL Framework API
 "./../Framework/inc"
 "./../HAL/inc"
 "./../Media/inc"
+
 )
 add_library(App ${SRC_LIST})
 target_link_libraries(App

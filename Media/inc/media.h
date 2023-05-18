@@ -5,6 +5,11 @@
 extern "C" {
 #endif/*__cplusplus*/
 
+#define MEDIASTRMAX 256
+typedef struct
+{
+   char type[MEDIASTRMAX];//media的启动类型
+}Media_Default_T;
 
 
 
@@ -17,7 +22,8 @@ struct IMedia
      * @param[in]  pIMedia   初始化的对象
      * @return     成功返回OK     失败返回错误码
      */
-    int (*Init)(IMedia *pIMediainit);
+    int (*Init)(IMedia *pIMediainit,const char* type);
+    
 };
 
 
