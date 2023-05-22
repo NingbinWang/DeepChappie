@@ -85,13 +85,6 @@ else()
     link_libraries(${LIBRAYS})
 endif()
 
-
-
-
-elseif(WINDOWS)
-add_subdirectory(WinApp)
-include_directories("WinApp/inc")
-#link_directories("WinApp/libs")
 endif()
 
 

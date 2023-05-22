@@ -8,8 +8,9 @@ extern "C" {
 #define MEDIASTRMAX 256
 typedef struct
 {
+   int  enable;
    char type[MEDIASTRMAX];//media的启动类型
-}Media_Default_T;
+}Media_Info_T;
 
 
 

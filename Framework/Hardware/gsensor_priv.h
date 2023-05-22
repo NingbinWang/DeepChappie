@@ -1,8 +1,5 @@
 #ifndef _GSENSOR_PRIV_H_
 #define _GSENSOR_PRIV_H_
-
-
-
 #include "Gsensor.h"
 #include "sys_gsensor.h"
 #include "sys_pthread.h"
@@ -12,10 +9,6 @@
 #include "sys_mqueue.h"//信号量
 #include "sys_time.h"
 #include "logger.h"
-
-
-
-
 
 /*mode*/
 typedef enum

@@ -1,7 +1,7 @@
 #include "app_config.h"
 #include "iniparse.h"
 
-
+#define ENBALE 1
 char *gConPath  = PATH_APPCONF;
 
 void app_conf_load(App_Defaultconf_t* defaultconf)
@@ -24,13 +24,13 @@ void app_conf_load(App_Defaultconf_t* defaultconf)
     if(value){
         tmpvalue = atoi(value);
         if(tmpvalue < 0){
-            printf("rootdirnum get error\n");
+            printf("network disable\n");
             defaultconf->networkinfo.enable = 0;
         }else{
             defaultconf->networkinfo.enable = tmpvalue
         }
     }
-    if(defaultconf->networkinfo.enable){
+    if(defaultconf->networkinfo.enable == ENBALE){
       value = iniparse_get_value(inih, "network", "devname");
       if(value){
          strncpy(defaultconf->networkinfo.DevName, value, strlen(value));
@@ -53,21 +53,21 @@ void app_conf_load(App_Defaultconf_t* defaultconf)
     if(value){
         tmpvalue = atoi(value);
         if(tmpvalue < 0){
-            printf("rootdirnum get error\n");
+            printf("storager disable\n");
             defaultconf->storagerinfo.enable = 0;
         }else{
              defaultconf->storagerinfo.enable = tmpvalue;
         }
     }
-    if( defaultconf->storagerinfo.enable ){
+    if( defaultconf->storagerinfo.enable == ENBALE){
        value = iniparse_get_value(inih, "storager", "rootdirnum");
        if(value){
-         i = atoi(value);
-         if(i < 0){
+         tmpvalue = atoi(value);
+         if(tmpvalue < 0){
              printf("rootdirnum get error\n");
              defaultconf->storagerinfo.dirnum=0;
          }else{
-            defaultconf->storagerinfo.dirnum=i;
+            defaultconf->storagerinfo.dirnum=tmpvalue;
          }
        }
        for (i = 0; i < defaultconf->storagerinfo.dirnum; i++)
@@ -80,7 +80,57 @@ void app_conf_load(App_Defaultconf_t* defaultconf)
             }
        }
     }
-    
+    //media
+    value = iniparse_get_value(inih, "media", "enable");
+    if(value){
+        tmpvalue = atoi(value);
+        if(tmpvalue < 0){
+            printf("media disable\n");
+            defaultconf->mediainfo.enable = 0;
+        }else{
+             defaultconf->mediainfo.enable = tmpvalue;
+        }
+    }
+    if(defaultconf->mediainfo.enable == ENBALE)
+    {
+       value = iniparse_get_value(inih, "media", "type");
+      if(value){
+         strncpy(defaultconf->mediainfo.type, value, strlen(value));
+      }
+    }
+    //gsensor
+    value = iniparse_get_value(inih, "gsensor", "enable");
+    if(value){
+        tmpvalue = atoi(value);
+        if(tmpvalue < 0){
+            printf("gsensor disable\n");
+            defaultconf->gsensorinfo.enable = 0;
+        }else{
+             defaultconf->gsensorinfo.enable = tmpvalue;
+        }
+    }
+    //notification
+    value = iniparse_get_value(inih, "notification", "enable");
+    if(value){
+        tmpvalue = atoi(value);
+        if(tmpvalue < 0){
+            printf("notification disable\n");
+            defaultconf->notificationinfo.enable = 0;
+        }else{
+            defaultconf->notificationinfo.enable = tmpvalue;
+        }
+    }
+    if(defaultconf->notificationinfo.enable){
+       value = iniparse_get_value(inih, "notification", "pingpongsize");
+       if(value){
+         tmpvalue = atoi(value);
+         if(tmpvalue < 0){
+            defaultconf->notificationinfo.pingpongsize = 0;
+          }else{
+            defaultconf->notificationinfo.pingpongsize = tmpvalue;
+          }
+        }
+    }
 
     iniparse_free(inih);
     return ;

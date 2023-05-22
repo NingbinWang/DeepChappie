@@ -4,42 +4,46 @@
 
 //#include "avb_1722_talker.h"
 
-IGsensor_manager *gsensor;
-IDevMonitor *devmonitor;
-INetwork *network;
+IGsensor_manager *gsensor = NULL;
+IDevMonitor *devmonitor = NULL;
+INetwork *network = NULL;
+INotification *notification = NULL;
 //IAVB1722Talker *avb1722talker;
 
 static int Framework_Component_Init(App_Defaultconf_t *config)
 {
   //instance
-  //avb
-   //avb1722talker = avb_1722_talker_instance();
   //gsensor
-   //gsensor = gsensor_manager_init_instance();
+  if(config->gsensorinfo.enable){
+     gsensor = gsensor_manager_init_instance();
+  }
    //devmoitor
-   devmonitor = devmonitor_init_instance();
+  if(config->devmonitorinfo.enable){
+     devmonitor = devmonitor_init_instance();
+     //devmonitor  init
+     devmonitor->Init(devmonitor);
+  }
    //network
-   if(strlen(config->networkinfo.DevName) != 0){
-     network = network_init_instance(config->networkinfo.DevName);
-     network->Init(network,config->networkinfo.IP,config->networkinfo.NetMask,config->networkinfo.GateWay);
-   }else{
-     printf("no ini set eth0!!!\n");
-     network = network_init_instance("eth0");
-     network->Init(network,"10.65.38.165","255.255.255.0","10.65.38.254");
-   }
-   
+  if(config->networkinfo.enable){
+    if(strlen(config->networkinfo.DevName) != 0){
+       network = network_init_instance(config->networkinfo.DevName);
+       network->Init(network,config->networkinfo.IP,config->networkinfo.NetMask,config->networkinfo.GateWay);
+    }else{
+       printf("no ini set eth0!!!\n");
+       network = network_init_instance("eth0");
+       network->Init(network,"10.65.38.165","255.255.255.0","10.65.38.254");
+    }
+  }
+  //notification
+  if(config->notificationinfo.enable){
+     notification = notification_init_instance(config->notificationinfo.pingpongsize);
+     notification->Init(notification);
+  }
 
-   //init
-  // avb1722talker->Init(avb1722talker);
-   // gsensor->Init(gsensor);
-    devmonitor->Init(devmonitor);
-    
-   
-
-   return 0;
+  return 0;
 }
 
-static int Framework_Component_DefaultConfig(App_Defaultconf_t *config)
+static int Framework_Component_DefaultParam(App_Defaultconf_t *config)
 {
   /*
      AVB_1722_TALKER_SET_PARAM_T  avb1722talkerSetParam;
@@ -59,23 +63,36 @@ static int Framework_Component_DefaultConfig(App_Defaultconf_t *config)
 }
 
 
-static int Framework_Component_DefaultStart(void)
+static int Framework_Component_DefaultStart(App_Defaultconf_t *config)
 {
-     //avb1722talker->Start(avb1722talker);
-      // gsensor->Start(gsensor);
-     return 0;
+   if(config->gsensorinfo.enable){
+      gsensor->Start(gsensor);
+   }
+   if(config->notificationinfo.enable){
+      if(config->gsensorinfo.enable)
+         notification->Subscribe(notification,"IMU");
+      if(config->networkinfo.enable)
+         notification->Subscribe(notification,"NET");
+      if(config->devmonitorinfo.enable)
+         notification->Subscribe(notification,"DEVMONTOR");
+   }
+   return 0;
 }
 
 void Framework_Init(App_Defaultconf_t *config)
 {
-
    Framework_Component_Init(config);
-   Framework_Component_DefaultConfig(config);
-   Framework_Component_DefaultStart();
+   Framework_Component_DefaultParam(config);
+   Framework_Component_DefaultStart(config);
 }
 
-int Framework_work(void)
+int Framework_work(App_Defaultconf_t *config)
 {
+    if(config->notificationinfo.enable){
+      if(config->gsensorinfo.enable){
+         
+      }
+    }
     return 0;
 }
 

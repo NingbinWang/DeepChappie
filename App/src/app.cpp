@@ -8,14 +8,16 @@ App_Defaultconf_t defaultconf;
 
 int app_main()
 {
-  app_defaultconfig(&defaultconf);
+  app_defaultconfig(&defaultconf);//loading ini
   Framework_Init(&defaultconf);
   //app init
   objDevMonitor = Framework_GetDevMonitorinrterface();
-  app_tf_regitster(objDevMonitor);
+  if(objDevMonitor != NULL){
+     app_tf_regitster(objDevMonitor);
+  }
   while (1)
   {
-    Framework_work();
+    Framework_work(&defaultconf);
     sleep(100);
   }
   

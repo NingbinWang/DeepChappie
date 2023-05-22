@@ -5,6 +5,12 @@
 extern "C" {
 #endif/*__cplusplus*/
 
+typedef struct
+{
+   int  enable;
+}Gsensor_Info_T;
+
+
 
 typedef struct 
 {

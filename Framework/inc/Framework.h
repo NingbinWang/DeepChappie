@@ -17,6 +17,12 @@ typedef struct
 {
     NetworkInfo_t networkinfo;
     Storager_Info_T storagerinfo;
+    Media_Info_T mediainfo;
+    Gsensor_Info_T gsensorinfo;
+    Devmonitor_Info_t devmonitorinfo;
+    Notification_Info_t notificationinfo;
+    Serial_Info_t serialinfo;
+
 }App_Defaultconf_t;
 
 
@@ -24,7 +30,7 @@ typedef struct
 
 
 void Framework_Init(App_Defaultconf_t *config);
-int Framework_work(void);
+int Framework_work(App_Defaultconf_t *config);
 
 IGsensor_manager* Framework_GetGsensorinterface(void);
 IDevMonitor* Framework_GetDevMonitorinrterface(void);

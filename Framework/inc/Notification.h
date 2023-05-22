@@ -5,6 +5,14 @@
 extern "C" {
 #endif/*__cplusplus*/
 
+typedef struct 
+{
+    int  enable;
+    unsigned int pingpongsize;
+}Notification_Info_t;
+
+
+
 typedef struct INotification INotification;
 struct INotification
 {
@@ -14,7 +22,6 @@ struct INotification
      * @return     成功返回OK     失败返回错误码
      */
     int (*Init)(INotification *pINotificaion);
-
      /**@fn         Subscribe   
      * @brief      订阅发布者
      * @param[in]  pINotificaion   INotificaiton对象操作指针
@@ -36,7 +43,7 @@ struct INotification
      * @param[in]  pINotificaion   INotificaiton对象操作指针
      * @return     成功返回OK     失败返回错误码
      */
-    int (*Commit)(INotification *pINotificaion, const void* data,unsigned int size);
+    int (*Commit)(INotification *pINotificaion,const char* pubid, const void* data,unsigned int size);
 
     /**@fn         Publish 
      * @brief      发送数据给订阅者

@@ -1,14 +1,16 @@
 file(GLOB SRC_LIST 
 #compenment
 "src/*.cpp"
-"src/hdal/*.cpp" 
+"hdal/*.cpp" 
 )
 include_directories(
 #api
 "inc"
 "hdal"
+"hdal/inlcude"
+"hdal/api"
 #compenment 
-"src/hdal"
+"src"
 )
 
 add_library(MEDIA ${SRC_LIST})

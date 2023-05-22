@@ -5,7 +5,12 @@
 extern "C" {
 #endif/*__cplusplus*/
 
-
+typedef struct 
+{
+    int  enable;
+    char sDevName[128];
+    int iIndex;
+}Serial_Info_t;
 
 /**@struct SERIAL_ATTRIBUTE_UART_T 
  * @brief  定义UART的参数设置

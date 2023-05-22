@@ -5,6 +5,13 @@
 extern "C" {
 #endif/*__cplusplus*/
 
+
+typedef struct 
+{
+    int  enable;
+}Devmonitor_Info_t;
+
+
 /**@enum  DEV_MONITOR_TYPE_E
  * @brief 分区类型
  */
