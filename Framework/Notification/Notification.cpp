@@ -1,4 +1,4 @@
-#include "notification_priv.h"
+#include "Notification_priv.h"
 
 
 /**@fn         notification_get_priv_data
@@ -27,6 +27,7 @@ static NOTIFICATION_PRIV_DATA_T *notification_get_priv_data(INotification *pINot
 static INT32 notification_subscribe(INotification *pINotification,const char* pubid)
 {
     NOTIFICATION_PRIV_DATA_T *pStPrivData = NULL;
+    Broker_Node *pub = NULL;
     if(NULL == pINotification)
     {
         LOGGER_ERROR("invaild param error :%p \n",pINotification);
@@ -46,7 +47,7 @@ static INT32 notification_subscribe(INotification *pINotification,const char* pu
         return ERROR;
     }
     // Whether the account is created
-     Broker_Node pub=notifybroker_Find(pStPrivData->publishers,pubid);
+     pub=notifybroker_find(pStPrivData->publishers,pubid);
      if(pub != NULL){
         LOGGER_ERROR("Multi subscribe pub[%s]", pubid);
         return ERROR;
@@ -68,6 +69,7 @@ static INT32 notification_unsubscribe(INotification *pINotification,const char* 
 {
     INT32 iRet = ERROR;
     NOTIFICATION_PRIV_DATA_T *pStPrivData = NULL;
+    Broker_Node *pub = NULL;
     if(NULL == pINotification)
     {
         LOGGER_ERROR("invaild param error :%p \n",pINotification);
@@ -80,7 +82,7 @@ static INT32 notification_unsubscribe(INotification *pINotification,const char* 
         return ERROR;
     }
   /* Whether to subscribe to the publisher */
-    Broker_Node pub=notifybroker_Find(pStPrivData->publishers,pubid);
+    pub=notifybroker_find(pStPrivData->publishers,pubid);
      if(pub == NULL){
         LOGGER_ERROR("no subscribe pub[%s]\n", pubid);
         return ERROR;
@@ -105,7 +107,7 @@ static INT32 notification_unsubscribe(INotification *pINotification,const char* 
 static INT32 notification_commit(INotification *pINotification, const char* pubid,const void* data,unsigned int size)
 {
     NOTIFICATION_PRIV_DATA_T *pStPrivData = NULL;
-    Broker_Node pub = NULL;
+    Broker_Node *pub = NULL;
     void* wBuf;
     if(NULL == pINotification || !size )
     {
@@ -123,14 +125,14 @@ static INT32 notification_commit(INotification *pINotification, const char* pubi
         LOGGER_ERROR("no publiisher \n");
         return ERROR;
     }
-    Broker_Node pub=notifybroker_Find(pStPrivData->publishers,pubid);
+    pub=notifybroker_find(pStPrivData->publishers,pubid);
      if(pub == NULL){
         LOGGER_ERROR("no subscribe pub[%s]\n", pubid);
         return ERROR;
      }
   
     PingPongBuffer_GetWriteBuf(&pub->BufferManager, &wBuf);
-    sys_mem_copy(wBuf, data, size);
+    sys_mem_copy(wBuf, (void*)data, size);
     PingPongBuffer_SetWriteDone(&pub->BufferManager);
     LOGGER_INFO("pub[%s] commit data(0x%p)[%d] >> data(0x%p)[%d] done\n",
                 pubid, data, size, wBuf, size);
@@ -148,6 +150,7 @@ static INT32 notification_publish(INotification *pINotification, const char* pub
     NOTIFICATION_PRIV_DATA_T *pStPrivData = NULL;
     void* rBuf;
     EventParam_t param;
+    Broker_Node *pub=NULL;
     if(NULL == pINotification)
     {
         LOGGER_ERROR("invaild param error :%p \n",pINotification);
@@ -159,7 +162,7 @@ static INT32 notification_publish(INotification *pINotification, const char* pub
         LOGGER_ERROR("get priv data error \n");
         return ERROR;
     }
-    Broker_Node pub=notifybroker_Find(pStPrivData->publishers,pubid);
+    pub=notifybroker_find(pStPrivData->publishers,pubid);
      if(pub == NULL){
         LOGGER_ERROR("no subscribe pub[%s]\n", pubid);
         return ERROR;
@@ -188,14 +191,14 @@ static INT32 notification_publish(INotification *pINotification, const char* pub
  */
 static INT32 notification_pull(INotification *pINotificaion, const char* pubid,void* data,unsigned int size)
 {
-    
+    return OK;
 }
 
 
 
 static INT32 notification_notify(INotification *pINotificaion, const char* pubid,void* data,unsigned int size)
 {
-    
+    return OK;
 }
 
 
@@ -214,13 +217,13 @@ static int notification_init(INotification *pINotification)
         LOGGER_ERROR("param error\n");
         return iRet;
     }
-    pStPrivData->subscribers =notifybroker_init("SUB",1024);
+    pStPrivData->subscribers =notifybroker_init("SUB",pStPrivData->BufferSize);
     if(pStPrivData->subscribers == NULL)
     {
       LOGGER_ERROR("init subscribers error\n");
       return ERROR;
     }
-    pStPrivData->publishers =notifybroker_init("PUB",1024);
+    pStPrivData->publishers =notifybroker_init("PUB",pStPrivData->BufferSize);
     if(pStPrivData->publishers == NULL)
     {
       LOGGER_ERROR("init subscribers error\n");
@@ -243,13 +246,6 @@ static INT32 notification_priv_data(NOTIFICATION_PRIV_DATA_T *pStPrivData,UINT32
         return ERROR;
     }
     pStPrivData->BufferSize= pingpongbuffsize;
-    pStPrivData->publishers =  notifybroker_init("MASTER");
-    if(pStPrivData->publishers == NULL)
-    {
-        LOGGER_ERROR("can't craete publishers!");
-        return FALSE;
-    }
-
     return OK;
 }
 
@@ -272,6 +268,8 @@ static INT32 notification_interface(INotification *pINotification)
     pINotification->Unsubscribe = notification_unsubscribe;
     pINotification->Commit = notification_commit;
     pINotification->Pull = notification_pull;
+    pINotification->Publish = notification_publish;
+    pINotification->Notify = notification_notify;
     return OK;
 }
 

@@ -15,6 +15,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/vfs.h>    /* or <sys/statfs.h> */
+#include "mkfs.h"
 
 typedef enum  SYS_MEDIUM_FS_MAGIC_E
 {

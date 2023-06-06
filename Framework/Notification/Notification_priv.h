@@ -15,21 +15,36 @@
  * @struct    NOTIFICATION_PRIV_DATA_T
  * @brief     NOTIFICATION私有数据结构
 */
-typedef struct NOTIFICATION_PRIV_DATA_T
+typedef struct
 {
     DataCentor_Header* subscribers;
     DataCentor_Header* publishers;
-    
+    UINT32 BufferSize;
 }NOTIFICATION_PRIV_DATA_T;
 
 /**
  * @struct    NOTIFICATION_BASE_T
  * @brief     NOTIFICATION基础数据结构
 */
-typedef struct NOTIFICATION_BASE_T
+typedef struct
 {
     INotification           stInterface; /* notificition接口 */
     NOTIFICATION_PRIV_DATA_T stPrivData;  /* 私有数据 */
 }NOTIFICATION_BASE_T;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #endif

@@ -1,5 +1,6 @@
 file(GLOB SRC_LIST 
 #compenment
+"src/fdisk/*.cpp"
 "src/cmd/*.cpp" 
 "src/common/*.cpp" 
 "src/file/*.cpp" 
@@ -13,6 +14,8 @@ file(GLOB SRC_LIST
 "src/time/*.cpp"
 "src/timer/*.cpp"
 "src/block/*.cpp"
+"src/list/*.cpp"
+
 #BSP
 "devices/gsensor/*.cpp"
 "devices/serial/*.cpp"
@@ -34,6 +37,7 @@ include_directories(
 "src/time"
 "src/timer"
 "src/block"
+"src/fdisk"
 #devices api
 "devices/include"
 #bsp

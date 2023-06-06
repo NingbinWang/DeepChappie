@@ -6,7 +6,7 @@
  * @param[in]  pIDevMonitor      串口对象操作指针
  * @return	   成功 私有数据指针 失败 NULL
  */
-/*
+
 static STORAGER_MANAGER_PRIV_DATA_T *storage_manager_get_priv_data(IStorager *pIStorager)
 {
     STORAGER_MANAGER_BASE_T *pBase =NULL;
@@ -19,73 +19,27 @@ static STORAGER_MANAGER_PRIV_DATA_T *storage_manager_get_priv_data(IStorager *pI
     return &pBase->stPrivData;
 }
 
-*/
 
 
-/**@fn	       storage_manager_common_check_and_create_dir_exist	  
- * @brief	   检查并创建目录
- * @param[in]  iMediumNo   介质ID
- * @return	   成功返回OK  失败返回错误码
+/**@fn	       storage_manager_init	  
+ * @brief	   初始化对外接口
+ * @param[in]  无
+ * @return	   成功返回IDevMonitor操作指针  失败返回NULL;
  */
-/*
-INT32 storage_manager_check_and_create_dir_exist(INT32 iMediumNo, MEDIUM_STATE_E eStates)
-{
-    INT32 iRet = ERROR; 
-    INT32 iIndex = 0;
-    CONFIG_STORAGE_T stConfig;
-    IFileManager *pIFileManager = NULL;
-    STORAGE_MANAGER_PRIV_DATA_T *pStPrivData = NULL;
-
-    pStPrivData = storage_manager_get_priv_data((IStorageManager*)storage_manager_get_instance());
-    if(NULL == pStPrivData)
+static INT32 storager_manager_init(IStorager *pIStorager)
+{   
+    INT32 iRet = ERROR;
+    if(NULL == pIStorager)
     {
-        STORAGE_ERROR("get priv data error \n");
-        return ERROR;
-    }
-
-    if(eStates != MEDIUM_STATE_NORMAL && MEDIUM_STATE_MEM_FULL != eStates)
-    {
-        return iRet;
-    }
-    
-    iRet = storage_manager_get_storage_config(&stConfig);
-    if(iRet < 0)
-    {
-        STORAGE_ERROR("storage_manager_get_storage_config failed\n");
-        return iRet;
-    }
-    
-    pIFileManager = FACTORY_GET_COMPONENT(IFileManager,FACTORY_IID_FILE_MANAGER,FACTORY_CID_DEFAULT);
-    if(!pIFileManager)
-    {   
-        STORAGE_ERROR("pIFileManager is NULL\n");
+        LOGGER_ERROR("init interface func error\n");
         return iRet;
     }
 
-    for(iIndex = 0;iIndex < ARRAY_SIZE(stConfig.stParam.aDirAttr);iIndex++)
-    {
-        if((FALSE == pStPrivData->bOmcVedio) && 
-			((CONFIG_STORAGE_ATTR_NORMAL == stConfig.stParam.aDirAttr[iIndex].eAttr) || (CONFIG_STORAGE_ATTR_EVENT == stConfig.stParam.aDirAttr[iIndex].eAttr)))
-        {
-		    STORAGE_INFO("not support omc record, not create dir:%s \n", stConfig.stParam.aDirAttr[iIndex].strDir);
-			continue;
-		}
-        if(stConfig.stParam.aDirAttr[iIndex].bValid == FALSE)
-        {
-            continue;
-        }
-        
-        iRet = pIFileManager->CreateDir(pIFileManager,iMediumNo,stConfig.stParam.aDirAttr[iIndex].strDir);
-        if(iRet < 0)
-        {
-            STORAGE_ERROR("create dir:%s failed\n", stConfig.stParam.aDirAttr[iIndex].strDir);
-            break;
-        }
-        STORAGE_INFO("create dir:%s successful\n", stConfig.stParam.aDirAttr[iIndex].strDir);
-    }
-    return iRet;
+    return OK;
 }
-*/
+
+
+
 
 
 
@@ -107,6 +61,7 @@ static INT32 storager_manager_init_priv_data(STORAGER_MANAGER_PRIV_DATA_T *pStPr
 }
 
 
+
 /**@fn	       storage_manager_init_interface	  
  * @brief	   初始化对外接口
  * @param[in]  无
@@ -120,6 +75,7 @@ static INT32 storager_manager_init_interface(IStorager *pIStorager)
         LOGGER_ERROR("init interface func error\n");
         return iRet;
     }
+    pIStorager->Init=storager_manager_init;
 
 
 

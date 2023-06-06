@@ -1,2 +1,2 @@
-#include "logger.h"
+#include "logger_priv.h"
 

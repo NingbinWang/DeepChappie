@@ -14,7 +14,7 @@ typedef enum
         EVENT_NOTIFY,      // Subscribers send notifications to publishers
         EVENT_TIMER,       // Timed event
         _EVENT_LAST
-} EventCode_E;
+}EventCode_E;
 
 /**
  * @enum   errorcode
@@ -31,10 +31,7 @@ typedef enum
     ERROR_NO_COMMITED         = -6,
     ERROR_NOT_FOUND           = -7,
     ERROR_PARAM_ERROR         = -8
-} ErrorCode_E;
-
-
-
+}ErrorCode_E;
 
 /**
  * @struct   Event parameter structure
@@ -42,7 +39,7 @@ typedef enum
 */
 typedef struct
 {
-        EventCode_t event; // Event type
+        EventCode_E event; // Event type
         //Notification* tran;     // Pointer to sender
         //Notification* recv;     // Pointer to receiver
         void* pData;      // Pointer to data
@@ -76,8 +73,9 @@ typedef struct DataCentor_T
 
 DataCentor_Header* notifybroker_init(const char* master,UINT32 pingpongbuffsize);
 void notifybroker_pushback(DataCentor_Header *head,const char* id);
+Broker_Node* notifybroker_find(DataCentor_Header *head,const char* id);
 
-int notifybroker_remove(DataCentor_Header *head,const char* id)
+int notifybroker_remove(DataCentor_Header *head,const char* id);
 
 
 

@@ -10,11 +10,9 @@
 
 
 TODO：
-Linux版本：
-1.
 
-WINDOWS版本：
-1.
+Linux版本：
+
 
 
 # 系统架构图

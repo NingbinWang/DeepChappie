@@ -17,7 +17,7 @@ void ANTO_Send(const ANTO_MODE_E mode)
     IGsensor_manager *gsensor;
     Sensordata_t data;
     GSENSOR_DATA_T antodata;
-    gsensor = Framework_GetGsensorinterface();
+    gsensor = Framework_GetGsensor();
     
     switch (mode)
     {

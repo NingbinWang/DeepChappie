@@ -8,6 +8,9 @@ IGsensor_manager *gsensor = NULL;
 IDevMonitor *devmonitor = NULL;
 INetwork *network = NULL;
 INotification *notification = NULL;
+IStorager *storager = NULL;
+IMediumManager *medium = NULL;
+//ISerial *serial0=NULL;
 //IAVB1722Talker *avb1722talker;
 
 static int Framework_Component_Init(App_Defaultconf_t *config)
@@ -16,12 +19,7 @@ static int Framework_Component_Init(App_Defaultconf_t *config)
   //gsensor
   if(config->gsensorinfo.enable){
      gsensor = gsensor_manager_init_instance();
-  }
-   //devmoitor
-  if(config->devmonitorinfo.enable){
-     devmonitor = devmonitor_init_instance();
-     //devmonitor  init
-     devmonitor->Init(devmonitor);
+     gsensor->Init(gsensor);
   }
    //network
   if(config->networkinfo.enable){
@@ -39,24 +37,26 @@ static int Framework_Component_Init(App_Defaultconf_t *config)
      notification = notification_init_instance(config->notificationinfo.pingpongsize);
      notification->Init(notification);
   }
-
+  //storager
+  if(config->storagerinfo.enable){
+   //devmonitor  init
+     devmonitor = devmonitor_init_instance();
+     devmonitor->Init(devmonitor);
+     medium = medium_manager_init_instance();
+     medium->Init(medium,&(config->storagerinfo));
+     storager = storager_manager_init_instance();
+     storager->Init(storager);
+  }
+  //serial
+ // if(config->serialinfo0.enable){
+  //   serial0 = serial_init_instance("ttyS",0);
+  //}
   return 0;
 }
 
 static int Framework_Component_DefaultParam(App_Defaultconf_t *config)
 {
-  /*
-     AVB_1722_TALKER_SET_PARAM_T  avb1722talkerSetParam;
-     //avb talker config
-     avb1722talkerSetParam.stParam.iSockPriority = 6;
-     avb1722talkerSetParam.stParam.uMaxPayloadLen = 1400;
-     avb1722talkerSetParam.stParam.uMaxTransmitTime = 4;
-     avb1722talkerSetParam.stParam.uStreamID = 0x93E0f000FE120004;
-     strncpy(avb1722talkerSetParam.stParam.aMacAddr."02:47:57:4D:00:91",sizeof(avb1722talkerSetParam.stParam.aMacAddr));
-     strncpy(avb1722talkerSetParam.stParam.aInterfaceName."eth0.3",sizeof(avb1722talkerSetParam.stParam.aInterfaceName));
-     avb1722talkerSetParam.uFrameBufSize = 0; 
-     avb1722talker->SetParam(avb1722talker,&avb1722talkerSetParam);
-   */
+
 
 
      return 0;
@@ -68,14 +68,19 @@ static int Framework_Component_DefaultStart(App_Defaultconf_t *config)
    if(config->gsensorinfo.enable){
       gsensor->Start(gsensor);
    }
+   if(config->storagerinfo.enable){
+     medium->Start(medium);
+      medium->Format(medium,0,MEDIUM_FORMAT_FAT32);
+   }
    if(config->notificationinfo.enable){
       if(config->gsensorinfo.enable)
          notification->Subscribe(notification,"IMU");
       if(config->networkinfo.enable)
          notification->Subscribe(notification,"NET");
-      if(config->devmonitorinfo.enable)
-         notification->Subscribe(notification,"DEVMONTOR");
+      if(config->storagerinfo.enable)
+         notification->Subscribe(notification,"STORAGER");
    }
+
    return 0;
 }
 
@@ -88,25 +93,44 @@ void Framework_Init(App_Defaultconf_t *config)
 
 int Framework_work(App_Defaultconf_t *config)
 {
+   /*
     if(config->notificationinfo.enable){
       if(config->gsensorinfo.enable){
-         
+         Sensordata_t data;
+         gsensor->GetData(gsensor,&data);
+         notification->Commit(notification,"IMU",&data,sizeof(Sensordata_t));
       }
     }
+    */
     return 0;
 }
 
-IGsensor_manager* Framework_GetGsensorinterface(void)
+IGsensor_manager* Framework_GetGsensor(void)
 {
   return gsensor;
 }
 
-IDevMonitor* Framework_GetDevMonitorinrterface(void)
+IDevMonitor* Framework_GetDevMonitor(void)
 {
   return devmonitor;
 }
 
-INetwork* Framework_GetNetworkinrterface(void)
+INetwork* Framework_GetNetwork(void)
 {
   return network;
+}
+
+INotification* Framework_Getnotification(void)
+{
+  return notification;
+}
+
+IStorager* Framework_Getstorager(void)
+{
+  return storager;
+}
+
+IMediumManager* Framework_Getmedium(void)
+{
+   return medium;
 }

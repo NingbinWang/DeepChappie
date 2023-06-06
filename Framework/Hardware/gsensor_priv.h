@@ -15,8 +15,8 @@ typedef enum
 {
     LOWPOWER_MODE    = 0,
     NORMALE_MODE     = 1,
-    HIGHRESO_MODE    = 2,  /*压缩视频格式(Compressed Video Format), 如RFC H.264 CVF*/
-    NOTALLOW_MODE    = -1,  /*时钟参考格式(Clock Reference Format)*/
+    HIGHRESO_MODE    = 2,  
+    NOTALLOW_MODE    = -1,  
 }GSENSOR_MODE_E;
 
 /**

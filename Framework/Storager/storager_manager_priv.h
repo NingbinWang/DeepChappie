@@ -20,7 +20,8 @@
 #include <unistd.h>
 #include "sys_mem.h"
 #include "logger.h"
-#include "Devmonitor.h"
+
+#include "sys_medium.h"
 #include "Storager.h"
 
 
@@ -31,7 +32,7 @@
  */
 typedef struct
 {
-   UINT32 fd;
+   SYS_MEDIUM_INFO_T mediainfo;
 }STORAGER_MANAGER_PRIV_DATA_T;
 
 /**@struct    STORAGER_MANAGER_BASE_T

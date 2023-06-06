@@ -7,7 +7,7 @@ include_directories(
 #api
 "inc"
 "hdal"
-"hdal/inlcude"
+"hdal/include"
 "hdal/api"
 #compenment 
 "src"

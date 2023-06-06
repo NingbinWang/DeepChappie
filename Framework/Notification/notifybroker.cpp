@@ -25,7 +25,8 @@ Broker_Node * notifybroker_creatnode(DataCentor_Header *head,const char* id)
         if (!buffer)
         {
             LOGGER_ERROR("buffer malloc failed!");
-            return ERROR;
+            sys_mem_free(node);
+            return NULL;
         }
         memset(buffer, 0, (head->BufferSize) * sizeof(UINT8) * 2);
         buf0 = buffer;
@@ -85,9 +86,8 @@ void notifybroker_pushback(DataCentor_Header *head,const char* id)
   * @param  id:  Account ID
   * @retval If the search is successful, return the pointer of the account
   */
-Broker_Node* notifybroker_Find(DataCentor_Header *head,const char* id)
+Broker_Node* notifybroker_find(DataCentor_Header *head,const char* id)
 {
-   int i = 0;
    Broker_Node *start=head->next;
    while(start)
    {

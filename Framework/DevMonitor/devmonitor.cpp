@@ -81,6 +81,9 @@ void devmonitor_netlink_data_handle(DEV_MONITOR_PRIV_DATA_T *pStPrivData, CHAR *
     else if(strstr(strBuf, DEV_MONITOR_ACTION_SYMBOL_REMOVE) != NULL)
     {
         eAction = DEV_MONITOR_ACTION_REMOVE;
+    }else if(strstr(strBuf,DEV_MONITOR_ACTION_SYMBOL_CHANGE) != NULL)
+    {
+        eAction = DEV_MONITOR_ACTION_CHANGE;
     }
     else
     {   

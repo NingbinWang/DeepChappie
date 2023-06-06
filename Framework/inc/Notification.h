@@ -50,7 +50,7 @@ struct INotification
      * @param[in]  pINotificaion   INotificaiton对象操作指针
      * @return     成功返回OK     失败返回错误码
      */
-    int (*Publish)(INotification *pINotificaion);
+    int (*Publish)(INotification *pINotificaion,const char* pubid);
 
     /**@fn         pull 
      * @brief      从订阅者那里拉去数据

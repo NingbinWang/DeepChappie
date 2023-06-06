@@ -200,7 +200,7 @@ INT32 sys_gsensor_getdata(const UINT32 fd,sensor_t * sensordata)
    sensordata->accz=gyro_val.accel_z;
    sensordata->gyrox=gyro_val.gyro_x;
    sensordata->gyroy=gyro_val.gyro_y;
-   sensordata->gyroz = gyro_val.gyro_z;
+   sensordata->gyroz=gyro_val.gyro_z;
    return OK;
 
 }

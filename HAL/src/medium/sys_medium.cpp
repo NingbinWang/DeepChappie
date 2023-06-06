@@ -218,14 +218,14 @@ INT32 sys_medium_make_part(const CHAR *strDevPath, INT32 iPartNum)
 	{
 		return iRet;
 	}
-	/*
+	
     iRet = fdisk_make_part(strDevPath, iPartNum);
     if (iRet != OK)
     {
         SYS_COMMON_ERROR("fdisk_make_part %s failed, %s\n", strDevPath, strerror(errno));
         return ERROR;
     }
-    */
+   
     return OK;
 }
 
@@ -396,7 +396,7 @@ INT32 sys_medium_get_info(const CHAR *strMountPath, SYS_MEDIUM_INFO_T *pStMedium
        uDiskFreeSize = (UINT32) ((stInfo.f_bavail / 1024) * stInfo.f_bsize);
     }
     
- //   SYS_COMMON_INFO("stInfo.f_bsize = %u\n", stInfo.f_bsize ); 
+    SYS_COMMON_INFO("stInfo.f_bsize = %u\n", stInfo.f_bsize ); 
     pStMediumInfo->uClusterSize = stInfo.f_bsize;
     pStMediumInfo->uTotalSize = uDiskTotalSize/1024;
     pStMediumInfo->uRemainSize = uDiskFreeSize/1024;
@@ -415,7 +415,7 @@ INT32 sys_medium_get_info(const CHAR *strMountPath, SYS_MEDIUM_INFO_T *pStMedium
             break;
     }
     
-    // SYS_COMMON_INFO("strMountPath:%s uTotalSize:%d MB uTotalSize:%dMB f_type:0x%x\n",strMountPath,pStMediumInfo->uTotalSize,pStMediumInfo->uRemainSize,(UINT32)stInfo.f_type);
+    SYS_COMMON_INFO("strMountPath:%s uTotalSize:%d MB uTotalSize:%dMB f_type:0x%x\n",strMountPath,pStMediumInfo->uTotalSize,pStMediumInfo->uRemainSize,(UINT32)stInfo.f_type);
     return 0;
 }
 

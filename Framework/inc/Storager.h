@@ -7,12 +7,15 @@ extern "C" {
 
 #define DIRNAMESTRMAX 256
 #define DIRNUMMAX     6
+#define TYPESTRMAX 64
+
 typedef struct 
 {
     int enable;
+    int tfid;
+    int emmcid;
     unsigned int dirnum;//根目录下有多少个文件夹
     char dirname[DIRNUMMAX][DIRNAMESTRMAX];//相关的名字
-
 }Storager_Info_T;
 
 
@@ -32,10 +35,9 @@ struct IStorager
      */
     int (*Init)(IStorager *pIStorager);
 
-    
 };
 
-IStorager *storage_manager_init_instance(void);
+IStorager *storager_manager_init_instance(void);
 
 
 

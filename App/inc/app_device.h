@@ -4,7 +4,6 @@
 
 #include "app_common.h"
 
-int app_tf_regitster(IDevMonitor* devmonitor);
 
 
 

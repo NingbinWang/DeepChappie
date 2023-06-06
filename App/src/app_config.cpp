@@ -27,7 +27,7 @@ void app_conf_load(App_Defaultconf_t* defaultconf)
             printf("network disable\n");
             defaultconf->networkinfo.enable = 0;
         }else{
-            defaultconf->networkinfo.enable = tmpvalue
+            defaultconf->networkinfo.enable = tmpvalue;
         }
     }
     if(defaultconf->networkinfo.enable == ENBALE){
@@ -78,6 +78,26 @@ void app_conf_load(App_Defaultconf_t* defaultconf)
             {
                 strncpy(defaultconf->storagerinfo.dirname[i], value, strlen(value));
             }
+       }
+       value = iniparse_get_value(inih, "storager", "tfid");
+       if(value){
+         tmpvalue = atoi(value);
+         if(tmpvalue < 0){
+             printf("tf get error\n");
+             defaultconf->storagerinfo.tfid=-1;
+         }else{
+             defaultconf->storagerinfo.tfid=tmpvalue;
+         }
+       }
+       value = iniparse_get_value(inih, "storager", "emmcid");
+       if(value){
+         tmpvalue = atoi(value);
+         if(tmpvalue < 0){
+             printf("emmcid get error\n");
+             defaultconf->storagerinfo.emmcid=-1;
+         }else{
+             defaultconf->storagerinfo.emmcid=tmpvalue;
+         }
        }
     }
     //media
@@ -131,7 +151,17 @@ void app_conf_load(App_Defaultconf_t* defaultconf)
           }
         }
     }
-
+//serial
+   value = iniparse_get_value(inih, "serial0", "enable");
+    if(value){
+        tmpvalue = atoi(value);
+        if(tmpvalue < 0){
+            printf("notification disable\n");
+            defaultconf->serialinfo0.enable = 0;
+        }else{
+            defaultconf->serialinfo0.enable = tmpvalue;
+        }
+    }
     iniparse_free(inih);
     return ;
 }
