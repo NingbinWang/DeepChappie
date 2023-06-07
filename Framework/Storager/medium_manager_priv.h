@@ -28,9 +28,11 @@
 #include "sys_list.h"
 #include "sys_utils.h"
 #include "sys_file.h" 
+#include "sys_sem.h"
 
 
 #include "Framework.h"
+#include "Notification.h"
 
 
 #define MEDIUM_USER_SPACE_PROTECT_MEM_SIZE  SIZE_512MB
@@ -62,6 +64,7 @@ typedef enum MEDIUM_STATE_ACTION_E
 {
     MEDIUM_STATE_ACTION_REMOVE,
     MEDIUM_STATE_ACTION_ADD,
+    MEDIUM_STATE_ACTION_CHANGE,
     MEDIUM_STATE_ACTION_UNKNOWN
 }MEDIUM_STATE_ACTION_E;
 
@@ -117,6 +120,7 @@ typedef struct
     LIST_T	 MediumPartInfoList;							// 介质分区信息链表
     LIST_T   MediumStateCallBackList;                       //回调监听函数
     LIST_T   MediumActionCallBackList;                      // 介质插拔链表信息
+    MUTEX_ID  MediumformatMutex;                             //介质格式化的锁
 
 
 }MEDIUM_MANAGER_PRIV_DATA_T;

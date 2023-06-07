@@ -5,7 +5,15 @@
     extern "C" {
 #endif
 
+typedef struct 
+{
+    int enable;
+}Medium_Info_T;
 
+
+
+
+#define MEDIUMPUBID "medium"
 /* 存储介质类型 */
 typedef enum
 {

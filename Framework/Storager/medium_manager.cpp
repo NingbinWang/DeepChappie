@@ -74,6 +74,34 @@ VOID medium_manager_umount(const char *strMountDev)
     sys_posix_rmdir(strMountDev);
 }
 
+/**@fn	       medium_manager_find_medium_node	  
+ * @brief	   获取分区信息节点
+ * @param[in]  pStPrivData     私有数据结构体指针
+ * @param[in]  iMediumChn      介质对外通道号
+ * @return	   成功返回节点数据指针 失败返回NULL
+ */
+MEDIUM_INFO_NODE_T *medium_manager_find_medium_node(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData,INT32 iMediumChn)
+{
+    MEDIUM_INFO_NODE_T *pStNode = NULL;
+    if(!pStPrivData)
+    {
+        LOGGER_ERROR("input prt null\n");
+        return NULL;
+    }
+
+    LIST_FOR_EACH(MEDIUM_INFO_NODE_T, pStNode, &pStPrivData->MediumInfoList)
+    {
+        if(iMediumChn != pStNode->iMediumNo)
+        {
+            continue;
+        }
+
+        break;
+    }
+
+    return pStNode;
+}
+
 /**@fn	       medium_manager_update_info	  
  * @brief	   更新介质节点信息
  * @param[in]  iMediumNo     介质索引
@@ -374,6 +402,38 @@ VOID medium_manager_remove_handle(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData,MEDIUM
 }
 
 
+/**@fn	       medium_manager_change_handle	  
+ * @brief	   介质拔出变更联动操作
+ * @param[in]  iMediumNo     介质索引
+ * @param[in]  iMediumPartNo   介质分区号
+ * @return	   无
+ */
+VOID medium_manager_change_handle(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData,MEDIUM_MANAGER_MSG_T *pStMsg)
+{ 
+	MEDIUM_INFO_NODE_T *pStNode = NULL;
+    if(NULL == pStMsg)
+    {
+        return ;
+    }
+	 if(!pStPrivData)
+    {
+        LOGGER_ERROR("medium_manager_get_priv_data failed\n");
+        return ;
+    }
+    pStNode = medium_manager_find_medium_node(pStPrivData, pStMsg->iMediumNo);
+    if(!pStNode)
+    {
+        LOGGER_ERROR("medium_manager_get_info_node failed, iMediumChan:%d  \n", pStMsg->iMediumNo);
+        return;
+    }
+
+    if(pStNode->eStates == MEDIUM_STATE_FORMATTING)
+       sys_mutex_unlock(&pStPrivData->MediumformatMutex);
+
+}
+
+
+
 /**@fn	       medium_manager_action_monitor_thread	  
  * @brief	   介质插拔状态监听线程
  * @param[in]  pStPrivData  私有数据指针
@@ -407,6 +467,9 @@ static VOID medium_manager_action_monitor_thread(MEDIUM_MANAGER_PRIV_DATA_T *pSt
                 break;
             case MEDIUM_STATE_ACTION_REMOVE:
                 medium_manager_remove_handle(pStPrivData,&stMediumMsg);
+                break;
+            case MEDIUM_STATE_ACTION_CHANGE:
+                medium_manager_change_handle(pStPrivData,&stMediumMsg);
                 break;
             default:
                 LOGGER_ERROR("type no support :%d \n",stMediumMsg.eAction);
@@ -458,6 +521,10 @@ VOID medium_manager_msg_callback(DEV_MONITOR_TYPE_E eType, INT32 iDevIndex, INT3
     {
         stMediumMsg.eAction = MEDIUM_STATE_ACTION_ADD;
     }
+    else if(eAction == DEV_MONITOR_ACTION_CHANGE)
+    {
+        stMediumMsg.eAction = MEDIUM_STATE_ACTION_CHANGE;
+    }
     else
     {
         stMediumMsg.eAction = MEDIUM_STATE_ACTION_UNKNOWN;
@@ -480,33 +547,7 @@ VOID medium_manager_msg_callback(DEV_MONITOR_TYPE_E eType, INT32 iDevIndex, INT3
     }
 }
 
-/**@fn	       medium_manager_find_medium_node	  
- * @brief	   获取分区信息节点
- * @param[in]  pStPrivData     私有数据结构体指针
- * @param[in]  iMediumChn      介质对外通道号
- * @return	   成功返回节点数据指针 失败返回NULL
- */
-MEDIUM_INFO_NODE_T *medium_manager_find_medium_node(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData,INT32 iMediumChn)
-{
-    MEDIUM_INFO_NODE_T *pStNode = NULL;
-    if(!pStPrivData)
-    {
-        LOGGER_ERROR("input prt null\n");
-        return NULL;
-    }
 
-    LIST_FOR_EACH(MEDIUM_INFO_NODE_T, pStNode, &pStPrivData->MediumInfoList)
-    {
-        if(iMediumChn != pStNode->iMediumNo)
-        {
-            continue;
-        }
-
-        break;
-    }
-
-    return pStNode;
-}
 
 /**@fn	       medium_manager_check_capacity	  
  * @brief	   容量判断
@@ -850,10 +891,8 @@ INT32 medium_manager_format_handle_tf_card(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivDa
         medium_manager_update_medium_info(pStPrivData,pStPartNode, MEDIUM_STATE_ABNORMAL);
         return iRet;
     }
-	/* 制作分区后会偶发没有mmcblk0p1节点，"fdisk -l"有mmcblk0p1分区，系统调用shell命令"mdev -s"刷新dev节点 */		
-	snprintf(strSysFormatCmd, sizeof(strSysFormatCmd), "%s", "mdev -s");
-	LOGGER_INFO("%s\n", strSysFormatCmd);
-	sys_posix_cmd_call(strSysFormatCmd);
+    sys_mutex_lock(&pStPrivData->MediumformatMutex,200);
+
     iRet = sys_medium_check_dev_node(pStPartNode->strDevPath);
     if(iRet < 0)
     {
@@ -962,6 +1001,7 @@ INT32 medium_manager_init_priv_data(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData)
     list_init(&pStPrivData->MediumStateCallBackList);
 	list_init(&pStPrivData->MediumActionCallBackList);
     sys_mutex_create(&pStPrivData->MediumInfoMutex, MUTEX_NORMAL);
+    sys_mutex_create(&pStPrivData->MediumformatMutex, MUTEX_NORMAL);
   //  pStPrivData->eSupportFileType = SYS_MEDIUM_FS_TYPE_UNKNOWN;
 
     iRet = sys_mqueue_create(&pStPrivData->stMediumMsgID, "MediumActionMsg", 64, sizeof(MEDIUM_MANAGER_MSG_T));
@@ -1013,6 +1053,7 @@ IMediumManager *medium_manager_init_instance(VOID)
 {   
     INT32 iRet = ERROR;
     MEDIUM_MANAGER_BASE_T *pBase = NULL;
+    INotification * notifybroker = NULL;
     
     pBase = (MEDIUM_MANAGER_BASE_T *)sys_mem_malloc(sizeof(MEDIUM_MANAGER_BASE_T));
     if(!pBase)
@@ -1039,6 +1080,12 @@ IMediumManager *medium_manager_init_instance(VOID)
         pBase = NULL;
         return NULL;
     }
-    
+    notifybroker = notification_get_notifybroker();
+    if(notifybroker == NULL)
+    {
+        LOGGER_WARN("no register notificaition\n");
+    }else{
+        //notifybroker->Subscribe(notifybroker,MEDIUMPUBID,);
+    }
     return &pBase->stInterface;
 }

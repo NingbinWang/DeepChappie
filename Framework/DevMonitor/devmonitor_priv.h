@@ -22,6 +22,7 @@
 #include "logger.h"
 
 
+IDevMonitor *devmonitor = NULL;
 
 #define DEV_MONITOR_ACTION_SYMBOL_REMOVE "remove"
 #define DEV_MONITOR_ACTION_SYMBOL_ADD    "add"

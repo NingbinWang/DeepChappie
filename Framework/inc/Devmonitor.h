@@ -75,7 +75,8 @@ struct IDevMonitor
     int (*CheckDev)(IDevMonitor *pIDevMonitor,DEV_MONITOR_TYPE_E eType, int iDevIndex);
 };
 
-IDevMonitor *devmonitor_init_instance(void);
+void init_devmonitor_component(void);
+IDevMonitor *devmonitor_get_instance(void);
 
 #ifdef __cplusplus
 }

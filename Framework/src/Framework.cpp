@@ -5,7 +5,7 @@
 //#include "avb_1722_talker.h"
 
 IGsensor_manager *gsensor = NULL;
-IDevMonitor *devmonitor = NULL;
+IDevMonitor *frdevmonitor = NULL;
 INetwork *network = NULL;
 INotification *notification = NULL;
 IStorager *storager = NULL;
@@ -34,14 +34,16 @@ static int Framework_Component_Init(App_Defaultconf_t *config)
   }
   //notification
   if(config->notificationinfo.enable){
-     notification = notification_init_instance(config->notificationinfo.pingpongsize);
+     init_notification_component();
+     notification = notification_get_notifybroker();
      notification->Init(notification);
   }
   //storager
   if(config->storagerinfo.enable){
    //devmonitor  init
-     devmonitor = devmonitor_init_instance();
-     devmonitor->Init(devmonitor);
+     init_devmonitor_component();
+     frdevmonitor = devmonitor_get_instance();
+     frdevmonitor->Init(frdevmonitor);
      medium = medium_manager_init_instance();
      medium->Init(medium,&(config->storagerinfo));
      storager = storager_manager_init_instance();
@@ -72,15 +74,6 @@ static int Framework_Component_DefaultStart(App_Defaultconf_t *config)
      medium->Start(medium);
       medium->Format(medium,0,MEDIUM_FORMAT_FAT32);
    }
-   if(config->notificationinfo.enable){
-      if(config->gsensorinfo.enable)
-         notification->Subscribe(notification,"IMU");
-      if(config->networkinfo.enable)
-         notification->Subscribe(notification,"NET");
-      if(config->storagerinfo.enable)
-         notification->Subscribe(notification,"STORAGER");
-   }
-
    return 0;
 }
 
@@ -112,7 +105,7 @@ IGsensor_manager* Framework_GetGsensor(void)
 
 IDevMonitor* Framework_GetDevMonitor(void)
 {
-  return devmonitor;
+  return frdevmonitor;
 }
 
 INetwork* Framework_GetNetwork(void)

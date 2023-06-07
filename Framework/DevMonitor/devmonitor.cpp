@@ -336,3 +336,17 @@ IDevMonitor *devmonitor_init_instance(VOID)
     }
     return &pBase->stInterface;
 }
+
+void init_devmonitor_component(void)
+{
+    devmonitor = devmonitor_init_instance();
+    if(devmonitor == NULL)
+    {
+        LOGGER_ERROR("notification_init_instance error \n");
+    }
+}
+
+IDevMonitor *devmonitor_get_instance(void)
+{
+    return devmonitor;
+}
