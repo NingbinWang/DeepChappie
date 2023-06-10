@@ -5,15 +5,6 @@
     extern "C" {
 #endif
 
-typedef struct 
-{
-    int enable;
-}Medium_Info_T;
-
-
-
-
-#define MEDIUMPUBID "medium"
 /* 存储介质类型 */
 typedef enum
 {
@@ -106,7 +97,8 @@ struct IMediumManager{
 
 
 
-IMediumManager *medium_manager_init_instance(void);
+void init_medium_manager_component(void);
+IMediumManager *medium_manager_get_instance(void);
 
 #ifdef __cplusplus
 }

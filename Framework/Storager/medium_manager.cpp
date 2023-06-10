@@ -794,7 +794,7 @@ INT32 medium_manager_start(IMediumManager *pIMediumManager)
 {
     INT32 iRet = ERROR;
     IDevMonitor *pIDevMonitor = NULL;
-     pIDevMonitor = Framework_GetDevMonitor();
+    pIDevMonitor = devmonitor_get_instance();
     if(pIDevMonitor == NULL){
          LOGGER_ERROR("Framework_GetDevMonitor failed\n");
         return iRet;
@@ -1002,7 +1002,6 @@ INT32 medium_manager_init_priv_data(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData)
 	list_init(&pStPrivData->MediumActionCallBackList);
     sys_mutex_create(&pStPrivData->MediumInfoMutex, MUTEX_NORMAL);
     sys_mutex_create(&pStPrivData->MediumformatMutex, MUTEX_NORMAL);
-  //  pStPrivData->eSupportFileType = SYS_MEDIUM_FS_TYPE_UNKNOWN;
 
     iRet = sys_mqueue_create(&pStPrivData->stMediumMsgID, "MediumActionMsg", 64, sizeof(MEDIUM_MANAGER_MSG_T));
     if(iRet < 0)
@@ -1053,8 +1052,6 @@ IMediumManager *medium_manager_init_instance(VOID)
 {   
     INT32 iRet = ERROR;
     MEDIUM_MANAGER_BASE_T *pBase = NULL;
-    INotification * notifybroker = NULL;
-    
     pBase = (MEDIUM_MANAGER_BASE_T *)sys_mem_malloc(sizeof(MEDIUM_MANAGER_BASE_T));
     if(!pBase)
     {
@@ -1080,12 +1077,19 @@ IMediumManager *medium_manager_init_instance(VOID)
         pBase = NULL;
         return NULL;
     }
-    notifybroker = notification_get_notifybroker();
-    if(notifybroker == NULL)
-    {
-        LOGGER_WARN("no register notificaition\n");
-    }else{
-        //notifybroker->Subscribe(notifybroker,MEDIUMPUBID,);
-    }
     return &pBase->stInterface;
+}
+
+void init_medium_manager_component(void)
+{
+    mediummanager = medium_manager_init_instance();
+    if(mediummanager == NULL)
+    {
+        LOGGER_ERROR("notification_init_instance error \n");
+    }
+}
+
+IMediumManager *medium_manager_get_instance(void)
+{
+    return mediummanager;
 }

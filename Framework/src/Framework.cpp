@@ -44,7 +44,8 @@ static int Framework_Component_Init(App_Defaultconf_t *config)
      init_devmonitor_component();
      frdevmonitor = devmonitor_get_instance();
      frdevmonitor->Init(frdevmonitor);
-     medium = medium_manager_init_instance();
+     init_medium_manager_component();
+     medium = medium_manager_get_instance();
      medium->Init(medium,&(config->storagerinfo));
      storager = storager_manager_init_instance();
      storager->Init(storager);

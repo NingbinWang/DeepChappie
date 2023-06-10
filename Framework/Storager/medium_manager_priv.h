@@ -30,9 +30,10 @@
 #include "sys_file.h" 
 #include "sys_sem.h"
 
-
-#include "Framework.h"
+#include "Medium.h"
+#include "Devmonitor.h"
 #include "Notification.h"
+#include "Storager.h"
 
 
 #define MEDIUM_USER_SPACE_PROTECT_MEM_SIZE  SIZE_512MB
@@ -98,19 +99,6 @@ typedef struct
     MEDIUM_TYPE_E           eType;              // 介质类型
 }MEDIUM_INFO_NODE_T;
 
-/*
-typedef struct
-{
-    NODE_T                  node;
-    MediumStateCallBack     pMediumStateCallback; // 介质状态改变回调函数
-}MEDIUM_STATE_CALLBACK_NODE_T;
-
-typedef struct
-{
-    NODE_T                  node;
-    MediumActionCallBack    pMediumActionCallback; // 介质插拔回调函数
-}MEDIUM_ACTION_CALLBACK_NODE_T;
-*/
 
 typedef struct
 {
@@ -118,8 +106,6 @@ typedef struct
     LIST_T   MediumInfoList;                                // 介质信息链表
     MUTEX_ID MediumInfoMutex;                               // 介质信息链表锁
     LIST_T	 MediumPartInfoList;							// 介质分区信息链表
-    LIST_T   MediumStateCallBackList;                       //回调监听函数
-    LIST_T   MediumActionCallBackList;                      // 介质插拔链表信息
     MUTEX_ID  MediumformatMutex;                             //介质格式化的锁
 
 
@@ -134,7 +120,7 @@ typedef struct
 
 
 
-
+IMediumManager *mediummanager = NULL;
 
 
 #endif

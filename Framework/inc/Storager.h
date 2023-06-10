@@ -19,10 +19,17 @@ typedef struct
 }Storager_Info_T;
 
 
+typedef struct 
+{
+    int enable;
+}Storager_Notifybroker_T;
+
+Storager_Notifybroker_T storager_notifybroker;
 
 
 
 
+#define STORAGERPUBID "strorager"
 
 typedef struct IStorager IStorager;
 
