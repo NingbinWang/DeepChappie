@@ -50,7 +50,7 @@ typedef struct
     NOTIFICATION_PRIV_DATA_T stPrivData;  /* 私有数据 */
 }NOTIFICATION_BASE_T;
 
-void notifybroker_pushback(NOTIFICATION_PRIV_DATA_T *pStPrivData,const char* ID,UINT32 BufferSize);
+void notifybroker_pushback(NOTIFICATION_PRIV_DATA_T *pStPrivData,const char* ID,void *pData,UINT32 BufferSize);
 int notifybroker_remove(LIST_T* publishers, BROKER_NODE_T *pBrokernode);
 
 

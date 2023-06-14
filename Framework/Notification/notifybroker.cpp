@@ -35,9 +35,10 @@ VOID notifybroker_init(BROKER_NODE_T *pStNode,UINT32 BufferSize)
  * @return     成功返回OK     失败返回错误码
  */
 
-void notifybroker_pushback(NOTIFICATION_PRIV_DATA_T *pStPrivData,const char* ID,UINT32 BufferSize)
+void notifybroker_pushback(NOTIFICATION_PRIV_DATA_T *pStPrivData,const char* ID,void *pData,UINT32 BufferSize)
 {
      BROKER_NODE_T *pStNode = NULL;
+     void* wBuf;
     if(NULL == pStPrivData)
     {
         LOGGER_ERROR("notifybroker_pushback get pStPrivData failed\n");
@@ -53,6 +54,9 @@ void notifybroker_pushback(NOTIFICATION_PRIV_DATA_T *pStPrivData,const char* ID,
     memset(pStNode,0,sizeof(BROKER_NODE_T));
     notifybroker_init(pStNode,BufferSize);
     strcpy(pStNode->ID,ID);
+    PingPongBuffer_GetWriteBuf(&pStNode->BufferManager, &wBuf);
+    sys_mem_copy(wBuf, (void*)pData, BufferSize);
+    PingPongBuffer_SetWriteDone(&pStNode->BufferManager);
     sys_mutex_lock(&pStPrivData->brokerMutex,WAIT_FOREVER);
     list_add(&pStPrivData->publishers,&pStNode->node);
     pStPrivData->publishers.count++;
@@ -74,6 +78,7 @@ int notifybroker_remove(LIST_T* publishers, BROKER_NODE_T *pBrokernode)
         LOGGER_ERROR("notifybroker_remove input param failed\n");
         return ERROR;
     }
+    sys_mem_free(pBrokernode->BufferManager.buffer);
     list_delete(publishers,&pBrokernode->node);
     publishers->count--;
     return OK;

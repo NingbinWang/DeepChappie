@@ -6,6 +6,7 @@ file(GLOB SRC_LIST
 "src/protocol/*.cpp"
 "src/ui/*.cpp"
 "src/utils/*.cpp"
+"src/storager/*.cpp"
 )
 include_directories(
 "inc"

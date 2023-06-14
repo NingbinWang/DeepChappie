@@ -77,11 +77,7 @@ typedef struct
     MEDIUM_TYPE_E           eType;
 }MEDIUM_MANAGER_MSG_T;
 
-typedef struct
-{
-    INT32                   iMediumNo;          // 介质ID
-    INT32                   iMediumPart;        // 介质分区号
-}MEDIUM_ID_T;
+
 
 //存储介质状态信息节点
 typedef struct

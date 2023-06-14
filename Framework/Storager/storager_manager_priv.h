@@ -27,6 +27,7 @@
 
 
 
+
 /**@struct    STORAGER_MANAGER_PRIV_DATA_T
  * @brief     设备监听私有数据结构
  */
@@ -45,7 +46,8 @@ typedef struct
 }STORAGER_MANAGER_BASE_T;
 
 
-
+IStorager *storagermanager = NULL;
+Storager_Notifybroker_T* storager_notifybroker=NULL;
 
 
 

@@ -18,7 +18,6 @@ typedef enum
         EVENT_PUB_PUBLISH, // Publisher posted information
         EVENT_SUB_PULL,    // Subscriber data pull request
         EVENT_NOTIFY,      // Subscribers send notifications to publishers
-        EVENT_TIMER,       // Timed event
 }EVENTCODE_E;
 
 
@@ -34,6 +33,7 @@ typedef enum
     ERROR_NOT_FOUND           = -7,
     ERROR_PARAM_ERROR         = -8
 }ERRORCODE_E;
+
 
 
 typedef struct

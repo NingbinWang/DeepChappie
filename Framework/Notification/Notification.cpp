@@ -36,7 +36,7 @@ BROKER_NODE_T *notification_find_broker_node(NOTIFICATION_PRIV_DATA_T *pStPrivDa
     }
     LIST_FOR_EACH(BROKER_NODE_T, pStNode, &pStPrivData->publishers)
     {
-        if(strcmp(ID,pStNode->ID) == 0)
+        if(strncmp(ID,pStNode->ID,strlen(pStNode->ID)) != 0)
         {
             continue;
         }
@@ -77,7 +77,7 @@ static ERRORCODE_E notification_subscribe(INotification *pINotification,const ch
      }
   
     //Let the publisher add this subscriber
-    notifybroker_pushback(pStPrivData,pubid,size);
+    notifybroker_pushback(pStPrivData,pubid,(void *)data,size);
     return ERROR_NONE;
 }
 

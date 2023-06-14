@@ -297,6 +297,8 @@ VOID medium_manager_insert_handle(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData,MEDIUM
     INT32 iRet = -1;
     MEDIUM_STATE_E eState = MEDIUM_STATE_NORMAL;
     MEDIUM_PART_INFO_T *pStPartNode = NULL;
+    INotification* notifybroker = NULL;
+    Storager_Notifybroker_T *storager_notifybroker=NULL;
     if(NULL == pStMsg)
     {
         return ;
@@ -306,8 +308,14 @@ VOID medium_manager_insert_handle(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData,MEDIUM
         LOGGER_ERROR("medium_manager_get_priv_data failed\n");
         return ;
     }
+    
     pStPartNode = medium_manager_find_medium_part(pStPrivData, pStMsg->iMediumNo, pStMsg->iMediumPart);
-
+    storager_notifybroker = storager_manager_get_broker();
+    notifybroker =  notification_get_notifybroker();
+    if(storager_notifybroker!=NULL){
+        storager_notifybroker->id.iMediumNo = pStMsg->iMediumNo;
+        storager_notifybroker->id.iMediumPart = pStMsg->iMediumPart;
+    }
     //检查主节点是否存在,不存在则需要格式化, 报真实的数据异常
     iRet  = sys_medium_check_dev_node(pStPartNode->strRootPath);
     if(iRet < 0)
@@ -315,6 +323,10 @@ VOID medium_manager_insert_handle(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData,MEDIUM
         LOGGER_ERROR("check node no exist :%s  \n", pStPartNode->strRootPath);
         eState = MEDIUM_STATE_ABNORMAL;
         medium_manager_update_medium_info(pStPrivData,pStPartNode, eState);
+        if(storager_notifybroker!=NULL)
+            storager_notifybroker->eState = STORAGER_STATE_ABNORMAL;
+        if(notifybroker != NULL)
+            notifybroker->Notify(notifybroker,STORAGERPUBID,storager_notifybroker,sizeof(Storager_Notifybroker_T));
         return ;
     }
 
@@ -325,6 +337,10 @@ VOID medium_manager_insert_handle(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData,MEDIUM
         LOGGER_ERROR("check node no exist :%s  \n", pStPartNode->strDevPath);
         eState = MEDIUM_STATE_UNINITIALIZED;
         medium_manager_update_medium_info(pStPrivData,pStPartNode, eState);
+        if(storager_notifybroker!=NULL)
+            storager_notifybroker->eState = STORAGER_STATE_UNINITIALIZED;
+        if(notifybroker != NULL)
+            notifybroker->Notify(notifybroker,STORAGERPUBID,storager_notifybroker,sizeof(Storager_Notifybroker_T));
         return ;
     }
     
@@ -348,6 +364,10 @@ VOID medium_manager_insert_handle(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData,MEDIUM
         sys_posix_rmdir(pStPartNode->strMountPath);
         eState = MEDIUM_STATE_SYSTEM_NO_SUPPORT;
         medium_manager_update_medium_info(pStPrivData,pStPartNode, eState);
+        if(storager_notifybroker!=NULL)
+            storager_notifybroker->eState = STORAGER_STATE_UNINITIALIZED;
+        if(notifybroker != NULL)
+            notifybroker->Notify(notifybroker,STORAGERPUBID,storager_notifybroker,sizeof(Storager_Notifybroker_T));
         return ;
     }
 
@@ -359,8 +379,16 @@ VOID medium_manager_insert_handle(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData,MEDIUM
             pStPartNode->uMediumId);
         eState = MEDIUM_STATE_ABNORMAL;
         medium_manager_update_medium_info(pStPrivData,pStPartNode, eState);
+        if(storager_notifybroker!=NULL)
+            storager_notifybroker->eState = STORAGER_STATE_ABNORMAL;
+        if(notifybroker != NULL)
+            notifybroker->Notify(notifybroker,STORAGERPUBID,storager_notifybroker,sizeof(Storager_Notifybroker_T));
         return;
     }
+    if(storager_notifybroker!=NULL)
+        storager_notifybroker->eState = STORAGER_STATE_NORMAL;
+    if(notifybroker != NULL)
+            notifybroker->Notify(notifybroker,STORAGERPUBID,storager_notifybroker,sizeof(Storager_Notifybroker_T));
     
     LOGGER_INFO("medium insert handle completed, uMediumId:%d  eState(MEDIUM_STATE_E):%u\n",
         pStPartNode->uMediumId, eState);
@@ -375,6 +403,8 @@ VOID medium_manager_insert_handle(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData,MEDIUM
 VOID medium_manager_remove_handle(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData,MEDIUM_MANAGER_MSG_T *pStMsg)
 { 
 	MEDIUM_PART_INFO_T *pStPartNode = NULL;
+     INotification* notifybroker = NULL;
+    Storager_Notifybroker_T *storager_notifybroker=NULL;
     if(NULL == pStMsg)
     {
         return ;
@@ -383,6 +413,13 @@ VOID medium_manager_remove_handle(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData,MEDIUM
     {
         LOGGER_ERROR("medium_manager_get_priv_data failed\n");
         return ;
+    }
+    storager_notifybroker = storager_manager_get_broker();
+    notifybroker =  notification_get_notifybroker();
+    if(storager_notifybroker!=NULL){
+        storager_notifybroker->id.iMediumNo = pStMsg->iMediumNo;
+        storager_notifybroker->id.iMediumPart = pStMsg->iMediumPart;
+        storager_notifybroker->eState = STORAGER_STATE_REMOVEED;
     }
 
 	pStPartNode = medium_manager_find_medium_part(pStPrivData, pStMsg->iMediumNo, pStMsg->iMediumPart);
@@ -399,6 +436,8 @@ VOID medium_manager_remove_handle(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData,MEDIUM
     
     //删除挂载文件路径
     sys_posix_rmdir(pStPartNode->strMountPath);
+    if(notifybroker != NULL)
+            notifybroker->Notify(notifybroker,STORAGERPUBID,storager_notifybroker,sizeof(Storager_Notifybroker_T));
 }
 
 
@@ -492,7 +531,7 @@ VOID medium_manager_msg_callback(DEV_MONITOR_TYPE_E eType, INT32 iDevIndex, INT3
     MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData = NULL;
     MEDIUM_MANAGER_MSG_T stMediumMsg = {0};
     IMediumManager *pIMediumManager = NULL;
-    pIMediumManager = Framework_Getmedium();
+    pIMediumManager = medium_manager_get_instance();
      INT32 iRet = ERROR;
     if(pIMediumManager == NULL){
          LOGGER_ERROR("Framework_Getmedium failed\n");
@@ -559,6 +598,8 @@ INT32 medium_manager_check_capacity(MEDIUM_PART_INFO_T *pStPartNode,MEDIUM_INFO_
 {
     INT32 iRet = ERROR;
     SYS_MEDIUM_INFO_T* pInfo = {0};
+    INotification* notifybroker = NULL;
+    Storager_Notifybroker_T *storager_notifybroker=NULL;
 	if( NULL == pStNode || NULL == pStPartNode )
 	{
 		LOGGER_ERROR("invalid param input \n");
@@ -576,10 +617,26 @@ INT32 medium_manager_check_capacity(MEDIUM_PART_INFO_T *pStPartNode,MEDIUM_INFO_
         LOGGER_ERROR("sys_medium_get_info, iMediumNo:%d \n",pStPartNode->uMediumId);
         return iRet;
     }
+
     pStNode->uTotalSpaceSize = pInfo->uTotalSize;
     pStNode->uRemainSpaceSize = pInfo->uRemainSize; 
     pStNode->eFileType = pInfo->eType;
     pStNode->uClusterSize = pInfo->uClusterSize;
+    if(pStNode->uRemainSpaceSize < 1024)
+    {
+           storager_notifybroker = storager_manager_get_broker();
+           notifybroker =  notification_get_notifybroker();
+           if(storager_notifybroker!=NULL){
+                 storager_notifybroker->id.iMediumNo = pStNode->iMediumNo;
+                 storager_notifybroker->id.iMediumPart = pStNode->iPartNo;
+                 storager_notifybroker->eState = STORAGER_STATE_MEM_FULL;
+           }          
+           if(notifybroker != NULL)
+                notifybroker->Notify(notifybroker,STORAGERPUBID,storager_notifybroker,sizeof(Storager_Notifybroker_T));
+    }
+
+
+
     return OK;
 }
 
@@ -717,7 +774,6 @@ MEDIUM_PART_INFO_T *medium_manager_add_medium_part_info(MEDIUM_MANAGER_PRIV_DATA
 INT32  medium_manager_init(IMediumManager *pIMediumManager,Storager_Info_T* storagerinfo)
 {
     MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData = NULL;
-    IDevMonitor *pIDevMonitor = NULL;
     INT32 iRet = ERROR;
     CHAR strNodePath[128] = {0};
     MEDIUM_PART_INFO_T *pStNode = NULL;
@@ -998,8 +1054,6 @@ INT32 medium_manager_init_priv_data(MEDIUM_MANAGER_PRIV_DATA_T *pStPrivData)
     }
     list_init(&pStPrivData->MediumInfoList);
 	list_init(&pStPrivData->MediumPartInfoList);
-    list_init(&pStPrivData->MediumStateCallBackList);
-	list_init(&pStPrivData->MediumActionCallBackList);
     sys_mutex_create(&pStPrivData->MediumInfoMutex, MUTEX_NORMAL);
     sys_mutex_create(&pStPrivData->MediumformatMutex, MUTEX_NORMAL);
 
