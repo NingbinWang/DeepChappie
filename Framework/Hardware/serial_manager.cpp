@@ -390,3 +390,4 @@ ISerial *serial_init_instance(char* sDevname,int iIndex)
     }
     return &pBase->stInterface;
 }
+

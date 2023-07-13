@@ -5,10 +5,7 @@
 extern "C" {
 #endif/*__cplusplus*/
 
-typedef struct
-{
-   int  enable;
-}Gsensor_Info_T;
+
 
 
 
@@ -82,7 +79,8 @@ struct IGsensor_manager
 };
 
 
-IGsensor_manager *gsensor_manager_init_instance(void);
+void init_gsensor_manager_component(void);
+IGsensor_manager *gsensor_manager_get_instance(void);
 
 
 #ifdef __cplusplus

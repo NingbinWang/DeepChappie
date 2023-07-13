@@ -119,6 +119,6 @@ typedef struct
 
 #define GYRO_NAME_LIS2DH12			"GYRO_LIS2DH12"
 
-
+IGsensor_manager* gsensor_manager= NULL;
 
 #endif

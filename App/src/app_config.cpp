@@ -1,7 +1,7 @@
 #include "app_config.h"
 #include "iniparse.h"
 
-#define ENBALE 1
+
 char *gConPath  = PATH_APPCONF;
 
 void app_conf_load(App_Defaultconf_t* defaultconf)

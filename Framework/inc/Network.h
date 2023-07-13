@@ -7,14 +7,7 @@ extern "C" {
 
 #define NETWORKSTRMAX 256
 
-typedef struct 
-{
-    int  enable;
-    char DevName[NETWORKSTRMAX];      //eth名字
-   	char IP[NETWORKSTRMAX];           // IP地址
-	  char NetMask[NETWORKSTRMAX];      // netmask 
-	  char GateWay[NETWORKSTRMAX];      // gateway 
-}NetworkInfo_t;
+
 
 typedef struct INetwork INetwork;
 struct INetwork

@@ -47,10 +47,6 @@ typedef struct
 
 
 IStorager *storagermanager = NULL;
-Storager_Notifybroker_T* storager_notifybroker=NULL;
-
-
-
 
 
 #endif

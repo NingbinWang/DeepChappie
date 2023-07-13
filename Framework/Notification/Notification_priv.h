@@ -54,20 +54,4 @@ void notifybroker_pushback(NOTIFICATION_PRIV_DATA_T *pStPrivData,const char* ID,
 int notifybroker_remove(LIST_T* publishers, BROKER_NODE_T *pBrokernode);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #endif

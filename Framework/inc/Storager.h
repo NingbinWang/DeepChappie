@@ -11,14 +11,7 @@ extern "C" {
 #define DIRNUMMAX     6
 #define TYPESTRMAX 64
 
-typedef struct 
-{
-    int enable;
-    int tfid;
-    int emmcid;
-    unsigned int dirnum;//根目录下有多少个文件夹
-    char dirname[DIRNUMMAX][DIRNAMESTRMAX];//相关的名字
-}Storager_Info_T;
+
 
 
 
@@ -37,11 +30,7 @@ typedef enum
     STORAGER_STATE_REMOVEED = 4,         //存储卡被拔出
 }STORAGER_STATE_E;
 
-typedef struct 
-{
-    STORAGER_ID_T    id;
-    STORAGER_STATE_E    eState;        //介质状态
-}Storager_Notifybroker_T;
+
 
 #define STORAGERPUBID "storager"
 
@@ -55,12 +44,7 @@ struct IStorager
      * @return     成功返回OK     失败返回错误码
      */
     int (*Init)(IStorager *pIStorager);
-    /**@fn         onEvent   
-     * @brief      各种事件回调函数
-     * @param[in]  IStorager   设备监听对象
-     * @return     成功返回OK     失败返回错误码
-     */
-    int (*OnEvent)(IStorager *pIStorager,EventCallback_t pCallback);
+
 
     
 
@@ -71,7 +55,6 @@ IStorager *storager_manager_get_instance(void);
 
 void init_storager_manager_component(void);
 
-Storager_Notifybroker_T *storager_manager_get_broker();
 
 
 

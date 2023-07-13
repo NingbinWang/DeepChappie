@@ -2,9 +2,6 @@ file(GLOB SRC_LIST
 "Notification/PingPongBuffer/*.cpp"
 "Notification/*.cpp"
 "Logger/*.cpp"
-#"AVB/talker/*.cpp"
-#"AVB/adaptor/*.cpp"
-"src/*.cpp"
 "Hardware/*.cpp"
 "DevMonitor/*.cpp"
 "Storager/*.cpp"
@@ -32,7 +29,6 @@ include_directories(
 "Hardware"
 "Storager"
 "Network"
-"src"
 )
 
 #target_link_libraries(Framework

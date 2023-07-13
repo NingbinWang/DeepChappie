@@ -68,6 +68,7 @@ endif()
 # 添加子目录
 
 if (LINUX)
+#add_subdirectory(Library/cJSON-1.7.15)
 add_subdirectory(HAL)
 add_subdirectory(Media)
 add_subdirectory(Framework)
@@ -76,7 +77,7 @@ include_directories("App/inc")
 
 # 查找库
 set(LIBRARY_PATH "./Library")
-#set(LIBRARY_LIST libnvtinfo.so)
+set(LIBRARY_LIST libcjson.so)
 find_library(LIBRAYS ${LIBRARY_LIST} ${LIBRARY_PATH})
 if( ${LIBRAYS} STREQUAL "LIBRAYS-NOTFOUND" )
     message(STATUS "libarys is not found")

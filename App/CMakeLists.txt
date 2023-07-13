@@ -4,9 +4,9 @@ file(GLOB SRC_LIST
 "src/imu/*.cpp"
 "src/media/*.cpp"
 "src/protocol/*.cpp"
-"src/ui/*.cpp"
 "src/utils/*.cpp"
 "src/storager/*.cpp"
+"src/framework/*.cpp"
 )
 include_directories(
 "inc"
@@ -15,6 +15,9 @@ include_directories(
 "inc/media"
 "inc/protocol"
 "inc/utils"
+"inc/framework"
+"inc/storager"
+"inc/other"
 #HAL Framework API
 "./../Framework/inc"
 "./../HAL/inc"

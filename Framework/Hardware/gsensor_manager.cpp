@@ -608,3 +608,17 @@ IGsensor_manager *gsensor_manager_init_instance(void)
     }
     return &pStBase->stInterface;    
 }
+
+void init_gsensor_manager_component(void)
+{
+    gsensor_manager = gsensor_manager_init_instance();
+    if(gsensor_manager == NULL)
+    {
+        LOGGER_ERROR("gsensor_manager_init_instance error \n");
+    }
+}
+
+IGsensor_manager *gsensor_manager_get_instance(void)
+{
+    return gsensor_manager;
+}

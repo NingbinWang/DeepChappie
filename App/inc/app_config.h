@@ -3,7 +3,7 @@
 
 #include "app_common.h"
 #include <string.h>
-#include "Framework.h"
+#include "framework.h"
 
 
 #ifndef PATH_APPCONF
@@ -12,7 +12,7 @@
 
 
 
-
+#define ENBALE 1
 
 
 

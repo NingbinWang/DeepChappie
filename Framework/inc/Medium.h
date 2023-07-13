@@ -73,7 +73,7 @@ struct IMediumManager{
      * @param[in]  pIMediumManager   设备监听对象
      * @return     成功返回OK     失败返回错误码
      */
-    int (*Init)(IMediumManager *pIMediumManager,Storager_Info_T* storagerinfo);
+    int (*Init)(IMediumManager *pIMediumManager,unsigned char uMediumId,unsigned char uPartId);
 
     /**@fn	       Start	  
      * @brief	   开启介质管理
