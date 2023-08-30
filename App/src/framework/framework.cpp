@@ -2,7 +2,7 @@
 #include "app_common.h"
 IGsensor_manager *gsensor = NULL;
 IDevMonitor *frdevmonitor = NULL;
-INetwork *network = NULL;
+INetwork *ftnetwork = NULL;
 INotification *notification = NULL;
 IStorager *storager = NULL;
 IMediumManager *medium = NULL;
@@ -19,13 +19,16 @@ static int Framework_Component_Init(App_Defaultconf_t *config)
    //network
   if(config->networkinfo.enable){
     if(strlen(config->networkinfo.DevName) != 0){
-       network = network_init_instance(config->networkinfo.DevName);
-       network->Init(network,config->networkinfo.IP,config->networkinfo.NetMask,config->networkinfo.GateWay);
+       init_network_component(config->networkinfo.DevName);
+       ftnetwork = network_get_instance();
+       ftnetwork->Init(ftnetwork,config->networkinfo.IP,config->networkinfo.NetMask,config->networkinfo.GateWay);
     }else{
        printf("no ini set eth0!!!\n");
-       network = network_init_instance("eth0");
-       network->Init(network,"192.168.1.100","255.255.255.0","10.65.38.254");
+       init_network_component("eth0");
+       ftnetwork = network_get_instance();
+       ftnetwork->Init(ftnetwork,"192.168.1.100","255.255.255.0","10.65.38.254");
     }
+    ftnetwork->Up(ftnetwork);
   }
   //notification
   if(config->notificationinfo.enable){
@@ -77,9 +80,4 @@ void Framework_Init(App_Defaultconf_t *config)
    Framework_Component_Init(config);
    Framework_Component_DefaultParam(config);
    Framework_Component_DefaultStart(config);
-}
-
-INetwork* get_network_intferface()
-{
-    return network;
 }

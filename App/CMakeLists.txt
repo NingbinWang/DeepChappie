@@ -7,6 +7,7 @@ file(GLOB SRC_LIST
 "src/utils/*.cpp"
 "src/storager/*.cpp"
 "src/framework/*.cpp"
+"src/test/*.cpp"
 )
 include_directories(
 "inc"
@@ -22,12 +23,8 @@ include_directories(
 "./../Framework/inc"
 "./../HAL/inc"
 "./../Media/inc"
+"inc/test"
 
 )
 add_library(App ${SRC_LIST})
-target_link_libraries(App
-Framework
-HAL
-MEDIA)
-
 

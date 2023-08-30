@@ -43,7 +43,8 @@ struct INetwork
 };
 
 
-INetwork *network_init_instance(char* sDevname);
+void init_network_component(char* sDevname);
+INetwork *network_get_instance(void);
 
 #ifdef __cplusplus
 }

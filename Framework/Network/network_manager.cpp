@@ -181,3 +181,17 @@ INetwork *network_init_instance(char* sDevname)
     }
     return &pBase->stInterface;
 }
+
+void init_network_component(char* sDevname)
+{
+    network = network_init_instance(sDevname);
+    if(network== NULL)
+    {
+        LOGGER_ERROR("init_network_component error \n");
+    }
+}
+
+INetwork *network_get_instance(void)
+{
+    return network;
+}

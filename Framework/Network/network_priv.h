@@ -7,6 +7,7 @@
 #include "sys_mem.h"
 #include "sys_net.h"
 
+INetwork * network;
 /**
  * @struct    NETWORK_PRIV_DATA_T
  * @brief     NETWORK私有数据结构
