@@ -2,7 +2,7 @@
 #define _MEDIA_INIT_PRIV_H_
 
 #include "HalMedia.h"
-
+#include "hdalinf.h"
 
 /*
 //视频输入配置参数

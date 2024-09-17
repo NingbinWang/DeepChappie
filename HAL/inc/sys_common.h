@@ -5,7 +5,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
-
 #if 0
 typedef void                    VOID;
 typedef int                     BOOLEAN;

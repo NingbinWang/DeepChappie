@@ -20,6 +20,7 @@ static int GetBuildTime(void)
 
 int app_mediainit()
 {
+    halmedia_init();
     return 0;
 }
 
@@ -37,7 +38,6 @@ int app_main()
   //Framework_Init(&defaultconf);
   app_init();
   app_mediainit();
-  dsp_demo();
   while (1)
   {
     sleep(1);

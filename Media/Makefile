@@ -10,6 +10,7 @@ ifeq ($(TARGET_MEDIA),$(HDAL))
 MODULE_SUB_DIR += hdal/
 MODULE_SUB_INC += hdal/
 MODULE_SUB_INC += hdal/include/
+MODULE_SUB_INC += hdal/inc/
 HDAL_LIB_PATH = $(MODULE_CUR_PATH)/hdal/Libs
 #-ldl -lm -lpthread -lrt --std=c99 -D _GNU_SOURCE
 WARNING		= -Wall -Wundef -Wsign-compare -Wno-missing-braces -Wstrict-prototypes -Werror

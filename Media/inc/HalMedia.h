@@ -7,8 +7,8 @@ extern "C" {
 
 
 
-
-int dsp_demo(void);
+int halmedia_init(void);
+int halmedia_exit(void);
 
 #ifdef __cplusplus
 }
