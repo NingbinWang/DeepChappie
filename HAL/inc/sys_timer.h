@@ -69,7 +69,7 @@ typedef enum
  */
 typedef union
 {
-    INT32 iSigvalue;
+    INT iSigvalue;
     VOID *pSigValue;
 }SYS_TIMER_SIGVAL_U;
 
@@ -78,8 +78,8 @@ typedef union
  */
 typedef struct
 {
-    INT32 iNoitfy;  /*notification type*/
-    INT32 iSignNo;  /*signal number*/
+    INT iNoitfy;  /*notification type*/
+    INT iSignNo;  /*signal number*/
     SYS_TIMER_SIGVAL_U uSigval; /*signal value*/
     VOID (*NotifyFunc)(SYS_TIMER_SIGVAL_U uSigval);/*当SYS_TIMER_SIGEV_THREAD 生效*/
     UINT8 uRes[8];
@@ -92,7 +92,7 @@ typedef struct
  * @param[out] pTimerID    时钟ID指针
  * @return     成功返回 OK,错误返回 ERROR
  */
-INT32 sys_timer_create(SYS_TIMER_CLOCK_E eClockID, SYS_TIMER_SIG_EVENT_T *pStSigEvent, TIMER_ID *pTimerID);
+INT sys_timer_create(SYS_TIMER_CLOCK_E eClockID, SYS_TIMER_SIG_EVENT_T *pStSigEvent, TIMER_ID *pTimerID);
 
 /**@fn         sys_timer_settime      
  * @brief      设置定时器参数，arm启动或停止定时器
@@ -102,7 +102,7 @@ INT32 sys_timer_create(SYS_TIMER_CLOCK_E eClockID, SYS_TIMER_SIG_EVENT_T *pStSig
  * @param[in]  pStITimerSpecOld 老参数
  * @return     成功返回 OK 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_timer_settime(TIMER_ID tTimerID, INT32 iFlag, SYS_TIMER_ITIMES_SPEC_T *pStITimerSpecNew, SYS_TIMER_ITIMES_SPEC_T *pStITimerSpecOld);
+INT sys_timer_settime(TIMER_ID tTimerID, INT iFlag, SYS_TIMER_ITIMES_SPEC_T *pStITimerSpecNew, SYS_TIMER_ITIMES_SPEC_T *pStITimerSpecOld);
 
 /**@fn         sys_timer_gettime      
  * @brief      获取计时器下次到期前的剩余时间，以及计时器的间隔设置
@@ -110,21 +110,21 @@ INT32 sys_timer_settime(TIMER_ID tTimerID, INT32 iFlag, SYS_TIMER_ITIMES_SPEC_T 
  * @param[in]  pStITimerSpec 参数
  * @return     成功返回 OK 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_timer_gettime(TIMER_ID tTimerID, SYS_TIMER_ITIMES_SPEC_T *pStITimerSpec);
+INT sys_timer_gettime(TIMER_ID tTimerID, SYS_TIMER_ITIMES_SPEC_T *pStITimerSpec);
 
 /**@fn         sys_timer_delete      
  * @brief      删除定时器
  * @param[in]  tTimerID 定时器ID
  * @return     成功返回 OK 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_timer_delete(TIMER_ID tTimerID);
+INT sys_timer_delete(TIMER_ID tTimerID);
 
 /**@fn         sys_timer_get_over_run      
  * @brief      获取定时器超时计数，返回最后一个计时器过期的溢出计数。
  * @param[in]  tTimerID 定时器ID
  * @return     成功返回次数 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_timer_get_over_run(TIMER_ID tTimerID);
+INT sys_timer_get_over_run(TIMER_ID tTimerID);
 
 /**@fn         sys_timer_fd_create      
  * @brief      创建定时器
@@ -132,7 +132,7 @@ INT32 sys_timer_get_over_run(TIMER_ID tTimerID);
  * @param[in]  iFlag 　 参数标识
  * @return     成功返回 OK,错误返回 ERROR
  */
-INT32 sys_timer_fd_create(SYS_TIMER_CLOCK_E eClockID, INT32 iFlag);
+INT sys_timer_fd_create(SYS_TIMER_CLOCK_E eClockID, INT iFlag);
 
 /**@fn         sys_timer_fd_settime      
  * @brief      设置定时器参数，arm启动或停止定时器
@@ -142,7 +142,7 @@ INT32 sys_timer_fd_create(SYS_TIMER_CLOCK_E eClockID, INT32 iFlag);
  * @param[in]  pStITimerSpecOld 老参数
  * @return     成功返回 OK 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_timer_fd_settime(INT32 iFd, INT32 iFlag, SYS_TIMER_ITIMES_SPEC_T *pStITimerSpecNew, SYS_TIMER_ITIMES_SPEC_T *pStITimerSpecOld);
+INT sys_timer_fd_settime(INT iFd, INT iFlag, SYS_TIMER_ITIMES_SPEC_T *pStITimerSpecNew, SYS_TIMER_ITIMES_SPEC_T *pStITimerSpecOld);
 
 /**@fn         sys_timer_fd_gettime      
  * @brief      获取计时器下次到期前的剩余时间，以及计时器的间隔设置
@@ -150,7 +150,7 @@ INT32 sys_timer_fd_settime(INT32 iFd, INT32 iFlag, SYS_TIMER_ITIMES_SPEC_T *pStI
  * @param[in]  pStITimerSpec 参数
  * @return     成功返回 OK 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_timer_fd_gettime(INT32 iFd, SYS_TIMER_ITIMES_SPEC_T *pStITimerSpec);
+INT sys_timer_fd_gettime(INT iFd, SYS_TIMER_ITIMES_SPEC_T *pStITimerSpec);
 
 #ifdef __cplusplus
 }

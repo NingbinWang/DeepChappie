@@ -11,11 +11,17 @@ endif()
 
 #设置交叉编译的环境
 set(ARM 1)
+set(HDAL 1)
 if(ARM)
 #指定交叉编译的gcc  g++。如果没有配置到环境变量，此处写绝对路径
 set(CMAKE_SYSTEM_PROCESSOR arm)
-set(CMAKE_C_COMPILER "arm-ca9-linux-gnueabihf-gcc")
-set(CMAKE_CXX_COMPILER "arm-ca9-linux-gnueabihf-g++")
+set(COMPILER_HOST "arm-ca9-linux-gnueabihf")
+set(CMAKE_C_COMPILER "${COMPILER_HOST}-gcc")
+set(CMAKE_CXX_COMPILER "${COMPILER_HOST}-g++")
+
+else()
+set(CMAKE_C_COMPILER "gcc")
+set(CMAKE_CXX_COMPILER "g++")
 endif()
 
 ############## 以下几条可以不设置(实测可以)，官方文档上步骤 ############
@@ -36,8 +42,8 @@ if (LINUX)
 set(CMAKE_SYSTEM_NAME Linux)
 endif()
 if (ARM)
-set(CMAKE_CXX_FLAGS "-std=c++11 -pthread -Wall -O0 -g3 -Wall  -fmessage-length=0 -fPIC -lrt")
-set(CMAKE_C_FLAGS "-std=c99 -Wall -O0 -g3 -Wall -fmessage-length=0")
+set(CMAKE_CXX_FLAGS "-std=c++11 -pthread -Wall -O0 -g3 -Wall  -fmessage-length=0 -fPIC -lpthread -lm -lrt -ldl")
+set(CMAKE_C_FLAGS "-ldl -lm -lpthread -lrt --std=c99 -D _GNU_SOURCE")
 endif()
 # -Wall       :  编译时显示警告信息
 # -O          ： 选择编译器优化的级别，-O0 不优化  -O1 -O2 -O3 不同程度的优化
@@ -52,7 +58,10 @@ endif()
 # 连接库的搜索
 #set(LINK_DIR "./Library/")
 #link_libraries(${LINK_DIR})
-
+if (HDAL)
+link_directories("./Media/hdal/Libs/")
+link_libraries(hdal)
+endif()
 
 
 #if (WINDOWS)
@@ -68,16 +77,9 @@ endif()
 # 添加子目录
 
 if (LINUX)
-#add_subdirectory(Library/cJSON-1.7.15)
-add_subdirectory(HAL)
-add_subdirectory(Media)
-add_subdirectory(Framework)
-add_subdirectory(App)
-include_directories("App/inc")
-
 # 查找库
-set(LIBRARY_PATH "./Library")
-set(LIBRARY_LIST libcjson.so)
+set(LIBRARY_PATH "./Lib")
+set(LIBRARY_LIST  libjson.so)
 find_library(LIBRAYS ${LIBRARY_LIST} ${LIBRARY_PATH})
 if( ${LIBRAYS} STREQUAL "LIBRAYS-NOTFOUND" )
     message(STATUS "libarys is not found")
@@ -85,18 +87,24 @@ else()
     message(STATUS "found lib: ${LIBRAYS}")
     link_libraries(${LIBRAYS})
 endif()
-
+#add_subdirectory(Library/cJSON-1.7.15)
+add_subdirectory(HAL)
+add_subdirectory(Media)
+add_subdirectory(Framework)
+add_subdirectory(App)
+include_directories("App/inc")
 endif()
 
 
 # 指定生成的目标
-add_executable(Chappie main.cpp)
+add_executable(Chappie main.c)
 
 # 添加链接库 可以是多个
 target_link_libraries(Chappie 
 App
 Framework
 HAL
+Media
 )
 
 

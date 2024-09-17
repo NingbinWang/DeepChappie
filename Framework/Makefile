@@ -19,7 +19,7 @@ MODULE_SUB_INC += Storager/
 MODULE_SUB_INC += ./../HAL/inc/
 MODULE_SUB_INC += ./../HAL/devices/include/
 
-LD_CPP_FLAGS +=  -L $(CURDIR)/../output/lib -lHAL
+LD_C_FLAGS +=  -L $(CURDIR)/../output/lib -lHAL
 
 
 MODULE_NAME = Framework

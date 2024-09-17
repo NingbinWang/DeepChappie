@@ -53,10 +53,10 @@ typedef enum {
 typedef struct
 {
     UINT64 uSize;               /*文件实际大小,单位Byte*/
-    UINT32 uAttr;               /*位图，参考SYS_FS_ATTR_T*/
-    UINT32 uClusterSize;        /*文件簇大小,单位Byte*/
+    UINT uAttr;               /*位图，参考SYS_FS_ATTR_T*/
+    UINT uClusterSize;        /*文件簇大小,单位Byte*/
     UINT64 uSpaceSize;          /*文件实际占用空间大小,单位 Byte,大小为文件大小的整数倍*/
-    UINT32 uRes[4];             /*预留字节*/
+    UINT uRes[4];             /*预留字节*/
 }SYS_FS_STAT_T;
 
 typedef LONG  FILE_ID;
@@ -83,7 +83,7 @@ typedef LONG  DIR_ID;
  * @param[in]  pUserParam      自定义参数
  * @return     成功 0  失败 -1 
  */
-typedef INT32 (*ReadDirCallBack)(const CHAR *strDirPath, VOID *pUserParam);
+typedef INT (*ReadDirCallBack)(const CHAR *strDirPath, VOID *pUserParam);
 
 /**@fn         ReadFileCallBack      
  * @brief      遍历目录文件信息
@@ -92,7 +92,7 @@ typedef INT32 (*ReadDirCallBack)(const CHAR *strDirPath, VOID *pUserParam);
  * @param[in]  pUserParam      自定义数据
  * @return       成功 0  失败 -1 
  */
-typedef INT32 (*ReadFileCallBack)(const CHAR *strFilePath, SYS_FS_STAT_T *pStFileState, VOID *pUserParam);
+typedef INT (*ReadFileCallBack)(const CHAR *strFilePath, SYS_FS_STAT_T *pStFileState, VOID *pUserParam);
 
 /**@fn        sys_file_fopen    
  * @brief     打开文件      
@@ -107,7 +107,7 @@ FILE_ID* sys_file_fopen(const CHAR *strPath, const CHAR *strMode);
  * @param[in]  pFileID     文件句柄，通过sys_file_fopen获得
  * @return     成功返回0  错误返回 其他, 参考ERROR_CODE_E, 支持通过get_last_errno获取错误码
  */
-INT32 sys_file_fclose(FILE_ID *pFileID);
+INT sys_file_fclose(FILE_ID *pFileID);
 
 /**@fn         sys_file_fread
  * @brief      读文件数据      
@@ -118,7 +118,7 @@ INT32 sys_file_fclose(FILE_ID *pFileID);
  * @return     成功返回 实际读取的块数 错误返回 ERROR, 支持通过get_last_errno获取错误码
  * @note       到达文件末尾的时候，返回值可能小于uCount
  */
-INT32 sys_file_fread(FILE_ID *pFileID, VOID *pBuffer, UINT32 uSize, UINT32 uCount);
+INT sys_file_fread(FILE_ID *pFileID, VOID *pBuffer, UINT uSize, UINT uCount);
 
 /**@fn         sys_file_fwrite
  * @brief      写文件     
@@ -128,14 +128,14 @@ INT32 sys_file_fread(FILE_ID *pFileID, VOID *pBuffer, UINT32 uSize, UINT32 uCoun
  * @param[in]  uCount  要写入的块数
  * @return     成功返回 实际写入的块数 错误返回 ERROR ,  支持通过get_last_errno获取错误码
  */
-INT32 sys_file_fwrite(FILE_ID *pFileID, const VOID *pBuffer, UINT32 uSize, UINT32 uCount);
+INT sys_file_fwrite(FILE_ID *pFileID, const VOID *pBuffer, UINT uSize, UINT uCount);
 
 /**@fn         sys_file_fsync
  * @brief      强制写文件到存储介质      
  * @param[in]  pFileID  文件句柄
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E, 支持通过get_last_errno获取错误码
  */
-INT32 sys_file_fsync(FILE_ID *pFileID);
+INT sys_file_fsync(FILE_ID *pFileID);
 
 /**@fn         sys_file_fseek
  * @brief      重新定位文件读写位置
@@ -144,7 +144,7 @@ INT32 sys_file_fsync(FILE_ID *pFileID);
  * @param[in]  iStartPos 设定从文件的哪里开始偏移,可能取值为：SEEK_CUR、 SEEK_END 或 SEEK_SET
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E, 支持通过get_last_errno获取错误码
  */
-INT32 sys_file_fseek(FILE_ID *pFileID, LONG lOffset, INT32 iStartPos);
+INT sys_file_fseek(FILE_ID *pFileID, LONG lOffset, INT iStartPos);
 
 /**@fn         sys_file_ftell    
  * @brief      文件指针所指位置相对于开头的偏移，单位字节byte          
@@ -159,21 +159,21 @@ LONG sys_file_ftell(FILE_ID *pFileID);
  * @param[in]  pStSate 文件信息
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E, 支持通过get_last_errno获取错误码
  */
-INT32 sys_file_fstat(const CHAR *strPath, SYS_FS_STAT_T *pStSate);
+INT sys_file_fstat(const CHAR *strPath, SYS_FS_STAT_T *pStSate);
 
 /**@fn         sys_file_feof
  * @brief      判断是否已经到达文件末尾
  * @param[in]  pFileID  文件句柄
  * @return     > 0 ,已经到达文件末尾;= 0 , 未到达文件末尾;< 0 , 文件句柄错误
  */
-INT32 sys_file_feof(FILE_ID *pFileID);
+INT sys_file_feof(FILE_ID *pFileID);
 
 /**@fn         sys_file_fgetpos
  * @brief      获取文件当前定位
  * @param[in]  pFileID  文件句柄
  * @return     成功返回0,错误返回其他
  */
-INT32 sys_file_fgetpos(FILE_ID *pFileID, LONG *plOffset);
+INT sys_file_fgetpos(FILE_ID *pFileID, LONG *plOffset);
 
 /**@fn         sys_file_read_dir 暂时考虑到拷贝封装的性能消耗，互调反馈      
  * @brief      读目录文件夹
@@ -182,7 +182,7 @@ INT32 sys_file_fgetpos(FILE_ID *pFileID, LONG *plOffset);
  * @param[in]  pCallBack       读数据回调接口
  * @return     成功 0  失败 -1 
  */
-INT32 sys_file_read_dir(const CHAR *strDir, VOID *pUserParam, ReadDirCallBack pCallBack);
+INT sys_file_read_dir(const CHAR *strDir, VOID *pUserParam, ReadDirCallBack pCallBack);
 
 /**@fn         sys_file_read_dir_file      
  * @brief      读目录文件
@@ -191,7 +191,7 @@ INT32 sys_file_read_dir(const CHAR *strDir, VOID *pUserParam, ReadDirCallBack pC
  * @param[in]  pCallBack       读数据回调接口
  * @return     成功 0  失败 -1 
  */
-INT32 sys_file_read_dir_file(const CHAR *strDir, VOID *pUserParam, ReadFileCallBack pCallBack);
+INT sys_file_read_dir_file(const CHAR *strDir, VOID *pUserParam, ReadFileCallBack pCallBack);
 
 #ifdef __cplusplus
 }

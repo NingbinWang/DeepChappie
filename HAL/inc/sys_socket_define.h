@@ -111,7 +111,7 @@ typedef struct sys_in_addr sys_in_addr;
 
 struct sys_in_addr
 {
-    UINT32           s_addr;             /* Internet address (32 bits).                         */        
+    UINT           s_addr;             /* Internet address (32 bits).                         */        
 };
 
 struct sys_sockaddr_in
@@ -130,8 +130,8 @@ struct sys_sockaddr
 
 struct sys_linger
 {
-    INT32 l_onoff;                            /* 0 = disabled; 1 = enabled; default = 0;*/
-    INT32 l_linger;                           /* linger time in seconds; default = 0;*/
+    INT l_onoff;                            /* 0 = disabled; 1 = enabled; default = 0;*/
+    INT l_linger;                           /* linger time in seconds; default = 0;*/
 };
 
 struct sys_ip_mreq
@@ -147,7 +147,7 @@ struct sys_in6_addr{
 union {
     UINT8  u6_addr8[16];
     UINT16 u6_addr16[8];
-    UINT32 u6_addr32[4];
+    UINT u6_addr32[4];
 }sys_in6_u;
 #define sys_s6_addr sys_in6_u.u6_addr8
 #define sys_s6_addr16 sys_in6_u.u6_addr16
@@ -157,19 +157,19 @@ union {
 struct sys_sockaddr_in6 {
     UINT16 sin6_family; /* AF_INET6 */
     UINT16 sin6_port; /* Transport layer port # */
-    UINT32 sin6_flowinfo; /* IPv6 flow information */
+    UINT sin6_flowinfo; /* IPv6 flow information */
     struct sys_in6_addr sin6_addr; /* IPv6 address */
-    UINT32 sin6_scope_id; /* scope id (new in RFC2553) */
+    UINT sin6_scope_id; /* scope id (new in RFC2553) */
 };
 
 struct sys_ipv6_mreq
 {
   struct sys_in6_addr ipv6mr_multiaddr; /*  IPv6 multicast addr */
-  UINT32              ipv6mr_interface; /*  interface index, or 0 */
+  UINT              ipv6mr_interface; /*  interface index, or 0 */
 };
 
 #ifndef socklen_t
-#define socklen_t UINT32
+#define socklen_t UINT
 #endif
 
 typedef struct sys_address_t{

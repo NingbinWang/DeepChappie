@@ -57,7 +57,7 @@ MODULE_DEPS  := $(MODULE_OBJS_C:.o=.d)
 ifneq (,$(findstring android,$(TOOL_CHAIN_HOST)))
 LD_C_FLAGS   += --std=c99
 else
-LD_C_FLAGS   += -ldl -lm -lpthread -lrt --std=c99
+LD_C_FLAGS   += -ldl -lm -lpthread -lrt 
 endif
 
 LD_CPP_FLAGS += -lstdc++  #C++参数

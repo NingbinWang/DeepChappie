@@ -1,24 +1,12 @@
 file(GLOB SRC_LIST 
-#compenment
-"src/*.cpp"
-"hdal/*.cpp" 
+"src/*.c"
+"hdal/*.c"
 )
 include_directories(
 #api
 "inc"
-"hdal"
 "hdal/include"
-"hdal/api"
-#compenment 
+"hdal"
 "src"
 )
-
-add_library(MEDIA ${SRC_LIST})
-
-#搜索一个目录下的所有的
-#aux_source_directory(. SRC_LIST)
-#add_library(App ${SRC_LIST})
-
-# list追加或者删除变量的值
-#list(APPEND SRC_LIST app.cpp)
-#list(REMOVE_ITEM SRC_LIST app.cpp)
+add_library(Media ${SRC_LIST})

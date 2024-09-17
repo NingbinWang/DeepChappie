@@ -26,30 +26,30 @@ typedef struct
 typedef struct 
 {
     CHAR gyroname[30];//GYRO的名字
-    UINT32 AXIS; //gyro的轴树
-    UINT32 poll_tmr;     /* 轮训读取gyro信息定时器时间设置，单位ms */
-	UINT32 accrng;    /* 设置accel 的满量程精确度 可选:±2G,±4G,±8G,±16G */
-	UINT32 gyrorng;     /* 设置gyro 的满量程精确度 可选: ±250，±500,±1000,±2000 */
-	UINT32 threshold;  /* 设置碰撞唤醒阈值 0~255(0~1020mg,4mg LSB)*/
-	UINT32 wom;          /*  设置阈值唤醒功能，TRUE/FALSE*/
-	UINT32 accvalidnum;     /* acc有效数据 */
-	UINT32 gyrovalidnum;    /* gyro有效数据 */
-	UINT32 acccoef;
-	UINT32 gyrocoef;
+    UINT AXIS; //gyro的轴树
+    UINT poll_tmr;     /* 轮训读取gyro信息定时器时间设置，单位ms */
+	UINT accrng;    /* 设置accel 的满量程精确度 可选:±2G,±4G,±8G,±16G */
+	UINT gyrorng;     /* 设置gyro 的满量程精确度 可选: ±250，±500,±1000,±2000 */
+	UINT threshold;  /* 设置碰撞唤醒阈值 0~255(0~1020mg,4mg LSB)*/
+	UINT wom;          /*  设置阈值唤醒功能，TRUE/FALSE*/
+	UINT accvalidnum;     /* acc有效数据 */
+	UINT gyrovalidnum;    /* gyro有效数据 */
+	UINT acccoef;
+	UINT gyrocoef;
 }sensorinfo_t;
 
 /**@fn        sys_gsensor_open    
  * @brief     打开gesnor     
  * @return    成功返回 gsensor的文件描述符 错误返回 ERROR
  */
-INT32 sys_gsensor_open();
+INT sys_gsensor_open();
 
 /**@fn         sys_gsensor_close
  * @brief      关闭gsensor的节点
  * @param[in]  gsensor的文件描述符
  * @return     成功返回 OK 错误返回 ERROR
  */
-INT32 sys_gsensor_close(const UINT32 fd);
+INT sys_gsensor_close(const UINT fd);
 
 /**@fn         sys_gsensor_setpolltime
  * @brief      gsensor的名字
@@ -57,7 +57,7 @@ INT32 sys_gsensor_close(const UINT32 fd);
  * @param[in]  polling的时间
  * @return     成功返回 OK 错误返回 ERROR
  */
-INT32 sys_gsensor_setpolltime(const UINT32 fd,const UINT32 polltime);
+INT sys_gsensor_setpolltime(const UINT fd,const UINT polltime);
 
 
 /**@fn        sys_gsensor_lowpower
@@ -65,28 +65,28 @@ INT32 sys_gsensor_setpolltime(const UINT32 fd,const UINT32 polltime);
  * @param[in]  gsensor的文件描述符
  * @return     成功返回 OK 错误返回 ERROR
  */
-INT32 sys_gsensor_lowpower(const UINT32 fd);
+INT sys_gsensor_lowpower(const UINT fd);
 
 /**@fn        sys_gsensor_nomalpower
  * @brief      gsensor的正常模式
  * @param[in]  gsensor的文件描述符
  * @return     成功返回 OK 错误返回 ERROR
  */
-INT32 sys_gsensor_normalpower(const UINT32 fd);
+INT sys_gsensor_normalpower(const UINT fd);
 
 /**@fn        sys_gsensor_clearint
  * @brief      gsensor的清中断
  * @param[in]  gsensor的文件描述符
  * @return     成功返回 OK 错误返回 ERROR
  */
-INT32 sys_gsensor_clearint(const UINT32 fd);
+INT sys_gsensor_clearint(const UINT fd);
 
 /**@fn        sys_gsensor_setwakeup
  * @brief      gsensor的设置唤醒模式
  * @param[in]  gsensor的文件描述符
  * @return     成功返回 OK 错误返回 ERROR
  */
-INT32 sys_gsensor_setwakeup(const UINT32 fd,const UINT32 w_threshold);
+INT sys_gsensor_setwakeup(const UINT fd,const UINT w_threshold);
 
 
 /**@fn        sys_gesnsor_getdata
@@ -94,7 +94,7 @@ INT32 sys_gsensor_setwakeup(const UINT32 fd,const UINT32 w_threshold);
  * @param[in]  gsensor的文件描述符
  * @return     成功返回 OK 错误返回 ERROR
  */
-INT32 sys_gsensor_getdata(const UINT32 fd,sensor_t * sensordata);
+INT sys_gsensor_getdata(const UINT fd,sensor_t * sensordata);
 
 /**@fn        sys_gsensor_getinfo
  * @brief      gsensor的获取芯片信息
@@ -102,7 +102,7 @@ INT32 sys_gsensor_getdata(const UINT32 fd,sensor_t * sensordata);
  * @return     成功返回 OK 错误返回 ERROR
  */
 
-INT32 sys_gsensor_getinfo(const UINT32 fd,sensorinfo_t * info);
+INT sys_gsensor_getinfo(const UINT fd,sensorinfo_t * info);
 
 /**@fn        sys_gsensor_getconfig
  * @brief      gsensor的获取量程
@@ -110,7 +110,7 @@ INT32 sys_gsensor_getinfo(const UINT32 fd,sensorinfo_t * info);
  * @return     成功返回 OK 错误返回 ERROR
  */
 
-INT32 sys_gsensor_getconfig(const UINT32 fd,sensorinfo_t * info);
+INT sys_gsensor_getconfig(const UINT fd,sensorinfo_t * info);
 
 /**@fn        sys_gsensor_setconfig
  * @brief      gsensor的设置量程
@@ -118,7 +118,7 @@ INT32 sys_gsensor_getconfig(const UINT32 fd,sensorinfo_t * info);
  * @return     成功返回 OK 错误返回 ERROR
  */
 
-INT32 sys_gsensor_setconfig(const UINT32 fd,const UINT32 accrng);
+INT sys_gsensor_setconfig(const UINT fd,const UINT accrng);
 
 /**@fn        sys_gsensor_getparam
  * @brief      gsensor的获取数据值
@@ -126,7 +126,7 @@ INT32 sys_gsensor_setconfig(const UINT32 fd,const UINT32 accrng);
  * @return     成功返回 OK 错误返回 ERROR
  */
 
-INT32 sys_gsensor_getparam(const UINT32 fd,sensorinfo_t * info);
+INT sys_gsensor_getparam(const UINT fd,sensorinfo_t * info);
 
 #ifdef __cplusplus
 }

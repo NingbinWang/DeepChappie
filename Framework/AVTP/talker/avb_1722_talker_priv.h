@@ -39,7 +39,7 @@ typedef struct
 {
     AVB_1722_TALKER_CMD_E    eCmd;
     AVB_1722_TALKER_RESULT_E eResult;//结果
-    UINT32 uRes;
+    UINT uRes;
 }AVB_1722_TALKER_MSG_T;
 
 
@@ -53,7 +53,7 @@ typedef struct
     BOOL         bFirstFrame;      /* 首帧标识 */
     UINT8        uRes[3];
     UINT8        *pFrameBuf;      /* 帧缓冲区 */
-    UINT32       uFrameBufSize;   /* 帧缓冲区大小 */
+    UINT       uFrameBufSize;   /* 帧缓冲区大小 */
 }AVB_1722_TALKER_FRAME_INFO_T;  
     
 /**
@@ -76,10 +76,10 @@ typedef enum
      UINT8 uIgnoreSyncLoss; //忽略gPTP的sync报文丢失
      UINT8 aMacAddr[6]; //talker:目的mac地址，listener:源（本地）mac地址
      CHAR  aInterfaceName[32];//网卡名称
-     UINT32 uMaxTransmitTime;//最大传输时间 单位ms
-     UINT32 uMaxPayloadLen;//avtp报文payload最大长度
+     UINT uMaxTransmitTime;//最大传输时间 单位ms
+     UINT uMaxPayloadLen;//avtp报文payload最大长度
      UINT64 uStreamID;       //SteamID
-     UINT32 uRes[4];
+     UINT uRes[4];
 }AVB_1722_TALKER_TRANSMIT_PARAM_T;  
     
 
@@ -92,11 +92,11 @@ typedef struct
     IAvtpPdu                            *pIAvtpPdu;        /* Avtpdu对象单例指针 */
     struct sockaddr_ll                  stDstSockAddr;    /* 目的socket */
     TASK_ID                             stThreadID;     /* 推流线程 */
-    INT32                               iWaitTime;        /* 超时时长 */
-    INT32                               iSock;           /* 套接字句柄 */
+    INT                               iWaitTime;        /* 超时时长 */
+    INT                               iSock;           /* 套接字句柄 */
     UINT8                               uSeq;            /* avtp包序号 */
-    UINT32                              uMaxPayloadLen;  /* avtp报文payload长度 */ 
-    UINT32                              uChannel;  
+    UINT                              uMaxPayloadLen;  /* avtp报文payload长度 */ 
+    UINT                              uChannel;  
     MSG_Q_ID                            stReqMsgID;     /* 请求消息任务ID */
     MSG_Q_ID                            stRespMsgID;    /* 响应消息任务ID */
     AVB_1722_TALKER_TRANSMIT_PARAM_T    stTransmitParam;  //配置参数

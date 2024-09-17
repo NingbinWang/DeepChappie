@@ -14,8 +14,8 @@
 */
 typedef struct  BAUDRATE_PARI_T
 {
-    INT32 iBaudRate;   /* 波特率 */
-    INT32 iEBaudRate;  /* 波特率设置参数 */
+    INT iBaudRate;   /* 波特率 */
+    INT iEBaudRate;  /* 波特率设置参数 */
 }BAUDRATE_PARI_T;
 
 //波特率MAP,转换成波特率枚举
@@ -42,21 +42,21 @@ typedef enum UART_BIT_DATA_E
     UART_BIT_DATA_8          /* 8位 */
 }UART_BIT_DATA_E;
 
-INT32 sys_serial_open(char* strDevName);
+INT sys_serial_open(char* strDevName);
 
-INT32 sys_serial_close(const INT32 fd);
+INT sys_serial_close(const INT fd);
 
-INT32 sys_serial_baudrate(const INT32 iFd,INT32 iBaudRate);
+INT sys_serial_baudrate(const INT iFd,INT iBaudRate);
 
-INT32 sys_serial_set_databits(struct termios *pTermios,INT32 iDataBit);
+INT sys_serial_set_databits(struct termios *pTermios,INT iDataBit);
 
- INT32 sys_serial_set_parity(struct termios *pTermios, INT32 iParity);
+ INT sys_serial_set_parity(struct termios *pTermios, INT iParity);
 
- INT32 sys_serial_set_stopbit(struct termios *pTermios,INT32 iStopBit);
+ INT sys_serial_set_stopbit(struct termios *pTermios,INT iStopBit);
 
- INT32 sys_serial_tx(const INT32 iFd,void *pData,size_t iLength);
+ INT sys_serial_tx(const INT iFd,void *pData,size_t iLength);
 
- INT32 sys_serial_rx(const INT32 iFd,void *pData,size_t iLength);
+ INT sys_serial_rx(const INT iFd,void *pData,size_t iLength);
 
 
 #endif

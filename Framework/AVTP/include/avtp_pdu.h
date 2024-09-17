@@ -19,7 +19,7 @@ struct IAvtpPdu
      * @param[in]  eSubType avtp类型
      * @return	   成功返回OK  失败返回错误码
      */
-    INT32 (*SetSubType)(IAvtpPdu *pIAvtpPdu, AVTP_PDU_SUBTYPE_E eSubType);
+    INT (*SetSubType)(IAvtpPdu *pIAvtpPdu, AVTP_PDU_SUBTYPE_E eSubType);
 
     /**@fn	       GetSubType	  
      * @brief	   获取subtype
@@ -27,7 +27,7 @@ struct IAvtpPdu
      * @param[in]  pSubType avtp类型
      * @return	   成功返回OK  失败返回错误码
      */
-    INT32 (*GetSubType)(IAvtpPdu *pIAvtpPdu, AVTP_PDU_SUBTYPE_E *pSubType);
+    INT (*GetSubType)(IAvtpPdu *pIAvtpPdu, AVTP_PDU_SUBTYPE_E *pSubType);
 
     /**@fn	       SetField	  
      * @brief	   设置avtpdu域值
@@ -36,7 +36,7 @@ struct IAvtpPdu
      * @param[in]  uVal  域值
      * @return	   成功返回OK  失败返回错误码
      */
-    INT32 (*SetField)(IAvtpPdu *pIAvtpPdu, UINT8 uFieldType, UINT64 uVal);
+    INT (*SetField)(IAvtpPdu *pIAvtpPdu, UINT8 uFieldType, UINT64 uVal);
 
     /**@fn	       GetField	  
      * @brief	   设置avtpdu域值
@@ -45,7 +45,7 @@ struct IAvtpPdu
      * @param[out] pVal  域值
      * @return	   成功返回OK  失败返回错误码
      */
-    INT32 (*GetField)(IAvtpPdu *pIAvtpPdu, UINT8 uFieldType, UINT64 *pVal);
+    INT (*GetField)(IAvtpPdu *pIAvtpPdu, UINT8 uFieldType, UINT64 *pVal);
 
     /**@fn         SetPayload
      * @brief      设置payload数据
@@ -54,7 +54,7 @@ struct IAvtpPdu
      * @param[in]  uDataLength payload数据长度
      * @return     成功返回OK  失败返回错误码
      */
-    INT32 (*SetPayload)(IAvtpPdu *pIAvtpPdu, UINT8 *pPayloadData, UINT32 uDataLength);
+    INT (*SetPayload)(IAvtpPdu *pIAvtpPdu, UINT8 *pPayloadData, UINT uDataLength);
 
     /**@fn         SetPayload
      * @brief      获取payload数据
@@ -62,7 +62,7 @@ struct IAvtpPdu
      * @param[in]  uLength   指向保存获取payload数据长度的变量的指针
      * @return     成功返回payload数据首地址，失败返回NULL
      */
-    UINT8 *(*GetPayload)(IAvtpPdu *pIAvtpPdu, UINT32 *uLength);
+    UINT8 *(*GetPayload)(IAvtpPdu *pIAvtpPdu, UINT *uLength);
 
     /**@fn         Serial
      * @brief      序列化
@@ -70,7 +70,7 @@ struct IAvtpPdu
      * @param[in]  uLength    指向保存序列化后avtp包长度的变量的指针
      * @return     成功返回序列化后avtp包地址，失败返回NULL
      */
-    UINT8 *(*Serial)(IAvtpPdu *pIAvtpPdu, UINT32 *uLength);
+    UINT8 *(*Serial)(IAvtpPdu *pIAvtpPdu, UINT *uLength);
 
     /**@fn         Deserial
      * @brief      反序列化
@@ -79,7 +79,7 @@ struct IAvtpPdu
      * @param[in]  uAvtpDataLength    avtp包数据长度
      * @return     成功返回序列化长度   失败返回<0
      */
-    INT32 (*Deserial)(IAvtpPdu *pIAvtpPdu, UINT8 *pAvtpData, UINT32 uAvtpDataLength);
+    INT (*Deserial)(IAvtpPdu *pIAvtpPdu, UINT8 *pAvtpData, UINT uAvtpDataLength);
 
     /**@fn	       Release	  
      * @brief	   RTP资源释放接口
@@ -94,7 +94,7 @@ struct IAvtpPdu
  * @param[in]  uPduLength  pdu缓冲区长度
  * @return	   成功返回单例  失败返回NULL
  */
-IAvtpPdu *avtp_pdu_init_instance(const UINT32 uPduLength);
+IAvtpPdu *avtp_pdu_init_instance(const UINT uPduLength);
 
 
 #endif

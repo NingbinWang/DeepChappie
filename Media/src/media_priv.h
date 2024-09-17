@@ -1,11 +1,10 @@
 #ifndef _MEDIA_INIT_PRIV_H_
 #define _MEDIA_INIT_PRIV_H_
 
-#include "media_type.h"
-#include "Media.h"
+#include "HalMedia.h"
 
 
-
+/*
 //视频输入配置参数
 typedef enum
 {
@@ -22,22 +21,22 @@ typedef enum
 
 typedef enum
 {
-    CMOS_SONY_IMX322 = 0,/*sony  Sensor类型*/
+    CMOS_SONY_IMX322 = 0,//sony  Sensor类型
 	CMOS_SONY_IMX185,
 	CMOS_SONY_IMX178,
 	CMOS_SONY_IMX415,
-    CMOS_APTINA_AR0230 = 100, /*aptina  Sensor类型*/
+    CMOS_APTINA_AR0230 = 100, //aptina  Sensor类型
 	CMOS_APTINA_AR0330,
 	CMOS_APTINA_AR0237,
 	CMOS_APTINA_AR0238,
     CMOS_APTINA_AR0140,
     CMOS_APTINA_AR0132, 
-    CMOS_OV_4689 = 200, /*ov Sensor类型*/
+    CMOS_OV_4689 = 200, //ov Sensor类型
 	CMOS_OV_5658,
     CMOS_OV_OS05A2,
 	CMOS_OV_2775,
 	CMOS_OV_9281,
-    CMOS_PANASONIC_MN34120 = 300, /*panasonic Sensor类型*/
+    CMOS_PANASONIC_MN34120 = 300, //panasonic Sensor类型
 	CMOS_PANASONIC_MN34220,
 	CMOS_PANASONIC_MN34425,
     CMOS_JX_F22 = 400,
@@ -110,9 +109,9 @@ typedef struct
 } VI_BLC_INFO_T;
 typedef struct
 {
-	/**< 遮挡块数 */
+	// 遮挡块数 
 	UINT8 CoverNum;
-	/**< 遮挡区域（自定义模式生效） */
+	// 遮挡区域（自定义模式生效） 
     VI_Cover_T	cover_window_rec[4];
 } VI_COVER_INFO_T;
 
@@ -147,20 +146,20 @@ typedef struct
     UINT8 res[7];
 } VI_CFG_PARAM_T;
 
-/***************************** ROI设置参数**********************************/
-#define MAX_ROI_RGN_CNT (10)             /*ROI区域最大一共8个*/
+/// ROI设置参数
+#define MAX_ROI_RGN_CNT (10)             //ROI区域最大一共8个/
 
-#define ROI_MODE_NULL	(0u)             /*ROI关闭*/
-#define ROI_MODE_STATIC	(1u << 0)        /*静态区域,类似视频遮盖*/
-#define ROI_MODE_PLATE	(1u << 1)        /*车牌区域 暂时不支持*/
+#define ROI_MODE_NULL	(0u)             //ROI关闭
+#define ROI_MODE_STATIC	(1u << 0)       //静态区域,类似视频遮盖
+#define ROI_MODE_PLATE	(1u << 1)       //车牌区域 暂时不支持
 #define ROI_WINDOW_PERSENT_MAX           (1000)
 typedef struct
 {
-	BOOL bRegionEnable;			/*该region使能开关*/
-    UINT32 level;                 /* 等级参数*/
-    UINT32 param;                 /* 预留参数*/
-    INT32  deltaQp;             /* 相对编码质量 （正负31以内）绝对质量配置对用户不友好 */
-    UINT16  x;                   /* 坐标及宽高，以1000*1000为全屏大小*/
+	BOOL bRegionEnable;			//该region使能开关
+    UINT32 level;                 // 等级参数
+    UINT32 param;                 // 预留参数
+    INT32  deltaQp;             // 相对编码质量 （正负31以内）绝对质量配置对用户不友好 
+    UINT16  x;                   // 坐标及宽高，以1000*1000为全屏大小
     UINT16  y;
     UINT16  w;
     UINT16  h;
@@ -169,58 +168,37 @@ typedef struct
 
 typedef struct
 {
-    UINT32 mode;                  /* 关联模式，按比特位定义，考虑到以后有可能关联多种源*/
-	/*静态区域ROI配置*/
-	UINT32 regionCnt;                     /*静态区域个数*/
-    CFG_REGION_T region[MAX_ROI_RGN_CNT]; /*静态区域配置*/
+    UINT32 mode;                  // 关联模式，按比特位定义，考虑到以后有可能关联多种源
+	//静态区域ROI配置
+	UINT32 regionCnt;                     //静态区域个数
+    CFG_REGION_T region[MAX_ROI_RGN_CNT]; //静态区域配置
 } ROI_CONFIG_T;
 
-/*DSP编码通道运行状态*/
+//DSP编码通道运行状态
 typedef struct
 {
-    volatile UINT32   viFps;          /*采集帧率*/
-    volatile UINT32   osdStatus;      /*osd是否叠加*/
-    volatile UINT32   viFrm;          /*采集帧数*/
-    volatile UINT32   viLostFrm;      /*采集丢帧数目累加*/
-    volatile UINT32   viW;            /*采集的宽高*/
-    volatile UINT32   viH;            /*采集的宽高*/
-    volatile UINT32   encFps;         /*编码帧率*/
-    volatile UINT32   encFrm;         /*已编码帧数*/
-    volatile UINT32   encLostFrm;     /*编码丢帧数目累加*/
-    volatile UINT32   encBitRate;     /*编码比特率*/
-    volatile UINT32   encW;           /*编码宽高*/
-    volatile UINT32   encH;           /*编码宽高*/
-    volatile UINT32   audioFrm;       /*音频已编码帧数*/
-    volatile UINT32   audioLostFrm;   /*音频编码丢帧数目累加*/
-    volatile UINT32   enable;         /*通道是否使能*/
-    volatile UINT32   stremType;      /*视频流类型*/
-    volatile UINT32   bHaveSingal;      /*是否有信号*/
-    volatile UINT32   RecPoolFrmLost;   /*视频录像丢帧数目累加*/
-    volatile UINT32   NetPoolFrmLost;   /*网传视频录像丢帧数目累加*/
-    volatile UINT32   PsNetPoolFrmLost; /* PS网传视频录像丢帧数目累加*/
-    volatile UINT32   res[5];
+    volatile UINT32   viFps;          //采集帧率
+    volatile UINT32   osdStatus;      //osd是否叠加
+    volatile UINT32   viFrm;          //采集帧数
+    volatile UINT32   viLostFrm;      //采集丢帧数目累加
+    volatile UINT32   viW;            //采集的宽高
+    volatile UINT32   viH;            //采集的宽高
+    volatile UINT32   encFps;         //编码帧率
+    volatile UINT32   encFrm;         //已编码帧数
+    volatile UINT32   encLostFrm;     //编码丢帧数目累加
+    volatile UINT32   encBitRate;     //编码比特率
+    volatile UINT32   encW;           //编码宽高
+    volatile UINT32   encH;           //编码宽高
+    volatile UINT32   audioFrm;       //音频已编码帧数
+    volatile UINT32   audioLostFrm;   //音频编码丢帧数目累加
+    volatile UINT32   enable;         //通道是否使能
+    volatile UINT32   stremType;      //视频流类型
+    volatile UINT32   bHaveSingal;      //是否有信号
+    volatile UINT32   RecPoolFrmLost;   //视频录像丢帧数目累加
+    volatile UINT32   NetPoolFrmLost;   //网传视频录像丢帧数目累加
+    volatile UINT32   PsNetPoolFrmLost; // PS网传视频录像丢帧数目累加
+    volatile UINT32   res[5];//
 } ENC_STATUS;
 
-/**@struct    MEDIA_PRIV_DATA_T
- * @brief     私有数据结构
- */
-typedef struct
-{
-    BOOL  bExist;
-    UINT8 uRes[3];
-    INT32 iFd;            /* 操作的文件描述符 */
-}MEDIA_PRIV_DATA_T;
-
-
-/**@struct    DEV_MEDIA_BASE_T
- * @brief     MEDIA基础数据结构
- */
-typedef struct
-{
-    IMedia            stInterface; /* media接口 */
-    MEDIA_PRIV_DATA_T   stPrivData;  /* 私有数据 */
-}MEDIA_BASE_T;
-
-
-
+*/
 #endif

@@ -19,15 +19,15 @@ extern "C" {
 #endif
 
 #define AVTP_CVF_HEADER_LEN                 (sizeof(AVTP_STREAM_PDU_T))  /* CVF avtp头长度 24字节*/
-#define AVTP_CVF_PAYLOAD_H264_HEADER_LEN	(sizeof(UINT32))  /* CVF avtp payload h264头长度 4字节*/  
+#define AVTP_CVF_PAYLOAD_H264_HEADER_LEN	(sizeof(UINT))  /* CVF avtp payload h264头长度 4字节*/  
 
-#define AVTP_H264_HEADER_LEN	(sizeof(UINT32))    
+#define AVTP_H264_HEADER_LEN	(sizeof(UINT))    
 #define AVTP_HEADER_LEN	        (sizeof(AVTP_STREAM_PDU_T))
 #define AVTP_FULL_HEADER_LEN	(sizeof(AVTP_STREAM_PDU_T) + AVTP_H264_HEADER_LEN)
 
 typedef struct
 {
-	UINT32 uH264Header;
+	UINT uH264Header;
 	UINT8  uH264Data[0];
 }AVTP_CVF_PDU_H264_PAYLOAD_T;
 
@@ -38,7 +38,7 @@ typedef struct
  * @param[in]  pVal  保存检索pdu字段值的变量的指针
  * @return	   成功返回OK  失败返回错误码
  */
-INT32 avtp_cvf_pdu_filed_get(const AVTP_STREAM_PDU_T *pAvtpStreamPdu, AVTP_CVF_FIELD_E eField, UINT64 *pVal);
+INT avtp_cvf_pdu_filed_get(const AVTP_STREAM_PDU_T *pAvtpStreamPdu, AVTP_CVF_FIELD_E eField, UINT64 *pVal);
 
 /**@fn	       avtp_cvf_pdu_filed_set	  
  * @brief	   设置CVF avtpdu filed的值
@@ -47,7 +47,7 @@ INT32 avtp_cvf_pdu_filed_get(const AVTP_STREAM_PDU_T *pAvtpStreamPdu, AVTP_CVF_F
  * @param[in]  uVal  设置的值
  * @return	   成功返回OK  失败返回错误码
  */
-INT32 avtp_cvf_pdu_filed_set(AVTP_STREAM_PDU_T *pAvtpStreamPdu, AVTP_CVF_FIELD_E eField, UINT64 uVal);
+INT avtp_cvf_pdu_filed_set(AVTP_STREAM_PDU_T *pAvtpStreamPdu, AVTP_CVF_FIELD_E eField, UINT64 uVal);
 
 #ifdef __cplusplus
 }

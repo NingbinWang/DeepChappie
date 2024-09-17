@@ -35,9 +35,9 @@ static AVTP_CVF_PDU_PRIV_DATA_T *avtp_cvf_pdu_get_priv_data(IAvtpCvfPdu *pIAvtpC
  * @param[in]  pStPrivData 私有数据指针
  * @return	   成功返回OK  失败返回错误码
  */
-static INT32 avtp_cvf_pdu_filed_init(AVTP_CVF_PDU_PRIV_DATA_T *pStPrivData)
+static INT avtp_cvf_pdu_filed_init(AVTP_CVF_PDU_PRIV_DATA_T *pStPrivData)
 {
-    INT32 iRet = ERROR;
+    INT iRet = ERROR;
     AVTP_COMMON_PDU_T *pStCommHeader = NULL;
     AVTP_STREAM_PDU_T *pStStreamPdu = NULL;
 
@@ -87,9 +87,9 @@ static INT32 avtp_cvf_pdu_filed_init(AVTP_CVF_PDU_PRIV_DATA_T *pStPrivData)
  * @param[in]  uMaxPayloadLen  payload最大长度
  * @return	   成功返回OK  失败返回错误码
  */
-static INT32 avtp_cvf_pdu_init(IAvtpCvfPdu *pIAvtpCvfPdu, UINT32 uPduLength)
+static INT avtp_cvf_pdu_init(IAvtpCvfPdu *pIAvtpCvfPdu, UINT uPduLength)
 {
-    INT32 iRet = ERROR;  
+    INT iRet = ERROR;  
     AVTP_CVF_PDU_PRIV_DATA_T *pStPrivData = NULL;
 
     pStPrivData = avtp_cvf_pdu_get_priv_data(pIAvtpCvfPdu);
@@ -105,7 +105,7 @@ static INT32 avtp_cvf_pdu_init(IAvtpCvfPdu *pIAvtpCvfPdu, UINT32 uPduLength)
     }
     //avtp头长度+payload头长度+payload数据长度
     //cvf video payload头最多2个32位
-    pStPrivData->uPduLengthMax = AVTP_CVF_HEADER_LEN + (2u*sizeof(UINT32)) + uPduLength;
+    pStPrivData->uPduLengthMax = AVTP_CVF_HEADER_LEN + (2u*sizeof(UINT)) + uPduLength;
     pStPrivData->pAvtpPduBuf = sys_mem_malloc(pStPrivData->uPduLengthMax);
     if(NULL == pStPrivData->pAvtpPduBuf)
     {
@@ -126,9 +126,9 @@ static INT32 avtp_cvf_pdu_init(IAvtpCvfPdu *pIAvtpCvfPdu, UINT32 uPduLength)
  * @param[in]  uFormatSubtype   类型
  * @return	   成功返回头长度  失败返回错误码
  */
-static INT32 avtp_cvf_pdu_payload_header_len(UINT8 uFormatSubtype)
+static INT avtp_cvf_pdu_payload_header_len(UINT8 uFormatSubtype)
 {
-    INT32 iRet = ERROR;
+    INT iRet = ERROR;
 
     switch(uFormatSubtype)
     {
@@ -149,9 +149,9 @@ static INT32 avtp_cvf_pdu_payload_header_len(UINT8 uFormatSubtype)
  * @param[in]  uVal  域值
  * @return	   成功返回OK  失败返回错误码
  */
-static INT32 avtp_cvf_pdu_field_set(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 uFieldType, UINT64 uVal)
+static INT avtp_cvf_pdu_field_set(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 uFieldType, UINT64 uVal)
 {
-    INT32 iRet = ERROR;
+    INT iRet = ERROR;
     UINT64 uTmpVal = 0;
     AVTP_COMMON_PDU_T *pStCommonPdu = NULL;
     AVTP_STREAM_PDU_T *pStStreamPdu = NULL;
@@ -173,7 +173,7 @@ static INT32 avtp_cvf_pdu_field_set(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 uFieldType,
             AVTP_ERROR("ptr is NULL\n");
             return ERROR;
         }
-        iRet = avtp_common_pdu_set(pStCommonPdu, uFieldType, (UINT32)uVal);
+        iRet = avtp_common_pdu_set(pStCommonPdu, uFieldType, (UINT)uVal);
     }
     else
     {
@@ -199,7 +199,7 @@ static INT32 avtp_cvf_pdu_field_set(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 uFieldType,
                 return iRet;
             }
             //Data头长度+Data内容长度
-            uTmpVal += (UINT32)iRet;
+            uTmpVal += (UINT)iRet;
         }
         else
         {
@@ -221,9 +221,9 @@ static INT32 avtp_cvf_pdu_field_set(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 uFieldType,
  * @param[out] pVal  域值
  * @return	   成功返回OK  失败返回错误码
  */
-static INT32 avtp_cvf_pdu_field_get(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 uFieldType, UINT64 *pVal)
+static INT avtp_cvf_pdu_field_get(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 uFieldType, UINT64 *pVal)
 {
-    INT32 iRet = ERROR;
+    INT iRet = ERROR;
     AVTP_COMMON_PDU_T *pStCommonPdu = NULL;
     AVTP_STREAM_PDU_T *pStStreamPdu = NULL;
     AVTP_CVF_PDU_PRIV_DATA_T *pStPrivData = NULL;
@@ -243,7 +243,7 @@ static INT32 avtp_cvf_pdu_field_get(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 uFieldType,
             AVTP_ERROR("ptr is NULL\n");
             return ERROR;
         }
-        iRet = avtp_common_pdu_get(pStCommonPdu, uFieldType, (UINT32*)pVal);
+        iRet = avtp_common_pdu_get(pStCommonPdu, uFieldType, (UINT*)pVal);
     }
     else
     {
@@ -269,13 +269,13 @@ static INT32 avtp_cvf_pdu_field_get(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 uFieldType,
  * @param[in]  uDataLength payload数据长度
  * @return     成功返回OK  失败返回错误码
  */
-static INT32 avtp_cvf_pdu_payload_set(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 *pPayloadData, UINT32 uDataLength)
+static INT avtp_cvf_pdu_payload_set(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 *pPayloadData, UINT uDataLength)
 {
-    INT32 iRet = ERROR;
+    INT iRet = ERROR;
     AVTP_STREAM_PDU_T *pStStreamPdu = NULL;
     AVTP_CVF_PDU_H264_PAYLOAD_T *pStPayload = NULL;
     AVTP_CVF_PDU_PRIV_DATA_T *pStPrivData = NULL;
-    INT32 iPduLength = 0;
+    INT iPduLength = 0;
     VOID *pDst = NULL;
 
     pStPrivData = avtp_cvf_pdu_get_priv_data(pIAvtpCvfPdu);
@@ -303,7 +303,7 @@ static INT32 avtp_cvf_pdu_payload_set(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 *pPayload
         return iRet;
     }
     iPduLength += iRet; //payload header
-    iPduLength += (INT32)uDataLength; //payload data
+    iPduLength += (INT)uDataLength; //payload data
     iRet = avtp_cvf_pdu_filed_set(pStStreamPdu, AVTP_CVF_FIELD_STREAM_DATA_LEN, iPduLength);
     if(iRet < 0)
     {
@@ -311,8 +311,8 @@ static INT32 avtp_cvf_pdu_payload_set(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 *pPayload
         return iRet;
     }
 
-    iPduLength += (INT32)AVTP_CVF_HEADER_LEN; //avtp header
-    if(pStPrivData->uPduLengthMax < (UINT32)iPduLength)
+    iPduLength += (INT)AVTP_CVF_HEADER_LEN; //avtp header
+    if(pStPrivData->uPduLengthMax < (UINT)iPduLength)
     {
         AVTP_ERROR("buf not enough %d %d\n", pStPrivData->uPduLengthMax, iPduLength);
         return ERROR;
@@ -333,9 +333,9 @@ static INT32 avtp_cvf_pdu_payload_set(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 *pPayload
  * @param[in]  uLength   payload数据长度
  * @return     成功返回payload数据首地址，失败返回NULL
  */
-static UINT8 *avtp_cvf_pdu_payload_get(IAvtpCvfPdu *pIAvtpCvfPdu, UINT32 *uLength)
+static UINT8 *avtp_cvf_pdu_payload_get(IAvtpCvfPdu *pIAvtpCvfPdu, UINT *uLength)
 {
-    INT32 iRet = ERROR;
+    INT iRet = ERROR;
     AVTP_STREAM_PDU_T *pStPdu = NULL;
     AVTP_CVF_PDU_H264_PAYLOAD_T *pStPayload = NULL;
     UINT64 uDataLen = 0;
@@ -372,7 +372,7 @@ static UINT8 *avtp_cvf_pdu_payload_get(IAvtpCvfPdu *pIAvtpCvfPdu, UINT32 *uLengt
         AVTP_ERROR("get payload header error\n");
         return NULL;
     }
-    uDataLen -= (UINT32)iRet;
+    uDataLen -= (UINT)iRet;
     pPayloadData = pStPayload->uH264Data;
     *uLength = uDataLen;
     return pPayloadData;
@@ -384,9 +384,9 @@ static UINT8 *avtp_cvf_pdu_payload_get(IAvtpCvfPdu *pIAvtpCvfPdu, UINT32 *uLengt
  * @param[in]  uLength     序列化后avtp包长度
  * @return     成功返回序列化后avtp包地址，失败返回NULL
  */
-static UINT8 *avtp_cvf_pdu_serial(IAvtpCvfPdu *pIAvtpCvfPdu, UINT32 *uLength)
+static UINT8 *avtp_cvf_pdu_serial(IAvtpCvfPdu *pIAvtpCvfPdu, UINT *uLength)
 {
-    INT32 iRet = 0;
+    INT iRet = 0;
     AVTP_CVF_PDU_PRIV_DATA_T *pStPrivData = NULL;
 
     pStPrivData = avtp_cvf_pdu_get_priv_data(pIAvtpCvfPdu);
@@ -401,7 +401,7 @@ static UINT8 *avtp_cvf_pdu_serial(IAvtpCvfPdu *pIAvtpCvfPdu, UINT32 *uLength)
         AVTP_ERROR("get payload header error\n");
         return NULL;
     }
-    *uLength = AVTP_CVF_HEADER_LEN + (UINT32)iRet + pStPrivData->uPduPayloadDataLen;
+    *uLength = AVTP_CVF_HEADER_LEN + (UINT)iRet + pStPrivData->uPduPayloadDataLen;
     return pStPrivData->pAvtpPduBuf;
 }
 
@@ -412,9 +412,9 @@ static UINT8 *avtp_cvf_pdu_serial(IAvtpCvfPdu *pIAvtpCvfPdu, UINT32 *uLength)
 * @param[in]  uAvtpDataLength    avtp包数据长度
 * @return     成功返回OK  失败返回错误码
 */
-static INT32 avtp_cvf_pdu_deserial(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 *pAvtpData, UINT32 uAvtpDataLength)
+static INT avtp_cvf_pdu_deserial(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 *pAvtpData, UINT uAvtpDataLength)
 {
-    INT32 iRet = ERROR;
+    INT iRet = ERROR;
     UINT64 uValue = 0;
     UINT16 uStreamDataLen = 0;
     AVTP_STREAM_PDU_T *pStStreamPdu = NULL;
@@ -501,7 +501,7 @@ static VOID avtp_cvf_pdu_release(IAvtpCvfPdu *pIAvtpCvfPdu)
  * @param[in]  pIAvtpCvfPdu  IAvtpCvfPdu对象接口
  * @return     成功返回OK  失败返回错误码
  */
-static INT32 avtp_cvf_pdu_init_interface(IAvtpCvfPdu *pIAvtpCvfPdu)
+static INT avtp_cvf_pdu_init_interface(IAvtpCvfPdu *pIAvtpCvfPdu)
 {
     if(NULL == pIAvtpCvfPdu)
     {
@@ -524,9 +524,9 @@ static INT32 avtp_cvf_pdu_init_interface(IAvtpCvfPdu *pIAvtpCvfPdu)
  * @param[in]   pStPrivData  私有数据结构指针
  * @return     成功返回OK  失败返回错误码
  */
-static INT32 avtp_cvf_pdu_init_priv_data(AVTP_CVF_PDU_PRIV_DATA_T *pStPrivData)
+static INT avtp_cvf_pdu_init_priv_data(AVTP_CVF_PDU_PRIV_DATA_T *pStPrivData)
 {
-    INT32 iRet = ERROR;
+    INT iRet = ERROR;
     VOID *pMemset = NULL;
 
     if(NULL == pStPrivData)
@@ -550,7 +550,7 @@ static INT32 avtp_cvf_pdu_init_priv_data(AVTP_CVF_PDU_PRIV_DATA_T *pStPrivData)
  */
 IAvtpCvfPdu *avtp_cvf_pdu_init_instance(VOID)
 {
-    INT32 iRet = ERROR;
+    INT iRet = ERROR;
     AVTP_CVF_PDU_BASE_T *pStBase = NULL;
     VOID *pMemset = NULL;
 

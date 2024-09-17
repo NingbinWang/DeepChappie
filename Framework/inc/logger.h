@@ -7,7 +7,7 @@
 
 #define LOGGER_ERROR(fmt, arg...) \
     do{ \
-        INT32 iMsecond = 0;\
+        INT iMsecond = 0;\
         UINT64 uTimeStamp = 0;\
         SYS_DATE_TIME_T stDataTime = {0};\
         sys_time_get_in_struct(&stDataTime);\
@@ -18,7 +18,7 @@
 
 #define LOGGER_INFO(fmt, arg...) \
     do{ \
-        INT32 iMsecond = 0;\
+        INT iMsecond = 0;\
         UINT64 uTimeStamp = 0;\
         SYS_DATE_TIME_T stDataTime = {0};\
         sys_time_get_in_struct(&stDataTime);\
@@ -29,7 +29,7 @@
 
 #define LOGGER_WARN(fmt, arg...) \
     do{ \
-        INT32 iMsecond = 0;\
+        INT iMsecond = 0;\
         UINT64 uTimeStamp = 0;\
         SYS_DATE_TIME_T stDataTime = {0};\
         sys_time_get_in_struct(&stDataTime);\
@@ -40,7 +40,7 @@
 
 #define LOGGER_DEBUG(fmt, arg...) \
     do{ \
-        INT32 iMsecond = 0;\
+        INT iMsecond = 0;\
         UINT64 uTimeStamp = 0;\
         SYS_DATE_TIME_T stDataTime = {0};\
         sys_time_get_in_struct(&stDataTime);\

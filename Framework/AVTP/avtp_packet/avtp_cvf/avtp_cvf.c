@@ -30,10 +30,10 @@
  * @param[in]  uVal  保存检索pdu字段值的变量的指针
  * @return	   成功返回OK  失败返回错误码
  */
-static INT32 avtp_cvf_get_field_value(const AVTP_STREAM_PDU_T *pPduHeader, AVTP_CVF_FIELD_E eField, UINT64 *uVal)
+static INT avtp_cvf_get_field_value(const AVTP_STREAM_PDU_T *pPduHeader, AVTP_CVF_FIELD_E eField, UINT64 *uVal)
 {
-    UINT32 uBitmap = 0;
-    UINT32 uMask = 0;
+    UINT uBitmap = 0;
+    UINT uMask = 0;
     UINT8 uShift = 0;
 
 	if(NULL == pPduHeader)
@@ -84,10 +84,10 @@ static INT32 avtp_cvf_get_field_value(const AVTP_STREAM_PDU_T *pPduHeader, AVTP_
  * @param[in]  uVal  值
  * @return	   成功返回OK  失败返回错误码
  */
-static INT32 avtp_cvf_set_field_value(AVTP_STREAM_PDU_T *pAvtpStreamPdu, AVTP_CVF_FIELD_E eField, UINT32 uVal)
+static INT avtp_cvf_set_field_value(AVTP_STREAM_PDU_T *pAvtpStreamPdu, AVTP_CVF_FIELD_E eField, UINT uVal)
 {
-    UINT32 uBitmap = 0;
-    UINT32 uMask = 0;
+    UINT uBitmap = 0;
+    UINT uMask = 0;
     UINT8 uShift = 0;
 	void *ptr;
 
@@ -140,9 +140,9 @@ static INT32 avtp_cvf_set_field_value(AVTP_STREAM_PDU_T *pAvtpStreamPdu, AVTP_CV
  * @param[in]  pVal  保存检索pdu字段值的变量的指针
  * @return	   成功返回OK  失败返回错误码
  */
-INT32 avtp_cvf_pdu_filed_get(const AVTP_STREAM_PDU_T *pAvtpStreamPdu, AVTP_CVF_FIELD_E eField, UINT64 *pVal)
+INT avtp_cvf_pdu_filed_get(const AVTP_STREAM_PDU_T *pAvtpStreamPdu, AVTP_CVF_FIELD_E eField, UINT64 *pVal)
 {
-    INT32 iRet = ERROR;
+    INT iRet = ERROR;
     AVTP_CVF_PDU_H264_PAYLOAD_T *pH264Payload = NULL;
     if ((NULL == pAvtpStreamPdu) || (NULL == pVal))
     {
@@ -214,9 +214,9 @@ INT32 avtp_cvf_pdu_filed_get(const AVTP_STREAM_PDU_T *pAvtpStreamPdu, AVTP_CVF_F
  * @param[in]  uVal  设置的值
  * @return	   成功返回OK  失败返回错误码
  */
-INT32 avtp_cvf_pdu_filed_set(AVTP_STREAM_PDU_T *pAvtpStreamPdu, AVTP_CVF_FIELD_E eField, UINT64 uVal)
+INT avtp_cvf_pdu_filed_set(AVTP_STREAM_PDU_T *pAvtpStreamPdu, AVTP_CVF_FIELD_E eField, UINT64 uVal)
 {
-    INT32 iRet = ERROR;
+    INT iRet = ERROR;
 	AVTP_CVF_PDU_H264_PAYLOAD_T *pStH264Payload = NULL;
 
     if (NULL == pAvtpStreamPdu)
@@ -263,7 +263,7 @@ INT32 avtp_cvf_pdu_filed_set(AVTP_STREAM_PDU_T *pAvtpStreamPdu, AVTP_CVF_FIELD_E
             pStH264Payload = (AVTP_CVF_PDU_H264_PAYLOAD_T*)pAvtpStreamPdu->uAvtpPayload;
             if(NULL != pStH264Payload)
             {
-                pStH264Payload->uH264Header =  htonl((UINT32)uVal);
+                pStH264Payload->uH264Header =  htonl((UINT)uVal);
                 iRet = OK;	
             }
             else

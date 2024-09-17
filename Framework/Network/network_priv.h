@@ -14,7 +14,7 @@ INetwork * network;
 */
 typedef struct NETWORK_PRIV_DATA_T
 {
-    INT32 iFd;            // 操作的文件描述符 
+    INT iFd;            // 操作的文件描述符 
     CHAR  sDevName[128];       //以太网名称
 }NETWORK_PRIV_DATA_T;
 

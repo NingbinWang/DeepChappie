@@ -51,7 +51,7 @@ typedef VOID (*FUNCPTR)(VOID*, VOID*, VOID*, VOID*, VOID*, VOID*, VOID*, VOID*, 
  * @param[in]  args        参数个数
  * @return     成功返回 0  错误返回 其他
  */
-INT32 sys_pthread_create(TASK_ID *pStTid, CHAR *strTaskName, UINT32 uPriority, UINT32 uStackSize,
+INT sys_pthread_create(TASK_ID *pStTid, CHAR *strTaskName, UINT uPriority, UINT uStackSize,
         FUNCPTR pFunc,
         unsigned args, ...);
 
@@ -60,28 +60,28 @@ INT32 sys_pthread_create(TASK_ID *pStTid, CHAR *strTaskName, UINT32 uPriority, U
  * @param[in]  stTaskId   任务ID句柄
  * @return     成功返回 0  错误返回 其他
  */
-INT32 sys_pthread_join(TASK_ID stTaskId);
+INT sys_pthread_join(TASK_ID stTaskId);
 
 /**@fn         sys_pthread_cancel
  * @brief      取消线程并删除相关资源
  * @param[in]  stTaskId   任务ID句柄
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_pthread_cancel(TASK_ID stTaskId);
+INT sys_pthread_cancel(TASK_ID stTaskId);
 
 /**@fn         sys_pthread_verify
  * @brief      验证线程是否存在
  * @param[in]  pStTid     任务ID句柄
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_pthread_verify(TASK_ID *pStTid);
+INT sys_pthread_verify(TASK_ID *pStTid);
 
 /**@fn         sys_pthread_suspend
  * @brief      阻塞线程
  * @param[in]  pStTid        任务ID句柄
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_pthread_suspend(TASK_ID *pStTid);
+INT sys_pthread_suspend(TASK_ID *pStTid);
 
 
 /**@fn         sys_pthread_self
@@ -95,7 +95,7 @@ TASK_ID sys_pthread_self(VOID);
  * @param[in]  pStTid      任务ID句柄
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_pthread_reume(TASK_ID *pStTid);
+INT sys_pthread_reume(TASK_ID *pStTid);
 
 /**@fn         sys_pthread_get_name
  * @brief      获取当前调用线程线程名信息
@@ -103,7 +103,7 @@ INT32 sys_pthread_reume(TASK_ID *pStTid);
  * @param[in]  uNameLen    线程名称还清楚大小
  * @return     成功返回0,错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_pthread_get_name( CHAR *strName, UINT16 uNameLen);
+INT sys_pthread_get_name( CHAR *strName, UINT16 uNameLen);
 
 #ifdef __cplusplus
 }

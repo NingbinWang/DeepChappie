@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include"sys_common_inside.h"
 #include "sys_mqueue.h"
+#include <sys/select.h>
 
 #define MSG_Q_MODE          (0666)
 #define MSG_Q_PRIO          (0)

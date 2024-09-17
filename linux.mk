@@ -31,3 +31,5 @@ C_FLAGS += -O2 $(DBG_CFLAGS) -D_REENTRANT -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOU
 
 #c版本
 C_FLAGS += -ldl -lm -lpthread -lrt
+
+

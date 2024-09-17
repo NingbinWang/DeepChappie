@@ -15,12 +15,12 @@
 typedef struct
 {
     UINT8  *pAvtpPduBuf;          /*pdu指针*/
-    UINT32 uPduLengthMax;         /*(pdu)一个avtp报文的最大长度*/
+    UINT uPduLengthMax;         /*(pdu)一个avtp报文的最大长度*/
     UINT8  uFormatSubtype;        /*CVF格式子类型 参见AVTP_CVF_FORMAT_SUBTYPE_E*/
     BOOL   bDeserialFlag;
     UINT8  uRes[6];         
-    UINT32 uPduPayloadHeaderLen;  /* avtp payload中header长度*/
-    UINT32 uPduPayloadDataLen;    /* avtp payload中数据长度,注:payload格式为header+data*/
+    UINT uPduPayloadHeaderLen;  /* avtp payload中header长度*/
+    UINT uPduPayloadDataLen;    /* avtp payload中数据长度,注:payload格式为header+data*/
 }AVTP_CVF_PDU_PRIV_DATA_T;
 
 /* AVTP封装对象实例结构体 */

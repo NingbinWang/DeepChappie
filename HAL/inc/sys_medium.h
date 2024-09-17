@@ -52,9 +52,9 @@ typedef enum
 typedef struct
 {   
     SYS_MEDIUM_FS_TYPE_E eType;/*文件系统类型*/
-    UINT32 uTotalSize;   /*单位MB*/
-    UINT32 uRemainSize;  /*单位MB*/
-    UINT32 uClusterSize; /*簇大小，单位B*/
+    UINT uTotalSize;   /*单位MB*/
+    UINT uRemainSize;  /*单位MB*/
+    UINT uClusterSize; /*簇大小，单位B*/
 }SYS_MEDIUM_INFO_T;
 
 /**@fn         sys_medium_mount     
@@ -64,14 +64,14 @@ typedef struct
  * @param[in]  strMountPath挂载路径
  * @return     成果返回OK，失败返回ERROR,
  */
-INT32 sys_medium_mount(const CHAR *strPath, SYS_MEDIUM_FS_TYPE_E eFsType, const CHAR *strMountPath);
+INT sys_medium_mount(const CHAR *strPath, SYS_MEDIUM_FS_TYPE_E eFsType, const CHAR *strMountPath);
 
 /**@fn         sys_medium_umount    
  * @brief      卸载被挂载的存储介质，目前只支持一个介质一个分区
  * @param[in]  strMountPath挂载路径
  * @return     成果返回OK，失败返回ERROR
  */
-INT32 sys_medium_umount(const CHAR *strMountPath);
+INT sys_medium_umount(const CHAR *strMountPath);
 
 /**@fn         sys_medium_make_part    
  * @brief      制作介质分区
@@ -79,7 +79,7 @@ INT32 sys_medium_umount(const CHAR *strMountPath);
  * @param[in]  iPartNum  分区个数  
  * @return     成功OK, 其他参考ERROR_CODE_E, 支持get_last_errno获取错误码
  */
-INT32 sys_medium_make_part(const CHAR *strDevPath, INT32 iPartNum);
+INT sys_medium_make_part(const CHAR *strDevPath, INT iPartNum);
 
 /**@fn         sys_medium_format
  * @brief      格式化介质
@@ -88,13 +88,13 @@ INT32 sys_medium_make_part(const CHAR *strDevPath, INT32 iPartNum);
  * @param[in]  unit size 分配单元大小
  * @return     成功OK, 其他参考ERROR_CODE_E, 支持get_last_errno获取错误码
  */
-INT32 sys_medium_format(const CHAR *strPath, SYS_MEDIUM_FS_TYPE_E eFsType, UINT32 uUintSize);
+INT sys_medium_format(const CHAR *strPath, SYS_MEDIUM_FS_TYPE_E eFsType, UINT uUintSize);
 
 /**@brief      判断设备节点是否存在
  * @param[in]  strPath   节点路径  
  * @return     成果返回OK，失败返回ERROR,
  */
-INT32 sys_medium_check_dev_node(const CHAR *strPath);
+INT sys_medium_check_dev_node(const CHAR *strPath);
 
 /**@fn         sys_medium_get_info
  * @brief      medium获取介质信息
@@ -102,14 +102,14 @@ INT32 sys_medium_check_dev_node(const CHAR *strPath);
  * @param[out] pMediumInfo 介质信息指针  
  * @return     成功 ok 失败 ERROR
  */
-INT32 sys_medium_get_info(const CHAR *strPath, SYS_MEDIUM_INFO_T *pMediumInfo);
+INT sys_medium_get_info(const CHAR *strPath, SYS_MEDIUM_INFO_T *pMediumInfo);
 
 /**@fn         sys_medium_sync
  * @brief      强制写文件到存储介质      
  * @param[in]  strPath  盘符路径
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E, 支持通过get_last_errno获取错误码
  */
-INT32 sys_medium_sync(const CHAR *strPath);
+INT sys_medium_sync(const CHAR *strPath);
 
 #ifdef __cplusplus
 }

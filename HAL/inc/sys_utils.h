@@ -135,7 +135,7 @@ do\
  * @param[in]  iLen             长度
  * @return     成功返回校验和  
  */
-UINT32 sys_check_sum(VOID *pBuf, INT32 iLen);
+UINT sys_check_sum(VOID *pBuf, INT iLen);
 
 /**@fn           sys_htonl
  * @brief      将本地序转换成网络序
@@ -143,7 +143,7 @@ UINT32 sys_check_sum(VOID *pBuf, INT32 iLen);
  * @return     转换后的数值
  * @note 如果平台是大端序，内部不做任何转换
  */
-UINT32 sys_htonl(UINT32 x);
+UINT sys_htonl(UINT x);
 
 /**@fn         sys_ntohl
  * @brief      将网络序转换成本地序
@@ -151,7 +151,7 @@ UINT32 sys_htonl(UINT32 x);
  * @return     转换后的数值
  * @note       如果平台是大端序，内部不做任何转换
  */
-UINT32 sys_ntohl(UINT32 x);
+UINT sys_ntohl(UINT x);
 
 /**@fn         sys_htons
  * @brief      将本地序转换成网络序
@@ -190,7 +190,7 @@ UINT64 sys_htonll(UINT64 x);
  * @param[in] uSeed  随机数产生器的初始值
  * @return    无
  */
-VOID sys_srand(UINT32 uSeed);
+VOID sys_srand(UINT uSeed);
 
 
 /**@fn        sys_rand
@@ -198,7 +198,7 @@ VOID sys_srand(UINT32 uSeed);
  * @param[in] 无
  * @return    返回随机数值
  */
-INT32 sys_rand(VOID);
+INT sys_rand(VOID);
 
 #ifdef __cplusplus
 }

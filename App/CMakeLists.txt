@@ -1,13 +1,14 @@
 file(GLOB SRC_LIST 
-"src/*.cpp"
-"src/can/*.cpp"
-"src/imu/*.cpp"
-"src/media/*.cpp"
-"src/protocol/*.cpp"
-"src/utils/*.cpp"
-"src/storager/*.cpp"
-"src/framework/*.cpp"
-"src/test/*.cpp"
+"src/*.c"
+"src/can/*.c"
+"src/framework/*.c"
+"src/imu/*.c"
+"src/media/*.c"
+"src/protocol/*.c"
+"src/storager/*.c"
+"src/test/*.c"
+"src/ui/*.c"
+"src/utils/*.c"
 )
 include_directories(
 "inc"

@@ -37,7 +37,7 @@ UINT64 sys_block_size(const CHAR *dev);
  * @param   [in ]len:       待回读长度
  * @return  成功返回OK 失败返回ERROR
  */
-INT32 sys_block_read(const CHAR *dev,UINT32 offset,CHAR *buf,int len);
+INT sys_block_read(const CHAR *dev,UINT offset,CHAR *buf,int len);
 
 
 /**@fn      sys_block_write
@@ -48,7 +48,7 @@ INT32 sys_block_read(const CHAR *dev,UINT32 offset,CHAR *buf,int len);
  * @param   [in ]len:       待写入的数据长度
  * @return  成功返回OK 失败返回ERROR
  */
-INT32 sys_block_write(char *dev, unsigned int offset, char *buf, int len);
+INT sys_block_write(char *dev, unsigned int offset, char *buf, int len);
 
 /**@fn      sys_block_format
  * @brief   进行格式化整个分区
@@ -56,7 +56,7 @@ INT32 sys_block_write(char *dev, unsigned int offset, char *buf, int len);
  * @param   [out]N/A
  * @return  成功返回OK 失败返回ERROR
  */
-INT32 sys_block_format(const char *dev);
+INT sys_block_format(const char *dev);
 
 
 /**@fn      sys_block_avail_space_size
@@ -65,7 +65,7 @@ INT32 sys_block_format(const char *dev);
  * @param   [out]N/A
  * @return  数据长度
  */
-UINT32 sys_block_avail_space_size(const char *dev);
+UINT sys_block_avail_space_size(const char *dev);
 
 /**@fn      sys_block_chk_bank_page
  * @brief   判断是否是bank，即是否全0xff
@@ -74,7 +74,7 @@ UINT32 sys_block_avail_space_size(const char *dev);
  * @return  TRUE:  是bank page
  * @return  FALSE:  不是是bank page
  */
-static BOOL sys_block_chk_bank_page(UINT8 *buf, UINT32 len);
+static BOOL sys_block_chk_bank_page(UINT8 *buf, UINT len);
 
 /**@fn      sys_block_valid_data_len
  * @brief   判断BLOCK分区的有效数据长度
@@ -82,7 +82,7 @@ static BOOL sys_block_chk_bank_page(UINT8 *buf, UINT32 len);
  * @param   [out]N/A
  * @return  数据长度 失败返回ERROR
  */
-UINT32 sys_block_valid_data_len(const CHAR *dev);
+UINT sys_block_valid_data_len(const CHAR *dev);
 
 /**@fn      sys_block_copy
  * @brief   进行分区拷贝
@@ -90,7 +90,7 @@ UINT32 sys_block_valid_data_len(const CHAR *dev);
  * @param   [in ]dst_dev:    目的设备节点
  * @return  成功返回OK 失败返回ERROR
  */
-INT32 sys_block_copy(const char *src_dev, const char *dst_dev);
+INT sys_block_copy(const char *src_dev, const char *dst_dev);
 
 /**@fn      sys_block_cmp
  * @brief   进行分区数据比较，支持跳坏块
@@ -99,13 +99,13 @@ INT32 sys_block_copy(const char *src_dev, const char *dst_dev);
  * @return  =0: 数据一致
  * @return  !0: 数据不一致
  */
-INT32 sys_block_cmp(const char *src_dev, const char *dst_dev);
+INT sys_block_cmp(const char *src_dev, const char *dst_dev);
 
 /**@fn        sys_block_verboseset 
  * @brief     设置是否打印百分比
  * @param[in] enable
  */
-VOID sys_block_verboseset(const INT32 enable);
+VOID sys_block_verboseset(const INT enable);
 
 
 

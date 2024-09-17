@@ -35,7 +35,7 @@ typedef struct
 {
     BOOL  bExist;
     UINT8 uRes[3];
-    INT32 iFd;            /* 操作的文件描述符 */
+    INT iFd;            /* 操作的文件描述符 */
     CHAR strBuf[SIZE_4KB]; /*接收缓冲区*/
     DevActionCallBack pCallBack; /*暂时先支持设备监听回调函数*/
 }DEV_MONITOR_PRIV_DATA_T;

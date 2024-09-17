@@ -6,6 +6,7 @@
 #include <math.h>
 #include <pthread.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define NSEC2SEC (1000000 * 1000)
 

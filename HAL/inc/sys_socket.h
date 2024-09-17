@@ -18,7 +18,7 @@ extern "C" {
  * @param[in]  iProtocol 协议类型, 参考man 2 socket
  * @return     成功返回 套接字句柄 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_create(INT32 iDomain, INT32 iType, INT32 iProtocol);
+INT sys_socket_create(INT iDomain, INT iType, INT iProtocol);
 
 /**@fn         sys_socket_bind      
  * @brief      绑定socket
@@ -28,7 +28,7 @@ INT32 sys_socket_create(INT32 iDomain, INT32 iType, INT32 iProtocol);
  * @param[in]  uPort 要绑定的端口
  * @return     成功返回 套接字句柄 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_bind(INT32 iSockFd, INT32 iDomain, const CHAR *strIPAddr, UINT16 uPort);
+INT sys_socket_bind(INT iSockFd, INT iDomain, const CHAR *strIPAddr, UINT16 uPort);
 
 /**@fn        sys_socket_listen
  * @brief     在socket上建立监听      
@@ -36,7 +36,7 @@ INT32 sys_socket_bind(INT32 iSockFd, INT32 iDomain, const CHAR *strIPAddr, UINT1
  * @param[in] iMaxConNum 在套接字上排队的最大连接数
  * @return    成功返回 套接字句柄  错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_listen(INT32 iSockFd, INT32 iMaxConNum);
+INT sys_socket_listen(INT iSockFd, INT iMaxConNum);
 
 /**@fn          sys_socket_accept
  * @brief       从已完成的连接队列中获取一个已完成的队列      
@@ -47,7 +47,7 @@ INT32 sys_socket_listen(INT32 iSockFd, INT32 iMaxConNum);
  * @return      成功返回 套接字句柄 错误返回 ERROR, 支持通过get_last_errno获取错误码
  * @note        puClientPort的存储是本机序，调用者无需再做ntoh转换
  */
-INT32 sys_socket_accept(INT32 iSockFd, CHAR *strClientIP, UINT16 uAddrLen, UINT16 *puClientPort);
+INT sys_socket_accept(INT iSockFd, CHAR *strClientIP, UINT16 uAddrLen, UINT16 *puClientPort);
 
 /**@fn         sys_socket_connect
  * @brief      连接服务器
@@ -57,7 +57,7 @@ INT32 sys_socket_accept(INT32 iSockFd, CHAR *strClientIP, UINT16 uAddrLen, UINT1
  * @param[in]  uPort 要连接的端口
  * @return      OK/ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_connect(INT32 iSockFd, INT32 iDomain, const CHAR *strIPAddr, UINT16 uPort);
+INT sys_socket_connect(INT iSockFd, INT iDomain, const CHAR *strIPAddr, UINT16 uPort);
 
 /**@fn         sys_socket_send_to
  * @brief      将数据发送到指定地址上 
@@ -69,7 +69,7 @@ INT32 sys_socket_connect(INT32 iSockFd, INT32 iDomain, const CHAR *strIPAddr, UI
  * @param[in]  uPort 目的端口
  * @return     成功发送的字节数 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_send_to(INT32 iSockFd, void *pBuf, INT32 iLen, INT32 iDomain, const CHAR *strIPAddr, UINT16 uPort);
+INT sys_socket_send_to(INT iSockFd, void *pBuf, INT iLen, INT iDomain, const CHAR *strIPAddr, UINT16 uPort);
 
 /**@fn          sys_socket_recvfrom
  * @brief      从对端接收数据      
@@ -81,7 +81,7 @@ INT32 sys_socket_send_to(INT32 iSockFd, void *pBuf, INT32 iLen, INT32 iDomain, c
  * @param[out] puClientPort 接收到的对端端口
  * @return     成功接收的字节数 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_recvfrom(INT32 iSockFd, VOID *pBuf, INT32 iBufLen, CHAR *strClientIP, UINT16 uAddrLen, UINT16 *puClientPort);
+INT sys_socket_recvfrom(INT iSockFd, VOID *pBuf, INT iBufLen, CHAR *strClientIP, UINT16 uAddrLen, UINT16 *puClientPort);
 
 /**@fn         sys_socket_recv
  * @brief      从对端接收数据      
@@ -90,7 +90,7 @@ INT32 sys_socket_recvfrom(INT32 iSockFd, VOID *pBuf, INT32 iBufLen, CHAR *strCli
  * @param[in]  iLen 接受缓冲区的长度
  * @return     成功接收的字节数 错误返回 ERROR; 返回0代表对端关闭, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_recv(INT32 iSockFd, VOID *pBuf, INT32 iLen);
+INT sys_socket_recv(INT iSockFd, VOID *pBuf, INT iLen);
 
 /**@fn         sys_socket_send
  * @brief      向对端发送数据      
@@ -99,14 +99,14 @@ INT32 sys_socket_recv(INT32 iSockFd, VOID *pBuf, INT32 iLen);
  * @param[in]  iLen 发送缓冲区的长度
  * @return     成功发送的字节数 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_send(INT32 iSockFd, VOID *pBuf, INT32 iLen);
+INT sys_socket_send(INT iSockFd, VOID *pBuf, INT iLen);
 
 /**@fn         sys_socket_close
  * @brief      关闭socket      
  * @param[in]  iSockFd  套接字句柄
  * @return     成功返回 0 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_close(INT32 iSockFd);
+INT sys_socket_close(INT iSockFd);
 
 /**@fn         sys_socket_set_sock_opt
  * @brief      设置套接字属性
@@ -117,7 +117,7 @@ INT32 sys_socket_close(INT32 iSockFd);
  * @param[in]  iOptLength option_value的长度
  * @return     成功，返回OK；失败参考ERROR_ID_E, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_set_sock_opt(INT32 iSockFd, INT32 iOptLevel, INT32 iOptName, const VOID *pOptValue, INT32 iOptLength);
+INT sys_socket_set_sock_opt(INT iSockFd, INT iOptLevel, INT iOptName, const VOID *pOptValue, INT iOptLength);
 
 /**@fn         sys_socket_get_sock_opt
  * @brief      获取套接字属性
@@ -128,7 +128,7 @@ INT32 sys_socket_set_sock_opt(INT32 iSockFd, INT32 iOptLevel, INT32 iOptName, co
  * @param[in/out]  iOptLength 调用者填写option_value的长度, 返回时代表实际长度
  * @return     成功，返回OK；失败参考ERROR_ID_E, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_get_sock_opt(INT32 iSockFd, INT32 iOptLevel, INT32 iOptName, VOID *pOptValue, INT32 *iOptLength);
+INT sys_socket_get_sock_opt(INT iSockFd, INT iOptLevel, INT iOptName, VOID *pOptValue, INT *iOptLength);
 
 /**@fn         sys_socket_shutdown
  * @brief      shutdown socket      
@@ -136,7 +136,7 @@ INT32 sys_socket_get_sock_opt(INT32 iSockFd, INT32 iOptLevel, INT32 iOptName, VO
  * @param[in]  iHow 选项
  * @return     成功返回 0错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_shutdown(INT32 iSockFd, INT32 iHow);
+INT sys_socket_shutdown(INT iSockFd, INT iHow);
 
 /**@fn         sys_socket_get_local_addr      
  * @brief      获取套接字本地地址
@@ -145,7 +145,7 @@ INT32 sys_socket_shutdown(INT32 iSockFd, INT32 iHow);
  * @param[out] pUAddrLength 结构体大小
  * @return     成功返回 套接字句柄 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_get_local_addr(INT32 iSockFd, struct sys_sockaddr *pStLocalAddr, socklen_t *pUAddrLength);
+INT sys_socket_get_local_addr(INT iSockFd, struct sys_sockaddr *pStLocalAddr, socklen_t *pUAddrLength);
 
 /**@fn         sys_socket_get_peer_addr      
  * @brief      获取套接字对端地址
@@ -154,7 +154,7 @@ INT32 sys_socket_get_local_addr(INT32 iSockFd, struct sys_sockaddr *pStLocalAddr
  * @param[out] pUAddrLength  结构体大小
  * @return     成功返回 套接字句柄 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_get_peer_addr(INT32 iSockFd, struct sys_sockaddr *pStRemoteAddr, socklen_t *pUAddrLength);
+INT sys_socket_get_peer_addr(INT iSockFd, struct sys_sockaddr *pStRemoteAddr, socklen_t *pUAddrLength);
 
 /**@fn         sys_socket_inet_ntop      
  * @brief      转换网络二进制结构到ASCII类型的地址
@@ -164,7 +164,7 @@ INT32 sys_socket_get_peer_addr(INT32 iSockFd, struct sys_sockaddr *pStRemoteAddr
  * @param[out] uSize       网络序表示的32位IP地址
  * @return     成功,返回非NULL字符串；失败返回NULL,错误见ERRNO
  */
-const CHAR *sys_socket_inet_ntop(INT32 iAf, const VOID *pSrcAddr, CHAR *strDstAddr, socklen_t uSize);
+const CHAR *sys_socket_inet_ntop(INT iAf, const VOID *pSrcAddr, CHAR *strDstAddr, socklen_t uSize);
 
 /**@fn         sys_socket_inet_pton      
  * @brief      转换ASCII类型的地址到网络十进制结构
@@ -173,7 +173,7 @@ const CHAR *sys_socket_inet_ntop(INT32 iAf, const VOID *pSrcAddr, CHAR *strDstAd
  * @param[out] strDstAddr  网络序表示的32位IPV4地址或者128位的IPV6地址
  * @return     成功返回OK 失败返回ERROR
  */
-INT32 sys_socket_inet_pton(INT32 iAf, const VOID *pSrcAddr, VOID *strDstAddr);
+INT sys_socket_inet_pton(INT iAf, const CHAR *pSrcAddr, VOID *strDstAddr);
 
 /**@fn         sys_socket_inet_addr
  * @brief      将一个点分十进制的IP转换成一个长整数型数（u_long类型）
@@ -181,7 +181,7 @@ INT32 sys_socket_inet_pton(INT32 iAf, const VOID *pSrcAddr, VOID *strDstAddr);
  * @param[out] pUAdddr 
  * @return     成功则将字符串转换为32位二进制网络字节序的IPV4地址，否则为INADDR_NONE
  */
-INT32 sys_socket_inet_addr(const CHAR *strIP,ULONG *pUAdddr);
+INT sys_socket_inet_addr(const CHAR *strIP,ULONG *pUAdddr);
 
 /**@fn         sys_socket_inet_ntoa
  * @brief      将一个十进制网络字节序转换为点分十进制IP格式的字符串
@@ -195,21 +195,21 @@ CHAR *sys_socket_inet_ntoa(struct sys_in_addr in);
  * @param[in]  strIp  十进制IP格式的字符串
  * @return     成功返回0;错误，返回 -1。
  */
-INT32 sys_socket_inet_aton(const CHAR *strIp, struct sys_in_addr *pStInp);
+INT sys_socket_inet_aton(const CHAR *strIp, struct sys_in_addr *pStInp);
 
 /**@fn          sys_socket_get_tcp_state      
  * @brief      获取tcp状态
  * @param[in]  iSockFd 套接字
  * @return     成功返回 tcp链接状态 错误返回 ERROR, 支持通过get_last_errno获取错误码
  */
-INT32 sys_socket_get_tcp_state(int iSockFd);
+INT sys_socket_get_tcp_state(int iSockFd);
 
 /**@fn         sys_socket_get_last_errno      
  * @brief      获取套接字错误码
  * @param[in]  无
  * @return     详见errno 
  */
-INT32 sys_socket_get_last_errno();
+INT sys_socket_get_last_errno();
 
 #ifdef __cplusplus
 }

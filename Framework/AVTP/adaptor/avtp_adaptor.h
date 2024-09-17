@@ -30,7 +30,7 @@
  * @param[in]  struct sockaddr_ll 结构体指针
  * @return     成功返回OK 失败返回ERROR
  */
-INT32 avtp_talker_socket_create(INT32 iPriority, CHAR *pInterfaceName, UINT8 *pDestMacAddr, struct sockaddr_ll *pStSockAddr);
+INT avtp_talker_socket_create(INT iPriority, CHAR *pInterfaceName, UINT8 *pDestMacAddr, struct sockaddr_ll *pStSockAddr);
 
 /**@fn         avtp_socket_send   
  * @brief      发送数据
@@ -40,7 +40,7 @@ INT32 avtp_talker_socket_create(INT32 iPriority, CHAR *pInterfaceName, UINT8 *pD
  * @param[in]  struct sockaddr_ll 结构体指针
  * @return     成功返回发送的数据长度 失败返回ERROR
  */
-INT32 avtp_socket_send(INT32 iSock, UINT8 *pData, UINT32 uDataLen, struct sockaddr_ll *pStSockAddr);
+INT avtp_socket_send(INT iSock, UINT8 *pData, UINT uDataLen, struct sockaddr_ll *pStSockAddr);
 
 /**@fn         avtp_socket_close   
  * @brief      关闭套接字
@@ -49,7 +49,7 @@ INT32 avtp_socket_send(INT32 iSock, UINT8 *pData, UINT32 uDataLen, struct sockad
  * @param[in]  iBufLen 接收缓冲区长度
  * @return     成功返回OK 失败返回ERROR
  */
-INT32 avtp_socket_close(INT32 iSock);
+INT avtp_socket_close(INT iSock);
 
 
 

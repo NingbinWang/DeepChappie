@@ -20,7 +20,7 @@ typedef LONG  MSG_Q_ID;
 
 #define NO_WAIT             0
 
-#define WAIT_FOREVER        ((UINT32)(-1))
+#define WAIT_FOREVER        ((UINT)(-1))
 
 /**@fn         sys_mqueue_create
  * @brief      创建一个消息队列
@@ -30,7 +30,7 @@ typedef LONG  MSG_Q_ID;
  * @param[in]  iMsgLen   消息长度
  * @return     成功返回 0, 并且handle被修改;其他失败，参考ERROR_CODE_E
  */
-INT32 sys_mqueue_create(MSG_Q_ID *pStHandle,const CHAR *strName, INT32 iMaxMsg, INT32 iMsgLen);
+INT sys_mqueue_create(MSG_Q_ID *pStHandle,const CHAR *strName, INT iMaxMsg, INT iMsgLen);
 
 /**@fn         sys_mqueue_create
  * @brief      发送消息
@@ -40,7 +40,7 @@ INT32 sys_mqueue_create(MSG_Q_ID *pStHandle,const CHAR *strName, INT32 iMaxMsg, 
  * @param[in]  uWaitTime  阻塞时长
  * @return     成功返回 0  错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_mqueue_send(MSG_Q_ID *pStHandle, const CHAR *strMsg, UINT32 uLength, INT32 iWaitMs);
+INT sys_mqueue_send(MSG_Q_ID *pStHandle, const CHAR *strMsg, UINT uLength, INT iWaitMs);
 
 /**@fn         sys_mqueue_create
  * @brief      接受消息
@@ -50,21 +50,21 @@ INT32 sys_mqueue_send(MSG_Q_ID *pStHandle, const CHAR *strMsg, UINT32 uLength, I
  * @param[in]  uWaitTime  阻塞时长
  * @return     成功返回 0  错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_mqueue_recv(MSG_Q_ID *pStHandle, CHAR *strBuff, INT32 iBuffLen, INT32 iWaitMs);
+INT sys_mqueue_recv(MSG_Q_ID *pStHandle, CHAR *strBuff, INT iBuffLen, INT iWaitMs);
 
 /**@fn         sys_mqueue_close
  * @brief      关闭消息队列
  * @param[in]  pStHandle 消息队列句柄
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_mqueue_close(MSG_Q_ID *pStHandle);
+INT sys_mqueue_close(MSG_Q_ID *pStHandle);
 
 /**@fn         sys_mqueue_flush
  * @brief      flush消息队列
  * @param[in]  pStHandle 消息队列句柄
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_mqueue_flush(MSG_Q_ID *pStHandle);
+INT sys_mqueue_flush(MSG_Q_ID *pStHandle);
 
 /**@fn         sys_mqueue_query
  * @brief      查询消息队列
@@ -73,7 +73,7 @@ INT32 sys_mqueue_flush(MSG_Q_ID *pStHandle);
  * @param[out] uRemainBuff     剩余缓存大小
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_mqueue_query(MSG_Q_ID *pStHandle, UINT32 *puRemainCount, UINT32 *puRemainBuff);
+INT sys_mqueue_query(MSG_Q_ID *pStHandle, UINT *puRemainCount, UINT *puRemainBuff);
 
 #ifdef __cplusplus
 }

@@ -6,21 +6,32 @@
 #include <string.h>
 #include <stdlib.h>
 
+#if 0
+typedef void                    VOID;
+typedef int                     BOOLEAN;
+typedef unsigned long long      UINT64;
+typedef signed long long        INT64;
+typedef unsigned long           UINT32;
+typedef signed long             INT32;
+typedef unsigned short          UINT16;
+typedef signed short            INT16;
+typedef unsigned char           UINT8;
+typedef signed char             INT8;
+#ifndef UINT
+typedef unsigned int            UINT;
+#endif
+typedef signed int              INT;
+typedef float                   FLOAT;
+typedef double                  DOUBLE;
+typedef char                    CHAR;
+typedef unsigned int            BOOL;
+#endif
+
 #define PRINTF printf
 
-#ifndef TYPE_UINT8
-#define TYPE_UINT8
-typedef unsigned char     UINT8;
-#endif
-
-#ifndef TYPE_UINT16
-#define TYPE_UINT16
-typedef unsigned short    UINT16;
-#endif
-
-#ifndef TYPE_UINT32
-#define TYPE_UINT32
-typedef unsigned int     UINT32;
+#ifndef TYPE_BOOLEAN
+#define TYPE_BOOLEAN
+typedef int         BOOLEAN;
 #endif
 
 #ifndef TYPE_UINT64
@@ -28,31 +39,63 @@ typedef unsigned int     UINT32;
 typedef unsigned long long UINT64;
 #endif
 
-#ifndef TYPE_CHAR
-#define TYPE_CHAR
-typedef char     CHAR;
+#ifndef TYPE_INT64
+#define TYPE_INT64
+typedef signed long long INT64;
 #endif
 
+#ifndef TYPE_UINT32
+#define TYPE_UINT32
+typedef unsigned long   UINT32;
+#endif
+
+#ifndef TYPE_INT32
+#define TYPE_INT32
+typedef signed  long  INT32;
+#endif
+
+#ifndef TYPE_UINT16
+#define TYPE_UINT16
+typedef  unsigned short    UINT16;
+#endif
+
+#ifndef TYPE_INT16
+#define TYPE_INT16
+typedef signed short    INT16;
+#endif
+
+
+#ifndef TYPE_UINT8
+#define TYPE_UINT8
+typedef unsigned char     UINT8;
+#endif
 
 #ifndef TYPE_INT8
 #define TYPE_INT8
 typedef signed char     INT8;
 #endif
 
-#ifndef TYPE_INT16
-#define TYPE_INT16
-typedef short    INT16;
+#ifndef TYPE_UINT
+#define TYPE_UINT
+#ifndef UINT
+typedef unsigned int    UINT;
+#endif
 #endif
 
-#ifndef TYPE_INT32
-#define TYPE_INT32
-typedef int    INT32;
+#ifndef TYPE_INT
+#define TYPE_INT
+typedef int             INT;
 #endif
 
-#ifndef TYPE_INT64
-#define TYPE_INT64
-typedef long long INT64;
+
+
+#ifndef TYPE_CHAR
+#define TYPE_CHAR
+typedef char     CHAR;
 #endif
+
+
+
 
 #ifndef TYPE_FLOAT64
 #define TYPE_FLOAT64

@@ -25,6 +25,7 @@
 #include "sys_socket.h"
 #include <arpa/inet.h>
 #include <net/if_arp.h>
-#include"sys_common_inside.h"
-
+#include "sys_common_inside.h"
+#include <stdlib.h>
+#include <unistd.h>
 #endif

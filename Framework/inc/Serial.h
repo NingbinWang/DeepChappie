@@ -36,7 +36,7 @@ typedef struct
     int iBrk;         /* 帧错误计数 */
     int iOverrun;     /* 硬件256字节FIFO溢出计数 */
 	int iBufOverrun;  /* 驱动640KB缓存溢出计数 */
-	int iRes[13];     /* 预留13 INT32大小，用于后续扩展使用 */
+	int iRes[13];     /* 预留13 INT大小，用于后续扩展使用 */
 }SERIAL_COUNTER_INFO_T;
 
 typedef struct ISerial ISerial;

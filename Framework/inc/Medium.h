@@ -56,11 +56,11 @@ typedef struct
     MEDIUM_TYPE_E        eType;         //介质类型
     MEDIUM_STATE_E       eState;        //介质状态
     MEDIUM_FORMAT_TYPE_E eFileSystem;   //文件系统
-    UINT32               uTotalSize;    //总大小
-    UINT32               uRemainSize;   //剩余空间大小
-    UINT32               uUserSize;     //用户使用空间
-	INT32                iMediumId;     //介质id
-    INT32                iPartId;       //分区id
+    UINT               uTotalSize;    //总大小
+    UINT               uRemainSize;   //剩余空间大小
+    UINT               uUserSize;     //用户使用空间
+	INT                iMediumId;     //介质id
+    INT                iPartId;       //分区id
 }MEDIUM_INFO_T;
 */
 

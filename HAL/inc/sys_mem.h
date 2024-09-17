@@ -20,7 +20,7 @@ extern "C" {
  * @param[in]  uSize 需要申请的内存大小
  * @return     成功返回内存指针，失败返回NULL
  */
-VOID *sys_mem_malloc(UINT32 uSize);
+VOID *sys_mem_malloc(UINT uSize);
 
 /**@fn         sys_mem_calloc
  * @brief      申请一块大小为nmemb * uSize 的内存，内部初始化为0
@@ -28,7 +28,7 @@ VOID *sys_mem_malloc(UINT32 uSize);
  * @param[in]  uSize 每个单元的大小
  * @return     成功返回内存指针，失败返回NULL
  */
-VOID *sys_mem_calloc(UINT32 uMemBlock, UINT32 uSize);
+VOID *sys_mem_calloc(UINT uMemBlock, UINT uSize);
 
 /**@fn         sys_mem_realloc
  * @brief      改变指针pPtr所指内存块大小
@@ -37,7 +37,7 @@ VOID *sys_mem_calloc(UINT32 uMemBlock, UINT32 uSize);
  * @return     成功返回内存指针，失败返回NULL
  * @note       如果返回失败，原指针还是有效的
  */
-VOID *sys_mem_realloc(VOID *pPtr, UINT32 uSize);
+VOID *sys_mem_realloc(VOID *pPtr, UINT uSize);
 
 /**@fn         sys_mem_align
  * @brief      申请一块带对齐的内存块，内部初始化为0
@@ -45,7 +45,7 @@ VOID *sys_mem_realloc(VOID *pPtr, UINT32 uSize);
  * @param[in]  uSize 需要申请的内存大小
  * @return     成功返回内存指针，失败返回NULL
  */
-VOID *sys_mem_align(UINT32 uAlign, UINT32 uSize);
+VOID *sys_mem_align(UINT uAlign, UINT uSize);
 
 /**@fn         sys_mem_free
  * @brief      释放内存
@@ -61,7 +61,7 @@ VOID sys_mem_free(VOID *pPtr);
  * @param  [IN]uLength  拷贝长度
  * @return 无
  */
-VOID *sys_mem_copy(VOID *pDst, VOID *pSrc, UINT32 uLength);
+VOID *sys_mem_copy(VOID *pDst, VOID *pSrc, UINT uLength);
 
 #ifdef __cplusplus
 }

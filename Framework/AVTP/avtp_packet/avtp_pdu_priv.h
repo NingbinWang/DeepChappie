@@ -9,7 +9,7 @@
 typedef struct
 {
     AVTP_PDU_SUBTYPE_E eType;
-    UINT32             uPduLength;       /* pdu长度 */
+    UINT             uPduLength;       /* pdu长度 */
     IAvtpCvfPdu        *pCVFInstance;    /* cvf单例 */
 }AVTP_PDU_PRIV_DATA_T;
 

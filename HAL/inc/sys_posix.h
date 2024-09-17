@@ -45,14 +45,14 @@ struct sys_timeval {
  * @param[in]  iPid 进程ID
  * @return     无
  */
-VOID sys_posix_kill(INT32 iPid);
+VOID sys_posix_kill(INT iPid);
 
 /**@fn         sys_posix_verify
  * @brief      判断进程是否存在
  * @param[in]  iPid 进程ID
  * @return     存在返回OK，不存在返回ERROR
  */
-INT32 sys_posix_verify(INT32 iPid);
+INT sys_posix_verify(INT iPid);
 
 /**@fn         sys_posix_ioctl
  * @brief      底层数据交互接口,IO控制接口
@@ -61,14 +61,14 @@ INT32 sys_posix_verify(INT32 iPid);
  * @param[out] pData    数据缓存
  * @return     存在返回OK，不存在返回ERROR
  */
-INT32 sys_posix_ioctl(INT32 iFd, UINT32 uCmd,VOID *pData);
+INT sys_posix_ioctl(INT iFd, UINT uCmd,VOID *pData);
 
 /**@fn         sys_posix_cmd_call
  * @brief      调用系统命令,如果命令的前缀为$，则进程在后台执行
  * @param[in]  strCmd 系统命令字符串
  * @return     调用失败，返回-1；调用成功，若后台执行返回大于0的子进程号，前台执行则返回system接口返回值
  */
-INT32 sys_posix_cmd_call(const CHAR *strCmd);
+INT sys_posix_cmd_call(const CHAR *strCmd);
 
 /**@fn         sys_posix_cp
  * @brief      拷贝文件 
@@ -76,7 +76,7 @@ INT32 sys_posix_cmd_call(const CHAR *strCmd);
  * @param[in]  strDstPath  目的路径,全路径
  * @return     成功返回 0   错误返回 其他, 参考ERROR_CODE_E, 支持通过get_last_errno获取错误码
  */
-INT32 sys_posix_cp(const CHAR *strSrcPath, const CHAR *strDstPath);
+INT sys_posix_cp(const CHAR *strSrcPath, const CHAR *strDstPath);
 
 /**@fn         sys_posix_move
  * @brief      移动文件 
@@ -84,28 +84,28 @@ INT32 sys_posix_cp(const CHAR *strSrcPath, const CHAR *strDstPath);
  * @param[in]  strDstPath  目的路径,全路径
  * @return     成功返回 0   错误返回 其他, 参考ERROR_CODE_E, 支持通过get_last_errno获取错误码
  */
-INT32 sys_posix_move(const CHAR *strSrcPath, const CHAR *strDstPath);
+INT sys_posix_move(const CHAR *strSrcPath, const CHAR *strDstPath);
 
 /**@fn         sys_posix_mkdir
  * @brief      创建目录
  * @param[in]  strPath 路径
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E, 支持通过get_last_errno获取错误码
  */
-INT32 sys_posix_mkdir(const CHAR *strPath);
+INT sys_posix_mkdir(const CHAR *strPath);
 
 /**@fn         sys_posix_rmdir
  * @brief      删除目录
  * @param[in]  strPath 路径
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E, 支持通过get_last_errno获取错误码
  */
-INT32 sys_posix_rmdir(const CHAR *strPath);
+INT sys_posix_rmdir(const CHAR *strPath);
 
 /**@fn         sys_posix_rm
  * @brief      删除
  * @param[in]  strPath 文件路径
  * @return     成功返回 0 错误返回 其他, 参考ERROR_ID_E
  */
-INT32 sys_posix_rm(const CHAR *strPath);
+INT sys_posix_rm(const CHAR *strPath);
 
 /**@fn          sys_posix_sync      
  * @brief       强制写所有文件到存储介质
@@ -119,14 +119,14 @@ VOID sys_posix_sync(VOID);
  * @param[in]  strNewPath 新文件路径
  * @return     成功返回 0  错误返回 其他, 参考ERROR_ID_E
  */
-INT32 sys_posix_rename(const CHAR *strOldPath, const CHAR *strNewPath);
+INT sys_posix_rename(const CHAR *strOldPath, const CHAR *strNewPath);
 
 /**@fn         sys_posix_access
  * @brief      判断文件是否存在
  * @param[in]  strPath 路径
  * @return     存在返回 0 失败返回 其他
  */    
-INT32 sys_posix_access(const CHAR *strPath);
+INT sys_posix_access(const CHAR *strPath);
 
 /**@fn         sys_posix_fcntl
  * @brief      设置套接字属性，参考man fcntl
@@ -135,7 +135,7 @@ INT32 sys_posix_access(const CHAR *strPath);
  * @param[in]  iOptions 操作名称
  * @return     成功返回对应的值；失败参考ERROR_ID_E
  */
-INT32 sys_posix_fcntl(INT32 iFd, UINT32 iType, UINT32 iOptions);
+INT sys_posix_fcntl(INT iFd, UINT iType, UINT iOptions);
 
 /**@fn         sys_posix_select
  * @brief      select封装。
@@ -149,7 +149,7 @@ INT32 sys_posix_fcntl(INT32 iFd, UINT32 iType, UINT32 iOptions);
  * @note 并非所有的系统都支持读、写、异常集合,
  *    比如安霸就只支持读集合
  */
-INT32 sys_posix_select(INT32 iFds, sys_fd_set *pStReadFdSet, sys_fd_set *pStWriteFdSet,
+INT sys_posix_select(INT iFds, sys_fd_set *pStReadFdSet, sys_fd_set *pStWriteFdSet,
                   sys_fd_set *pStExceptionFdSet, struct sys_timeval *pStTimeOut);
 
 /**@fn         sys_posix_get_last_errno      
@@ -157,7 +157,7 @@ INT32 sys_posix_select(INT32 iFds, sys_fd_set *pStReadFdSet, sys_fd_set *pStWrit
  * @param[in]  无
  * @return     详见errno 
  */
-INT32 sys_posix_get_last_errno();
+INT sys_posix_get_last_errno();
 
 #ifdef __cplusplus
 }

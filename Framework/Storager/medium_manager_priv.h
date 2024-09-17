@@ -71,8 +71,8 @@ typedef enum MEDIUM_STATE_ACTION_E
 
 typedef struct
 {  
-    INT32                   iMediumNo;          // 介质ID
-    INT32                   iMediumPart;        // 介质分区号
+    INT                   iMediumNo;          // 介质ID
+    INT                   iMediumPart;        // 介质分区号
     MEDIUM_STATE_ACTION_E   eAction;            // 介质插拔动作
     MEDIUM_TYPE_E           eType;
 }MEDIUM_MANAGER_MSG_T;
@@ -83,12 +83,12 @@ typedef struct
 typedef struct
 {
      NODE_T                  node;
-    INT32                   iMediumNo;          // 介质ID号
-    INT32                   iPartNo;            // 介质分区号
-    UINT32                  uTotalSpaceSize;    // 总容量
-    UINT32                  uRemainSpaceSize;   // 剩余容量
-    UINT32                  uUserSpaceSize;     // 用户使用空间
-    UINT32                  uClusterSize;
+    INT                   iMediumNo;          // 介质ID号
+    INT                   iPartNo;            // 介质分区号
+    UINT                  uTotalSpaceSize;    // 总容量
+    UINT                  uRemainSpaceSize;   // 剩余容量
+    UINT                  uUserSpaceSize;     // 用户使用空间
+    UINT                  uClusterSize;
     SYS_MEDIUM_FS_TYPE_E    eFileType;          // 文件系统
     MEDIUM_STATE_E          eStates;            // 介质状态
     MEDIUM_ACTION_E         eAction;            // 介质动作

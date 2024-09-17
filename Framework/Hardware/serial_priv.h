@@ -22,8 +22,8 @@
 */
 typedef struct SERIAL_UART_PRIV_DATA_T
 {
-    INT32 iFd;            // 操作的文件描述符 
-    INT32 iIndex;         // 串口序号 
+    INT iFd;            // 操作的文件描述符 
+    INT iIndex;         // 串口序号 
     CHAR  sDevName[128];       //
 }SERIAL_UART_PRIV_DATA_T;
 

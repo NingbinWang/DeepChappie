@@ -7,7 +7,7 @@ extern "C" {
 #endif/*__cplusplus*/
 /* timeout options */
 #define NO_WAIT             0
-#define WAIT_FOREVER        ((UINT32)(-1))
+#define WAIT_FOREVER        ((UINT)(-1))
 
 typedef enum
 {
@@ -24,7 +24,7 @@ typedef LONG  MUTEX_ID;
  * @param[in]  iType     互斥锁类型  MUTEX_TYPE_E
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_mutex_create(MUTEX_ID *pStMutex, INT32 iType);
+INT sys_mutex_create(MUTEX_ID *pStMutex, INT iType);
 
 /**@fn         sys_mutex_lock
  * @brief      加锁
@@ -32,21 +32,21 @@ INT32 sys_mutex_create(MUTEX_ID *pStMutex, INT32 iType);
  * @param[in]  uWaitTime  等待时间, 单位ms
  * @return     成功返回 0  错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_mutex_lock(MUTEX_ID *pStMutex, INT32 iWaitMs);
+INT sys_mutex_lock(MUTEX_ID *pStMutex, INT iWaitMs);
 
 /**@fn         sys_mutex_unlock
  * @brief      解锁
  * @param[in]  pStMutex   互斥锁句柄
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_mutex_unlock(MUTEX_ID *pStMutex);
+INT sys_mutex_unlock(MUTEX_ID *pStMutex);
 
 /**@fn         sys_mutex_destroy
  * @brief      销毁锁句柄
  * @param[in]  pStMutex     互斥锁句柄
  * @return     成功返回 0 @return 错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_mutex_destroy(MUTEX_ID *pStMutex);
+INT sys_mutex_destroy(MUTEX_ID *pStMutex);
 
 #ifdef __cplusplus
 }

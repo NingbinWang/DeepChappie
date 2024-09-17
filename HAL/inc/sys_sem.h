@@ -28,14 +28,14 @@ typedef LONG  SEM_ID;
  * @param[in]  uInitValue    信号量初始值
  * @return     成功返回 0    错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_sem_create(SEM_ID *pStSem, const CHAR *strName, UINT32 uInitValue);
+INT sys_sem_create(SEM_ID *pStSem, const CHAR *strName, UINT uInitValue);
 
 /**@fn         sys_sem_post
  * @brief      释放一个信号量资源
  * @param[in]  pStSem信号量句柄
  * @return     成功返回 0 错误返回 其他, 参考ERROR_CODE_E
  */
-INT32 sys_sem_post(SEM_ID *pStSem);
+INT sys_sem_post(SEM_ID *pStSem);
 
 /**@fn         sys_sem_wait
  * @brief      获取一个信号量资源
@@ -45,7 +45,7 @@ INT32 sys_sem_post(SEM_ID *pStSem);
  * @see
  * @note
  */
-INT32 sys_sem_wait(SEM_ID *pStSem, UINT32 uWaitTime);
+INT sys_sem_wait(SEM_ID *pStSem, UINT uWaitTime);
 
 /**@fn         sys_sem_destroy
  * @brief      销毁信号量
@@ -54,7 +54,7 @@ INT32 sys_sem_wait(SEM_ID *pStSem, UINT32 uWaitTime);
  * @see
  * @note
  */
-INT32 sys_sem_destroy(SEM_ID *pStSem);
+INT sys_sem_destroy(SEM_ID *pStSem);
 
 #ifdef __cplusplus
 }

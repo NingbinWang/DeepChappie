@@ -19,7 +19,7 @@ struct IAvtpCvfPdu
      * @param[in]  uPduLength  pdu长度, >= (64 + RTP payload)
      * @return	   成功返回OK  失败返回错误码
      */
-    INT32 (*Init)(IAvtpCvfPdu *pIAvtpCvfPdu, UINT32 uPduLength);
+    INT (*Init)(IAvtpCvfPdu *pIAvtpCvfPdu, UINT uPduLength);
 
     /**@fn	       SetField	  
      * @brief	   设置avtpdu域值
@@ -28,7 +28,7 @@ struct IAvtpCvfPdu
      * @param[in]  uVal  域值
      * @return	   成功返回OK  失败返回错误码
      */
-    INT32 (*SetField)(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 uFieldType, UINT64 uVal);
+    INT (*SetField)(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 uFieldType, UINT64 uVal);
 
     /**@fn	       GetField	  
      * @brief	   设置avtpdu域值
@@ -37,7 +37,7 @@ struct IAvtpCvfPdu
      * @param[out] pVal  域值
      * @return	   成功返回OK  失败返回错误码
      */
-    INT32 (*GetField)(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 uFieldType, UINT64 *pVal);
+    INT (*GetField)(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 uFieldType, UINT64 *pVal);
 
     /**@fn         SetPayload
      * @brief      设置payload数据
@@ -46,7 +46,7 @@ struct IAvtpCvfPdu
      * @param[in]  uDataLength payload数据长度
      * @return     成功返回OK  失败返回错误码
      */
-    INT32 (*SetPayload)(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 *pPayloadData, UINT32 uDataLength);
+    INT (*SetPayload)(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 *pPayloadData, UINT uDataLength);
 
     /**@fn         SetPayload
      * @brief      获取payload数据
@@ -54,7 +54,7 @@ struct IAvtpCvfPdu
      * @param[in]  uLength   payload数据长度
      * @return     成功返回payload数据首地址，失败返回NULL
      */
-    UINT8 *(*GetPayload)(IAvtpCvfPdu *pIAvtpCvfPdu, UINT32 *uLength);
+    UINT8 *(*GetPayload)(IAvtpCvfPdu *pIAvtpCvfPdu, UINT *uLength);
 
     /**@fn         Serial
      * @brief      序列化
@@ -62,7 +62,7 @@ struct IAvtpCvfPdu
      * @param[in]  uLength     序列化后avtp包长度
      * @return     成功返回序列化后avtp包地址，失败返回NULL
      */
-    UINT8 *(*Serial)(IAvtpCvfPdu *pIAvtpCvfPdu, UINT32 *uLength);
+    UINT8 *(*Serial)(IAvtpCvfPdu *pIAvtpCvfPdu, UINT *uLength);
 
     /**@fn         Deserial
      * @brief      反序列化
@@ -71,7 +71,7 @@ struct IAvtpCvfPdu
      * @param[in]  uAvtpDataLength    avtp包数据长度
      * @return     成功返回OK  失败返回错误码
      */
-    INT32 (*Deserial)(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 *pAvtpData, UINT32 uAvtpDataLength);
+    INT (*Deserial)(IAvtpCvfPdu *pIAvtpCvfPdu, UINT8 *pAvtpData, UINT uAvtpDataLength);
 
     /**@fn	       Release	  
      * @brief	   RTP资源释放接口

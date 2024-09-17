@@ -41,18 +41,18 @@ extern "C" {
 //AVTPDU common header field
 typedef struct
 {
-    UINT32  uSubtypeData;
+    UINT  uSubtypeData;
     UINT8   uPduSpecific[0];
 }__attribute__ ((__packed__))AVTP_COMMON_PDU_T;
 
 //Additional header and payload data
 typedef struct
 {
-    UINT32 uSubtypeData;
+    UINT uSubtypeData;
     UINT64 uStreamID;
-    UINT32 uAvtpTime;
-    UINT32 uFormatSpecific;
-    UINT32 uPacketInfo;
+    UINT uAvtpTime;
+    UINT uFormatSpecific;
+    UINT uPacketInfo;
     UINT8  uAvtpPayload[0];
 }__attribute__ ((__packed__))AVTP_STREAM_PDU_T;
 
@@ -88,7 +88,7 @@ typedef enum
  * @param[in]  uVal  待获取值的指针
  * @return	   成功返回OK  失败返回ERROR
  */
-INT32 avtp_common_pdu_get(const AVTP_COMMON_PDU_T *pStAvtpCommonPdu, AVTP_COMMOM_FIELD_E eField, UINT32 *uVal);
+INT avtp_common_pdu_get(const AVTP_COMMON_PDU_T *pStAvtpCommonPdu, AVTP_COMMOM_FIELD_E eField, UINT *uVal);
 
 /**@fn	       avtp_common_pdu_set	  
  * @brief	   设置通用AVTPDU field值
@@ -97,7 +97,7 @@ INT32 avtp_common_pdu_get(const AVTP_COMMON_PDU_T *pStAvtpCommonPdu, AVTP_COMMOM
  * @param[in]  uVal  设置的值
  * @return	   成功返回OK  失败返回ERROR
  */
-INT32 avtp_common_pdu_set(AVTP_COMMON_PDU_T *pStAvtpCommonPdu, AVTP_COMMOM_FIELD_E eField, UINT32 uVal);
+INT avtp_common_pdu_set(AVTP_COMMON_PDU_T *pStAvtpCommonPdu, AVTP_COMMOM_FIELD_E eField, UINT uVal);
 
 /**@fn	       avtp_common_stream_pdu_get	  
  * @brief	   获取AVTPDU field值
@@ -106,7 +106,7 @@ INT32 avtp_common_pdu_set(AVTP_COMMON_PDU_T *pStAvtpCommonPdu, AVTP_COMMOM_FIELD
  * @param[in]  uVal  待获取值的指针
  * @return	   成功返回OK  失败返回ERROR
  */
-INT32 avtp_common_stream_pdu_get(const AVTP_STREAM_PDU_T *pStAvtpStreamPdu, AVTP_STREAM_FIELD_E eField, UINT64 *uVal);
+INT avtp_common_stream_pdu_get(const AVTP_STREAM_PDU_T *pStAvtpStreamPdu, AVTP_STREAM_FIELD_E eField, UINT64 *uVal);
 
 /**@fn	       avtp_common_stream_pdu_set	  
  * @brief	   设置AVTPDU field值
@@ -115,7 +115,7 @@ INT32 avtp_common_stream_pdu_get(const AVTP_STREAM_PDU_T *pStAvtpStreamPdu, AVTP
  * @param[in]  uVal  设置的值
  * @return	   成功返回OK  失败返回ERROR
  */
-INT32 avtp_common_stream_pdu_set(AVTP_STREAM_PDU_T *pStAvtpStreamPdu, AVTP_STREAM_FIELD_E eField, UINT64 uVal);
+INT avtp_common_stream_pdu_set(AVTP_STREAM_PDU_T *pStAvtpStreamPdu, AVTP_STREAM_FIELD_E eField, UINT64 uVal);
 
 #ifdef __cplusplus
 }
