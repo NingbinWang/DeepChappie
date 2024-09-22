@@ -1,2 +1,4 @@
-# Library
-此处主要放置各个Library，主要引用第三方库的编译
+# Media
+
+1.修改HDAL的内存分布需要去修改hdal/src/system/hdal_system.c中添加
+2.修改sensor需要去hdal/src/capture/hdal_capture.c

@@ -19,6 +19,7 @@ TARGET_MEDIA = hdal
 
 # cross host
 TARGET_CROSS_HOST = /home/alex/workspace/novatek/nt9852x_sdk_2.05.009/toolchain/arm-ca9-linux-gnueabihf-6.5/bin/arm-ca9-linux-gnueabihf
+#TARGET_CROSS_HOST = arm-ca9-linux-gnueabihf
 export $(TARGET_CROSS_HOST)
 
 # rules
@@ -37,21 +38,21 @@ CROSS_COMPILE=$(TARGET_CROSS_HOST)-
 LD_C_FLAGS   +=  -ldl -lm -lpthread -lrt  -std=c99
 LD_CPP_FLAGS +=  -ldl -lm -lpthread -lrt  -lstdc++  #C++参数
 
-HDAL_PATH_LIB := -Xlinker "-("\
-			$(wildcard $(MEDIA_DIR)/hdal/Libs/*.a) \
-			-Xlinker "-)"
+#HDAL_PATH_LIB := -Xlinker "-("\
+#			$(wildcard $(MEDIA_DIR)/hdal/Libs/*.a) \
+#			-Xlinker "-)"
 
 INC_PATH = $(APP_DIR)/inc
 
 
 
 BUILD_ALL = HAL
-BUILD_ALL += App
-BUILD_ALL += Framework
 BUILD_ALL += Media
+BUILD_ALL += UVC
+BUILD_ALL += Framework
+BUILD_ALL += App
 
-
-.PHONY: App App_Clean Framework Framework_Clean HAL HAL_Clean Media Media_Clean
+.PHONY: App App_Clean Framework Framework_Clean HAL HAL_Clean Media Media_Clean UVC UVC_Clean
 
 all: $(BUILD_ALL)
 	$(CC) -c main.c -L $(OUTPUT_DIR)/lib -I $(INC_PATH) -lApp
@@ -121,3 +122,23 @@ clean: App_Clean Framework_Clean HAL_Clean Media_Clean
 	@$(RM)  *.o -rf
 	@$(ECHO) "RM  $(OUTPUT_DIR)"
 	@$(RM)  $(OUTPUT_DIR)
+
+
+#UVC
+UVC_LIB_DIR=$(ROOT_PATH)/uvc_lib
+
+UVC: checkenv
+	@$(ECHO) "##### Build UVC ####"
+	make -C $(UVC_LIB_DIR)
+	if [ -a $(UVC_LIB_DIR)/Lib/libnvtuvc.a ]; then \
+		cp $(UVC_LIB_DIR)/Lib/libnvtuvc.a $(OUTPUT_DIR)/lib/; \
+	fi
+	if [ -f $(UVC_LIB_DIR)/Libs/libuvac.a ]; then \
+		cp $(UVC_LIB_DIR)/Libs/*.a $(OUTPUT_DIR)/lib/; \
+	fi
+
+
+UVC_Clean:
+	@$(ECHO) "##### Build UVC clean ####"
+	make -C $(UVC_LIB_DIR) clean
+

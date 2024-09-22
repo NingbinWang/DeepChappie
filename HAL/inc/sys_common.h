@@ -5,26 +5,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
-#if 0
-typedef void                    VOID;
-typedef int                     BOOLEAN;
-typedef unsigned long long      UINT64;
-typedef signed long long        INT64;
-typedef unsigned long           UINT32;
-typedef signed long             INT32;
-typedef unsigned short          UINT16;
-typedef signed short            INT16;
-typedef unsigned char           UINT8;
-typedef signed char             INT8;
-#ifndef UINT
-typedef unsigned int            UINT;
-#endif
-typedef signed int              INT;
-typedef float                   FLOAT;
-typedef double                  DOUBLE;
-typedef char                    CHAR;
-typedef unsigned int            BOOL;
-#endif
 
 #define PRINTF printf
 

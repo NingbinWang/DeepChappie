@@ -1,7 +1,6 @@
 MODULE_SUB_DIR = DevMonitor/
 MODULE_SUB_DIR += Hardware/
 MODULE_SUB_DIR += Logger/
-MODULE_SUB_DIR += Media/
 MODULE_SUB_DIR += Network/
 MODULE_SUB_DIR += Notification/
 MODULE_SUB_DIR += Notification/PingPongBuffer/
@@ -11,7 +10,6 @@ MODULE_SUB_INC += inc/
 MODULE_SUB_INC += DevMonitor/
 MODULE_SUB_INC += Hardware/
 MODULE_SUB_INC += Logger/
-MODULE_SUB_INC += Media/
 MODULE_SUB_INC += Network/
 MODULE_SUB_INC += Notification/
 MODULE_SUB_INC += Notification/PingPongBuffer/

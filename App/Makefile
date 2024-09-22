@@ -24,6 +24,7 @@ MODULE_SUB_INC += ./../Framework/inc/
 MODULE_SUB_INC += ./../HAL/inc/
 MODULE_SUB_INC += ./../Media/inc/
 #MODULE_SUB_INC += ./../Media/hdal/include/
+MODULE_SUB_INC += ./../uvc_lib/inc/
 
 LD_C_FLAGS += --std=gnu99 -D _GNU_SOURCE
 

@@ -4,3 +4,5 @@ CMakeSettings.json
 Build
 out
 output
+uvc_lib
+Media/hdal/vendor
